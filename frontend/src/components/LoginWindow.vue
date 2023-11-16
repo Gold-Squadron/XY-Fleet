@@ -41,6 +41,6 @@
 
 <style scoped>
   .card-dimensions {
-	  width: 30vw;
-  }
+    width: clamp(30vw, 300px, 80vw);
+  } 
 </style>
