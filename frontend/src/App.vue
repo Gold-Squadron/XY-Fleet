@@ -1,33 +1,31 @@
 <script setup lang="ts">
-  import {BButton} from "bootstrap-vue-next";
+  import {BButton, BModal} from "bootstrap-vue-next";
   import {ref} from "vue";
+  import type {Ref} from "vue";
+  import LoginWindow from "@/components/LoginWindow.vue";
 
-  const show = ref(false)
+  const show : Ref<boolean> = ref(false)
 </script>
 
 <template>
-  <div>
+  <div class="center-content">
+    <LoginWindow/>
+  </div>
+
+  <div v-if="false">
     <BButton variant="primary" @click="show = !show">Click me</BButton>
     <BModal v-model="show">Test</BModal>
   </div>
 </template>
 
 <style scoped>
-header {
-  line-height: 1.5;
-}
+  .center-content {
+    display: grid;
 
-@media (min-width: 1024px) {
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
-  }
+    width: 100vw;
+    height: 100vh;
 
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
+    justify-content: center;
+    align-content: center;
   }
-}
 </style>
