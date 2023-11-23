@@ -3,13 +3,13 @@
 - Github für SCRUM und VCS
 ### Backend
 - Java als Programmiersprache
-- REST Lib
+- Restlet als REST-API
 - MariaDB als Datenbank
 - JOOQ
-## Frontend
+### Frontend
 - Javascript (/Typescript)
 - Vue
-### Design & Features
+## Design & Features
 - Dashboard
   - Tabellenform
   - Zeigt Fahrzeuginformationen (Status, Kosten, etc.)
