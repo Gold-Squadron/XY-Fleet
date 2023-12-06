@@ -56,17 +56,6 @@
     <build>
         <plugins>
             <plugin>
-                <!-- Specify the maven code generator plugin -->
-                <!-- Use org.jooq                for the Open Source Edition
-                         org.jooq.pro            for commercial editions with Java 17 support,
-                         org.jooq.pro-java-11    for commercial editions with Java 11 support,
-                         org.jooq.pro-java-8     for commercial editions with Java 8 support,
-                         org.jooq.trial          for the free trial edition with Java 17 support,
-                         org.jooq.trial-java-11  for the free trial edition with Java 11 support,
-                         org.jooq.trial-java-8   for the free trial edition with Java 8 support
-
-                     Note: Only the Open Source Edition is hosted on Maven Central.
-                           Install the others locally using the provided scripts, or access them from here: https://repo.jooq.org -->
                 <groupId>org.jooq</groupId>
                 <artifactId>jooq-codegen-maven</artifactId>
                 <version>3.18.7</version>
@@ -82,18 +71,11 @@
                 </executions>
 
                 <configuration>
-                    <!-- Configure the database connection here -->
                     <jdbc>
                         <driver>org.mariadb.jdbc.Driver</driver>
                         <url>jdbc:mariadb://localhost:3308</url>
                         <user>root</user>
                         <password>u2SG7FdmzNE4vZU3kVALCQhPYywfBH5X9raxWJ6T</password>
-
-                        <!-- You can also pass user/password and other JDBC properties in the optional properties tag: -->
-                        <!--<properties>
-                            <property><key>user</key><value>[db-user]</value></property>
-                            <property><key>password</key><value>[db-password]</value></property>
-                        </properties>-->
                     </jdbc>
 
                     <generator>
@@ -101,9 +83,6 @@
                             <name>org.jooq.meta.mariadb.MariaDBDatabase</name>
                             <includes>.*</includes>
                             <excludes></excludes>
-                            <!-- In case your database supports catalogs, e.g. SQL Server:
-                            <inputCatalog>public</inputCatalog>
-                              -->
                             <inputSchema>SWT</inputSchema>
                         </database>
                         <target>

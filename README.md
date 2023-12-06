@@ -29,22 +29,30 @@ npm install
 npm run dev      # for testing
 npm run build    # for building
 ```
-### Databank (MariaDB)
-````shell
-#GOTO project root folder
-cd sql
-docker compose -f compose.yml up mariadb -d
 
-````
-### Backend (Java)
-````shell
-#GOTO project root folder
-cd backend
 
-java org.jooq.codegen.GenerationTool /jooq-config.xml
-````
 #### IDE Setup:
 Install the Vue.js Plugin from Jetbrains
 https://plugins.jetbrains.com/plugin/9442-vue-js
 
-### Backend
+### Database (MariaDB)
+````shell
+#GOTO project root folder
+cd sql
+docker compose -f compose.yml up mariadb -d
+````
+If you have mariadb properly installed, you can call it in the console like this.
+```shell
+mariadb --defaults-file ./connection_parameters.cnf init.sql
+```
+Otherwise, you can execute the init.sql script manually form your Database IDE on the docker image.
+### Backend (Java)
+if you have Maven properly installed, you can call it in the console like this.
+````shell
+#GOTO project root folder
+cd backend
+mvn clean install
+mvn jooq-codegen:generate
+````
+Or you need to simply build and execute the backend module with Maven inside your IDE.
+If there still occure some problems, you should manually execute the jooq-codegen:generate plugin-commmand.
