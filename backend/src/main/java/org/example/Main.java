@@ -15,8 +15,8 @@ public class Main {
 
     public static void main(String[] args) {
         String userName = "root";
-        String password = "root";
-        String url = "jdbc:mariadb://localhost:3312";
+        String password = "u2SG7FdmzNE4vZU3kVALCQhPYywfBH5X9raxWJ6T";
+        String url = "jdbc:mariadb://localhost:3308";
         System.out.println("Hello world!");
         // Connection is the only JDBC resource that we need
         // PreparedStatement and ResultSet are handled by JOOQ internally
