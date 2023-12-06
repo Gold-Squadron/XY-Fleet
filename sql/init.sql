@@ -1,4 +1,6 @@
-create table insurances
+create schema if not exists SWT;
+
+create table if not exists SWT.insurances
 (
     id                          int auto_increment
         primary key,
@@ -7,7 +9,7 @@ create table insurances
     insurance_number_expiration int null
 );
 
-create table pricing
+create table if not exists SWT.pricing
 (
     id                      int auto_increment
         primary key,
@@ -16,7 +18,7 @@ create table pricing
     leasing_installment_net int  null
 );
 
-create table users
+create table if not exists SWT.users
 (
     id        int auto_increment
         primary key,
@@ -24,7 +26,7 @@ create table users
     is_driver tinyint(1) not null
 );
 
-create table access_groups
+create table if not exists SWT.access_groups
 (
     id      int auto_increment
         primary key,
@@ -34,7 +36,7 @@ create table access_groups
         foreign key (user_id) references users (id)
 );
 
-create table vehicles
+create table if not exists SWT.vehicles
 (
     id                 int auto_increment
         primary key,
@@ -52,7 +54,7 @@ create table vehicles
         foreign key (pricing_id) references pricing (id)
 );
 
-create table bookings
+create table if not exists SWT.bookings
 (
     id            int auto_increment
         primary key,
@@ -67,7 +69,7 @@ create table bookings
         foreign key (vehicle_id) references vehicles (id)
 );
 
-create table gas_cards
+create table if not exists SWT.gas_cards
 (
     id            int auto_increment
         primary key,

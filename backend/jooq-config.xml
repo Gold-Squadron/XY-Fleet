@@ -2,9 +2,9 @@
     <!-- Configure the database connection here -->
     <jdbc>
         <driver>org.mariadb.jdbc.Driver</driver>
-        <url>jdbc:mariadb://localhost:3312</url>
+        <url>jdbc:mariadb://localhost:3308</url>
         <user>root</user>
-        <password>root</password>
+        <password>u2SG7FdmzNE4vZU3kVALCQhPYywfBH5X9raxWJ6T</password>
 
         <!-- You can also pass user/password and other JDBC properties in the optional properties tag: -->
         <!--<properties>
@@ -100,7 +100,7 @@
 
                  If left empty, jOOQ will generate all available schemata. See the
                  manual's next section to learn how to generate several schemata -->
-            <inputSchema>SWT</inputSchema>
+            <inputSchema></inputSchema>
         </database>
 
         <!-- Generation flags: See advanced configuration properties -->
