@@ -31,10 +31,11 @@ npm run build    # for building
 ```
 
 
-#### IDE Setup:
+#### Setup:
 Install the Vue.js Plugin from Jetbrains
 https://plugins.jetbrains.com/plugin/9442-vue-js
-
+Install Docker
+https://docs.docker.com/desktop/install/windows-install/
 ### Database (MariaDB)
 ````shell
 #GOTO project root folder
