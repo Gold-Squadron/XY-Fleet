@@ -1,10 +1,8 @@
-package org.example;
 import org.jooq.DSLContext;
 import org.jooq.*;
 import org.jooq.Record;
 import org.jooq.SQLDialect;
-import static org.jooq.SWT.Tables.*;
-
+import static org.jooq.codegen.XYFleet.Tables.*;
 import org.jooq.impl.DSL;
 
 import static org.jooq.impl.DSL.*;
