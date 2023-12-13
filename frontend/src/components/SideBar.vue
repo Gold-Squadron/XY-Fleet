@@ -1,0 +1,34 @@
+<script setup lang="ts">
+
+</script>
+
+<template>
+  <div class="sidebar-container text-center shadow-custom pt-3 d-flex flex-column">
+    <i class="bi bi-calendar-event"></i>
+    <i class="bi bi-table"></i>
+    <i class="bi bi-car-front-fill"></i>
+    <i class="bi bi-person-rolodex"></i>
+  </div>
+</template>
+
+
+<style scoped>
+   .sidebar-container{
+     width: 53px;
+     flex-grow: 1;
+     background-color: #d2d2d2;
+   }
+   i{
+     transition: background-color 0.1s;
+     cursor: pointer;
+     font-size: 25px;
+     padding: 3px;
+     margin: 4px 0;
+   }
+   .sidebar-container > i:hover{
+     background-color: #949494;
+   }
+   .shadow-custom{
+     box-shadow: 0 0 20px 0 black;
+   }
+</style>
