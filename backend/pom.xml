@@ -106,7 +106,7 @@
                         </database>
                         <target>
                             <packageName>org.jooq.codegen.XYFleet</packageName>
-                            <directory>jooqGeneratedClasses</directory>
+                            <directory>src/main/java</directory>
                         </target>
                     </generator>
                 </configuration>
