@@ -1,4 +1,4 @@
-package cae.de.XYFleet;
+package de.cae.XYFleet;
 
 import org.restlet.Component;
 import org.restlet.data.Protocol;
