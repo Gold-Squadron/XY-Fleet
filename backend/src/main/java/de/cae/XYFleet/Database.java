@@ -30,7 +30,6 @@ public class Database {
                 Byte isUser = r.getValue(USERS.IS_DRIVER);
                 System.out.println("ID: " + id + ", isAdmin: " + isAdmin + ", isUser: " + isUser);
             }
-            Result<Record> result2 =  dslContext.select().from(BOOKINGS).where(BOOKINGS.ID.eq(4)).fetch();
 
         }
         //TODO specify ExceptionHandling

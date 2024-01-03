@@ -9,13 +9,12 @@ import org.restlet.resource.Get;
 import org.restlet.resource.ServerResource;
 
 
-
 public class Server extends ServerResource {
 
     //public static final String ROOT_URI = "file:///c:/restlet/docs/api/";
 
-    public static void initServer(){
-        try{
+    public static void initServer() {
+        try {
             Component component = new Component();
             org.restlet.Server server = component.getServers().add(Protocol.HTTP, 8080);
             component.getDefaultHost().attach("/xywing", Vehicle.class);
@@ -26,10 +25,11 @@ public class Server extends ServerResource {
             component.getDefaultHost().attach("", Server.class);
             component.getDefaultHost().attach("/ldapauthenticator", LDAPAuthenticator.class);
             component.start();
-             }catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
+
     @Get("txt")
     public String toString() {
         // Print the requested URI path
