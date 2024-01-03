@@ -82,11 +82,3 @@ create table if not exists SWT.gas_cards
     constraint gas_cards_vehicle_fk
         foreign key (vehicle_id) references vehicles (id)
 );
-INSERT insurances VALUES ('1', STR_TO_DATE('0511201813450367', '%d%m%Y%H%i%s%f'), '1', '1');
-INSERT pricing VALUES ('1', STR_TO_DATE('0511201813450367', '%d%m%Y%H%i%s%f'), '1', '1');
-INSERT users VALUES ('10', '1', '1');
-INSERT vehicles VALUES ('1', '1', '1', '1', '1', '1', '1', '1', '1');
-INSERT bookings VALUES(id ='2', driver_id = '1', vehicle_id = '1', leasing_start = STR_TO_DATE('0511201813450367', '%d%m%Y%H%i%s%f'), leasing_end = STR_TO_DATE('0511201813450367', '%d%m%Y%H%i%s%f'), reasoning = 'none');
-
-
-SELECT * from users;
