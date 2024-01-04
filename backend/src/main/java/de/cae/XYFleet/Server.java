@@ -25,7 +25,7 @@ public class Server {
             component.getDefaultHost().attach("/xywing", Vehicle.class);
             component.getDefaultHost().attach("/user", User.class);
             component.getDefaultHost().attach("/driver", Driver.class);
-            component.getDefaultHost().attach("/booking/", Booking.class);
+            component.getDefaultHost().attach("/booking/", Bookings.class);
             component.getDefaultHost().attach("/booking/{bookingIdentifier}", Booking.class);
             component.getDefaultHost().attach("", test.class);
             component.getDefaultHost().attach("/ldapauthenticator", LDAPAuthenticator.class);
