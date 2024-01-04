@@ -14,7 +14,7 @@ import static org.jooq.codegen.XYFleet.Tables.BOOKINGS;
 public class Booking extends XYServerResource {
     private int bookingIdentifier;
 
-    @Get()
+    @Get("txt")
     public String toString() {
 
         //SELECT * FROM bookings where id = {bookingIdentifier}
