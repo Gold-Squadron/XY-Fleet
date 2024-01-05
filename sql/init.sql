@@ -82,5 +82,3 @@ create table if not exists SWT.gas_cards
     constraint gas_cards_vehicle_fk
         foreign key (vehicle_id) references vehicles (id)
 );
-
-
