@@ -3,13 +3,20 @@
   import {ref} from "vue";
   import type {Ref} from "vue";
   import LoginWindow from "@/components/LoginWindow.vue";
+  import Header from "@/components/Header.vue";
+  import MainView from "@/components/MainView.vue";
 
   const show : Ref<boolean> = ref(false)
 </script>
 
 <template>
-  <div class="center-content">
-    <LoginWindow/>
+  <div v-if="true">
+    <MainView/>
+  </div>
+  <div v-else>
+    <div class="center-content">
+      <LoginWindow/>
+    </div>
   </div>
 
   <div v-if="false">

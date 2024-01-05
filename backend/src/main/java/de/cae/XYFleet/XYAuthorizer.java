@@ -1,0 +1,47 @@
+package de.cae.XYFleet;
+
+import org.restlet.Application;
+import org.restlet.Restlet;
+import org.restlet.data.ChallengeScheme;
+import org.restlet.routing.Router;
+import org.restlet.security.*;
+
+public class XYAuthorizer extends Application {
+
+    //Define role names
+    public static final String ROLE_ADMIN = "admin";
+    public static final String ROLE_USER = "user";
+    public static final String ROLE_SECURITY = "security";
+
+    @Override
+    public Restlet createInboundRoot() {
+        //Create the authenticator, the authorizer and the router that will be protected
+        ChallengeAuthenticator authenticator = createAuthenticator();
+
+        Router baseRouter = createBaseRouter();
+        //Protect the resource by enforcing authentication then authorization
+        authenticator.setNext(baseRouter);
+
+
+        return authenticator;
+    }
+
+    private Router createBaseRouter() {
+        Router router = new Router(getContext());
+        router.attach("/booking/{bookingIdentifier}", Booking.class);
+        router.attach("/test2", test.class);
+        router.attach("/xywing", Vehicle.class);
+        router.attach("/user", User.class);
+        router.attach("/driver", Driver.class);
+        router.attach("/booking", Bookings.class);
+        return router;
+    }
+
+    private ChallengeAuthenticator createAuthenticator() {
+        ChallengeAuthenticator guard = new ChallengeAuthenticator(
+                getContext(),false,  ChallengeScheme.HTTP_BASIC, "realm", new LDAPVerifier());
+        //Attach enroler to determine roles
+        return guard;
+    }
+
+}

@@ -24,7 +24,7 @@ create table if not exists SWT.users
         primary key,
     name      varchar(255) not null unique,
     passwort varchar(255) not null,
-    is_admin  tinyint(1) not null,
+    role  varchar(255) not null,
     is_driver tinyint(1) not null
 );
 
