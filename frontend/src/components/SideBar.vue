@@ -15,8 +15,10 @@
 <style scoped>
    .sidebar-container{
      width: 53px;
+     max-width: 53px;
      flex-grow: 1;
      background-color: #d2d2d2;
+     z-index: 1;
    }
    i{
      transition: background-color 0.1s;
