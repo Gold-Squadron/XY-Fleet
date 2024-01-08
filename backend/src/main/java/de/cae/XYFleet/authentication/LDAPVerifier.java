@@ -1,11 +1,12 @@
-package de.cae.XYFleet;
+package de.cae.XYFleet.authentication;
 
+import de.cae.XYFleet.Database;
 import org.jooq.codegen.XYFleet.tables.records.UsersRecord;
 import org.restlet.Request;
 import org.restlet.security.Role;
 import org.restlet.security.SecretVerifier;
 
-import static de.cae.XYFleet.XYAuthorizer.*;
+import static de.cae.XYFleet.authentication.XYAuthorizer.*;
 import static org.jooq.codegen.XYFleet.Tables.USERS;
 import static org.restlet.Application.getCurrent;
 

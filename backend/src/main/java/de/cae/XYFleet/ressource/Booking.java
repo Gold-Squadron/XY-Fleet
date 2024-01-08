@@ -1,12 +1,12 @@
-package de.cae.XYFleet;
+package de.cae.XYFleet.ressource;
 
 import org.jooq.Result;
 import org.jooq.Record;
 import org.restlet.resource.*;
 
 
-import static de.cae.XYFleet.XYAuthorizer.ROLE_SECURITY;
-import static de.cae.XYFleet.XYAuthorizer.ROLE_USER;
+import static de.cae.XYFleet.authentication.XYAuthorizer.ROLE_SECURITY;
+import static de.cae.XYFleet.authentication.XYAuthorizer.ROLE_USER;
 import static org.jooq.codegen.XYFleet.Tables.BOOKINGS;
 
 public class Booking extends XYServerResource {

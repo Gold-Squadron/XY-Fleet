@@ -1,4 +1,4 @@
-package de.cae.XYFleet;
+package de.cae.XYFleet.authentication;
 
 import org.restlet.resource.Get;
 import org.restlet.resource.ServerResource;

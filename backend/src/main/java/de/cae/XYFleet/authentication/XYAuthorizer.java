@@ -1,5 +1,6 @@
-package de.cae.XYFleet;
+package de.cae.XYFleet.authentication;
 
+import de.cae.XYFleet.test;
 import org.restlet.Application;
 import org.restlet.Restlet;
 import org.restlet.data.ChallengeScheme;

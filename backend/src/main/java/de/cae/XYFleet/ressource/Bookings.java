@@ -1,10 +1,10 @@
-package de.cae.XYFleet;
+package de.cae.XYFleet.ressource;
 
 import org.restlet.data.Status;
 import org.restlet.resource.Get;
 import org.restlet.resource.ResourceException;
 
-public class Bookings extends XYServerResource{
+public class Bookings extends XYServerResource {
     @Get("txt")
     public String toString(){
         isInRole(XYAuthorizer.ROLE_SECURITY);

@@ -1,5 +1,7 @@
 package de.cae.XYFleet;
 
+import de.cae.XYFleet.authentication.LDAPAuthenticator;
+import de.cae.XYFleet.authentication.XYAuthorizer;
 import org.restlet.*;
 import org.restlet.data.Protocol;
 
