@@ -8,8 +8,8 @@ public class Server {
 
     //public static final String ROOT_URI = "file:///c:/restlet/docs/api/";
 
-    public static void initServer(){
-        try{
+    public static void initServer() {
+        try {
             Component component = new Component();
             org.restlet.Server server = component.getServers().add(Protocol.HTTP, 8080);
 
@@ -20,7 +20,7 @@ public class Server {
 
             component.start();
 
-             }catch(Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
