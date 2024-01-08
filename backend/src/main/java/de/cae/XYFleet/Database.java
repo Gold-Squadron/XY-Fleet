@@ -26,7 +26,7 @@ public class Database {
             Result<Record> result = dslContext.select().from(USERS).fetch();
             for (Record r : result) {
                 Integer id = r.getValue(USERS.ID);
-                Byte isAdmin = r.getValue(USERS.IS_ADMIN);
+                String isAdmin = r.getValue(USERS.ROLE);
                 Byte isUser = r.getValue(USERS.IS_DRIVER);
                 System.out.println("ID: " + id + ", isAdmin: " + isAdmin + ", isUser: " + isUser);
             }

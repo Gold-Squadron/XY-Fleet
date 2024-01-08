@@ -1,14 +1,12 @@
 package de.cae.XYFleet;
 
-import org.jooq.JSONFormat;
 import org.jooq.Result;
 import org.jooq.Record;
-import org.jooq.Query;
-import org.jooq.codegen.XYFleet.tables.Bookings;
 import org.restlet.resource.*;
 
-import java.util.Map;
 
+import static de.cae.XYFleet.XYAuthorizer.ROLE_SECURITY;
+import static de.cae.XYFleet.XYAuthorizer.ROLE_USER;
 import static org.jooq.codegen.XYFleet.Tables.BOOKINGS;
 
 public class Booking extends XYServerResource {
@@ -16,7 +14,7 @@ public class Booking extends XYServerResource {
 
     @Get("txt")
     public String toString() {
-
+        checkInRole(ROLE_SECURITY);
         //SELECT * FROM bookings where id = {bookingIdentifier}
         Result<Record> result = dslContext.select().from(BOOKINGS).where(BOOKINGS.ID.eq(bookingIdentifier)).fetch();
 
@@ -35,22 +33,24 @@ public class Booking extends XYServerResource {
 
     @Delete()
     public String deleteBooking() {
+        checkInRole(ROLE_USER);
 
         String result = this.toString();
 
         //DELETE bookings where id = {bookingIdentifier}
-        dslContext.delete(BOOKINGS).where(BOOKINGS.ID.eq(bookingIdentifier)).execute();
-
+        if(Integer.parseInt(getClientInfo().getUser().getName()) == bookingIdentifier  || isInRole("admin")){
+            dslContext.delete(BOOKINGS).where(BOOKINGS.ID.eq(bookingIdentifier)).execute();
+        }
         return result;
     }
 
     @Post()
     public void createBooking() {
-
+        checkInRole(ROLE_USER);
     }
 
     @Put()
     public void editBooking() {
-
+        checkInRole(ROLE_USER);
     }
 }
