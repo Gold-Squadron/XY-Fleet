@@ -21,7 +21,7 @@
   nav{
     z-index: 2;
   }
-
+  
   .shadow-custom{
     box-shadow: 0 0 15px 2px black;
   }

@@ -19,6 +19,8 @@
      flex-grow: 1;
      background-color: #d2d2d2;
      z-index: 1;
+     flex-grow: 1;
+     background-color: #d2d2d2;
    }
    i{
      transition: background-color 0.1s;

@@ -12,6 +12,7 @@ import SideBar from "@/components/SideBar.vue";
     <div class="flex-grow-1">
     </div>
   </div>
+  <SideBar/>
 </template>
 
 <style scoped>
