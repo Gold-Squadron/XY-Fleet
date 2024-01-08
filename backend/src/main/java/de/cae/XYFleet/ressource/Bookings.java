@@ -1,5 +1,6 @@
 package de.cae.XYFleet.ressource;
 
+import de.cae.XYFleet.authentication.XYAuthorizer;
 import org.restlet.data.Status;
 import org.restlet.resource.Get;
 import org.restlet.resource.ResourceException;

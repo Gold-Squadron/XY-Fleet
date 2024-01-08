@@ -1,12 +1,13 @@
 package de.cae.XYFleet.authentication;
 
+import de.cae.XYFleet.ressource.User;
 import de.cae.XYFleet.test;
 import org.restlet.Application;
 import org.restlet.Restlet;
 import org.restlet.data.ChallengeScheme;
 import org.restlet.routing.Router;
 import org.restlet.security.*;
-
+import de.cae.XYFleet.ressource.*;
 public class XYAuthorizer extends Application {
 
     //Define role names
