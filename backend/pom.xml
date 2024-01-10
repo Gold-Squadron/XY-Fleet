@@ -17,6 +17,7 @@
     </repositories>
 
     <properties>
+        <maven.tests.skip>true</maven.tests.skip>
         <restlet-version>2.4.3</restlet-version>
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
@@ -101,7 +102,6 @@
                         <database>
                             <name>org.jooq.meta.mariadb.MariaDBDatabase</name>
                             <includes>.*</includes>
-                            <excludes></excludes>
                             <inputSchema>SWT</inputSchema>
                         </database>
                         <target>

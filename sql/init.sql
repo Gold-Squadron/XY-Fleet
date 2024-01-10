@@ -1,3 +1,5 @@
+DROP SCHEMA SWT;
+
 create schema if not exists SWT;
 
 create table if not exists SWT.insurances
