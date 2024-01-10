@@ -33,7 +33,7 @@ public class XYAuthorizer extends Application {
         router.attach("/booking/{bookingIdentifier}", Booking.class);
         router.attach("/test2", test.class);
         router.attach("/xywing", Vehicle.class);
-        router.attach("/user", User.class);
+        router.attach("/user/", User.class);
         router.attach("/driver", Driver.class);
         router.attach("/booking", Bookings.class);
         return router;
