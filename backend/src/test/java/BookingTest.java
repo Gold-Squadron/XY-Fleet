@@ -5,15 +5,15 @@ import de.cae.XYFleet.ressource.test;
 import org.jooq.DSLContext;
 import org.jooq.codegen.XYFleet.tables.Users;
 import org.jooq.codegen.XYFleet.tables.records.*;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.restlet.Client;
 import org.restlet.Context;
 import org.restlet.Request;
 import org.restlet.Response;
-import org.restlet.data.Form;
-import org.restlet.data.MediaType;
-import org.restlet.data.Method;
-import org.restlet.data.Protocol;
+import org.restlet.data.*;
 import org.restlet.representation.Representation;
 import org.restlet.representation.StringRepresentation;
 import org.restlet.resource.ClientResource;
@@ -23,72 +23,61 @@ import java.io.IOException;
 import java.sql.Date;
 import java.time.LocalDate;
 
+import static de.cae.XYFleet.authentication.XYAuthorizer.ROLE_ADMIN;
 import static org.jooq.codegen.XYFleet.Tables.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-public class BookingTest {
-    private static String url = "https://" +"testPerson" + ":" + "123" + "@localhost:8080/booking/";
+public class BookingTest extends RessourceTest {
+    private static String uri = "/booking/102";
+    private static BookingsRecord testBooking = null;
 
+    @BeforeAll
+    public static void init(){
+        //Arrange
+        PricingRecord pricing = new PricingRecord(getIndex(), new Date(1, 1, 1).toLocalDate(), 3000, 5000);
+        scenario.put( pricing);
+        //dslContext.insertInto(PRICING).values(pricing).onDuplicateKeyIgnore().execute();
+
+        InsurancesRecord insurances = new InsurancesRecord(getIndex(), 10, 10, 10);
+        scenario.put( insurances);
+        //dslContext.insertInto(INSURANCES).values(insurances).onDuplicateKeyIgnore().execute();
+
+        VehiclesRecord vehicle = new VehiclesRecord(getIndex(), "STO-XY-123", "VW", "Käfer", "123", 2000, 4000, insurances.getId(), pricing.getId());
+        scenario.put( vehicle);
+        //dslContext.insertInto(VEHICLES).values(vehicle).onDuplicateKeyIgnore().execute();
+
+        BookingsRecord booking = new BookingsRecord(getIndex(), ADMIN_ID, vehicle.getId(), new Date(1, 1, 1).toLocalDate(), new Date(1, 1, 2).toLocalDate(), "none");
+        scenario.put(booking);
+        testBooking = booking;
+
+    }
     @Test
     public void toString_validCall_shouldReturnEntryInDatabase() {
         //Arrange
-        DSLContext dslContext = Database.getDSLContext();
-        assert dslContext != null;
-        int userId = Index.getIndex();
-        int pricingId = Index.getIndex();
-        int vehicleId = Index.getIndex();
-        int insuranceId = Index.getIndex();
-        int bookingId = Index.getIndex();
-        UsersRecord user = new UsersRecord(userId, "testPerson", "123", "admin", Byte.valueOf("1"));
-        dslContext.executeInsert(user);
-        PricingRecord pricing = new PricingRecord(pricingId, new Date(1, 1, 1).toLocalDate(), 3000, 5000);
-        dslContext.executeInsert(pricing);
-
-        InsurancesRecord insurances = new InsurancesRecord(insuranceId, 10, 10, 10);
-        dslContext.executeInsert(insurances);
-        VehiclesRecord vehicle = new VehiclesRecord(vehicleId, "STO-XY-123", "VW", "Käfer", "123", 2000, 4000, insuranceId, pricingId);
-        dslContext.executeInsert(vehicle);
-        BookingsRecord booking = new BookingsRecord(bookingId, userId, vehicleId, new Date(1, 1, 1).toLocalDate(), new Date(1, 1, 2).toLocalDate(), "none");
-        dslContext.executeInsert(booking);
+        ClientResource clientResource = new ClientResource(url+uri);
+        ChallengeResponse challengeResponse = new ChallengeResponse(ChallengeScheme.HTTP_BASIC, ROLE_ADMIN, ROLE_ADMIN);
+        clientResource.setChallengeResponse(challengeResponse);
+        clientResource.setRetryAttempts(10);
         //Act
-try {
-    // Instantiate the client connector, and configure it.
-    //Client client = new Client(new Context(), Protocol.HTTP);
-    //client.getContext().getParameters().add("useForwardedForHeader","false");
+        try {
+            // Send a GET request
+            String response = clientResource.get(String.class);
 
-    // Instantiate the ClientResource, and set it's client connector.
-    //equest request = new Request(Method.DELETE, "https://" +"testPerson" + ":" + "123" + "@localhost:8080/booking/" + bookingId);
+            // Process the response
+            System.out.println("Response from the server: " + response);
 
-    //ClientResource cr = new ClientResource(request);
-    //cr.setNext(client);
-    ClientResource clientResource = new ClientResource(url);
-    Request request = new Request(Method.POST, url);
+            //Assert
+            assertEquals(testBooking.formatJSON(), response);
+            System.out.println(response);
 
-    clientResource.setRequest(request);
-
-    Form form = new Form();
-
-    form.set("foo", "barValue");
-
-    org.restlet.representation.Representation   response = clientResource.post(form, MediaType.APPLICATION_JSON);
-    Representation responseEntity = clientResource.getResponseEntity();
-
-
-    //test test = cr.wrap(test.class);
-    String value = responseEntity.getText();
-    //System.out.println("Hallo");
-    //Assert
-    assertEquals(booking.formatJSON(), value);
-    System.out.println(value);
-} catch (Exception e) {
-
-}
-        //Cleanup
-        dslContext.executeDelete(booking);
-        dslContext.executeDelete(vehicle);
-        dslContext.executeDelete(insurances);
-        dslContext.executeDelete(pricing);
-        dslContext.executeDelete(user);
+            // If you need to send other types of requests (POST, PUT, DELETE, etc.), you can use methods like:
+            // clientResource.post(), clientResource.put(), clientResource.delete(), etc.
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            // Release the resources when done
+            clientResource.release();
+        }
     }
 }
