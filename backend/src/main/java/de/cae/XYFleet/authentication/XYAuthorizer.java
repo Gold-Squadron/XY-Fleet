@@ -33,7 +33,7 @@ public class XYAuthorizer extends Application {
         router.attach("/booking/{bookingIdentifier}", Booking.class);
         router.attach("/test2", test.class);
         router.attach("/xywing", Vehicle.class);
-        router.attach("/user", User.class);
+        router.attach("/user/{bookingIdentifier}", User.class);
         router.attach("/driver", Driver.class);
         router.attach("/booking", Bookings.class);
         return router;
@@ -41,8 +41,13 @@ public class XYAuthorizer extends Application {
 
     private ChallengeAuthenticator createAuthenticator() {
         ChallengeAuthenticator guard = new ChallengeAuthenticator(
-                getContext(),false,  ChallengeScheme.HTTP_BASIC, "realm", new LDAPVerifier());
-        //Attach enroler to determine roles
+                getContext(),false,  ChallengeScheme.HTTP_BASIC, "realm");
+
+        //Attach enroler and verifier to determine roles
+        LDAPVerifier ldapVerifier = new LDAPVerifier();
+        guard.setVerifier(ldapVerifier);
+        guard.setEnroler(ldapVerifier);
+
         return guard;
     }
 
