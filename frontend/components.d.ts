@@ -7,19 +7,30 @@ export {}
 
 declare module 'vue' {
   export interface GlobalComponents {
+    BBadge: typeof import('bootstrap-vue-next')['BBadge']
     BButton: typeof import('bootstrap-vue-next')['BButton']
     BCard: typeof import('bootstrap-vue-next')['BCard']
     BCardBody: typeof import('bootstrap-vue-next')['BCardBody']
     BCardSubtitle: typeof import('bootstrap-vue-next')['BCardSubtitle']
     BCardTitle: typeof import('bootstrap-vue-next')['BCardTitle']
+    BContainer: typeof import('bootstrap-vue-next')['BContainer']
     BForm: typeof import('bootstrap-vue-next')['BForm']
     BFormGroup: typeof import('bootstrap-vue-next')['BFormGroup']
     BFormInput: typeof import('bootstrap-vue-next')['BFormInput']
-    BNavbar: typeof import('bootstrap-vue-next')['BNavbar']
+    BRow: typeof import('bootstrap-vue-next')['BRow']
+    BTable: typeof import('bootstrap-vue-next')['BTable']
+    BTableSimple: typeof import('bootstrap-vue-next')['BTableSimple']
+    BTbody: typeof import('bootstrap-vue-next')['BTbody']
+    BTd: typeof import('bootstrap-vue-next')['BTd']
+    BTfoot: typeof import('bootstrap-vue-next')['BTfoot']
+    BTh: typeof import('bootstrap-vue-next')['BTh']
+    BThead: typeof import('bootstrap-vue-next')['BThead']
+    BTr: typeof import('bootstrap-vue-next')['BTr']
     Header: typeof import('./src/components/Header.vue')['default']
     HelloWorld: typeof import('./src/components/HelloWorld.vue')['default']
     LoginWindow: typeof import('./src/components/LoginWindow.vue')['default']
     MainView: typeof import('./src/components/MainView.vue')['default']
+    Roadmap: typeof import('./src/components/bookings/Roadmap.vue')['default']
     SideBar: typeof import('./src/components/SideBar.vue')['default']
   }
 }
