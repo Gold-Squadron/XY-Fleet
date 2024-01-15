@@ -30,6 +30,8 @@ public class RessourceTest {
     public static void setUp(){
         System.out.println("setUp Ressource Test");
         scenario = new Scenario();
+        UsersRecord test = new UsersRecord();
+
         UsersRecord admin = new UsersRecord(ADMIN_ID, ROLE_ADMIN,ROLE_ADMIN, ROLE_ADMIN, Byte.valueOf("1"));
 
         UsersRecord user = new UsersRecord(USER_ID, ROLE_USER,ROLE_USER, ROLE_USER, Byte.valueOf("1"));
@@ -37,9 +39,8 @@ public class RessourceTest {
         UsersRecord security = new UsersRecord(SECURITY_ID, ROLE_SECURITY,ROLE_SECURITY, ROLE_SECURITY, Byte.valueOf("0"));
 
         scenario.put(admin);
-
-        scenario.put( user);
-        scenario.put( security);
+        scenario.put(user);
+        scenario.put(security);
     }
     @AfterClass
     public static void cleanUp(){
