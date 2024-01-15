@@ -38,7 +38,7 @@ public class User extends XYServerResource {
         }
 
         //INSERT INTO user (name, passwort, role, is_driver) VALUES ({query values})
-        dslContext.insertInto(USERS, USERS.NAME, USERS.PASSWORT, USERS.ROLE, USERS.IS_DRIVER)
+        dslContext.insertInto(USERS, USERS.NAME, USERS.PASSWORD, USERS.ROLE, USERS.IS_DRIVER)
                 .values(values.get("name"), values.get("passwort"), values.get("role"), Byte.parseByte(values.get("is_driver")))
                 .execute();
     }
@@ -64,7 +64,7 @@ public class User extends XYServerResource {
         for (Parameter param : form) {
             moreStep = switch (param.getName()) {
                 case "name" -> firstStep.set(USERS.NAME, param.getValue());
-                case "passwort" -> firstStep.set(USERS.PASSWORT, param.getValue());
+                case "password" -> firstStep.set(USERS.PASSWORD, param.getValue());
                 case "role" -> firstStep.set(USERS.ROLE, param.getValue());
                 case "is_driver" -> firstStep.set(USERS.IS_DRIVER, Byte.parseByte(param.getValue()));
                 default -> throw new IllegalArgumentException("Invalid param in firstStep: " + param.getName());
