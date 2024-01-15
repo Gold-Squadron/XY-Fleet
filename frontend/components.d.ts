@@ -7,6 +7,7 @@ export {}
 
 declare module 'vue' {
   export interface GlobalComponents {
+    BBtn: typeof import('bootstrap-vue-next')['BBtn']
     BButton: typeof import('bootstrap-vue-next')['BButton']
     BCard: typeof import('bootstrap-vue-next')['BCard']
     BCardBody: typeof import('bootstrap-vue-next')['BCardBody']
@@ -15,11 +16,16 @@ declare module 'vue' {
     BForm: typeof import('bootstrap-vue-next')['BForm']
     BFormGroup: typeof import('bootstrap-vue-next')['BFormGroup']
     BFormInput: typeof import('bootstrap-vue-next')['BFormInput']
-    BNavbar: typeof import('bootstrap-vue-next')['BNavbar']
+    BPopover: typeof import('bootstrap-vue-next')['BPopover']
+    BTable: typeof import('bootstrap-vue-next')['BTable']
     Header: typeof import('./src/components/Header.vue')['default']
     HelloWorld: typeof import('./src/components/HelloWorld.vue')['default']
     LoginWindow: typeof import('./src/components/LoginWindow.vue')['default']
     MainView: typeof import('./src/components/MainView.vue')['default']
     SideBar: typeof import('./src/components/SideBar.vue')['default']
+    VehicleDashboard: typeof import('./src/components/VehicleDashboard.vue')['default']
+  }
+  export interface ComponentCustomProperties {
+    vBPopover: typeof import('bootstrap-vue-next')['vBPopover']
   }
 }
