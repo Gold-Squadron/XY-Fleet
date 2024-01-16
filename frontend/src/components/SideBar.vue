@@ -1,10 +1,9 @@
 <script setup lang="ts">
-import {Views} from "@/main"
+  import {Views} from "@/main"
 
-
-const emit = defineEmits<{
+  const emit = defineEmits<{
     (event: 'changeTab', to: Views): void
-  }>();
+  }>()
 
   function changeTab(view: Views): void{
     emit('changeTab', view)
