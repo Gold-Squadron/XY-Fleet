@@ -2,16 +2,24 @@
 import Header from "@/components/Header.vue";
 import SideBar from "@/components/SideBar.vue";
 import VehicleDashboard from "@/components/VehicleDashboard.vue";
+import { ref } from "vue"
+import { Views } from "@/main"
+
+const currentView = ref(Views.NONE)
+
+function setCurrentView(to : Views) : void {
+  currentView.value = to;
+}
 </script>
 
 <template>
   <Header/>
   <div class="d-flex h-100 flex-grow-1 overflow-hidden">
-    <SideBar/>
+    <SideBar @changeTab="setCurrentView"/>
 
     <!-- Container for the different tabs -->
     <div class="w-100 overflow-y-scroll">
-        <VehicleDashboard/>
+        <VehicleDashboard v-if="currentView == Views.VEHICLE_DASHBOARD"/>
     </div>
   </div>
 </template>

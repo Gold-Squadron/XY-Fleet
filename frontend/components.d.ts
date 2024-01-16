@@ -7,7 +7,6 @@ export {}
 
 declare module 'vue' {
   export interface GlobalComponents {
-    BBtn: typeof import('bootstrap-vue-next')['BBtn']
     BButton: typeof import('bootstrap-vue-next')['BButton']
     BCard: typeof import('bootstrap-vue-next')['BCard']
     BCardBody: typeof import('bootstrap-vue-next')['BCardBody']
@@ -24,8 +23,5 @@ declare module 'vue' {
     MainView: typeof import('./src/components/MainView.vue')['default']
     SideBar: typeof import('./src/components/SideBar.vue')['default']
     VehicleDashboard: typeof import('./src/components/VehicleDashboard.vue')['default']
-  }
-  export interface ComponentCustomProperties {
-    vBPopover: typeof import('bootstrap-vue-next')['vBPopover']
   }
 }

@@ -61,7 +61,6 @@
   }
 
   /* Popover styling */
-  /* !TODO! Hightlight -> full width of popover */
   .popover-select{
     cursor: pointer;
     user-select: none;
@@ -91,6 +90,46 @@ export default {
         { key: 'actions', thClass: 'invisible' }
       ],
       items:[
+        { model: 'Corsa E', brand: 'Opel', license: 'DN-LA186', mileage: 34000, annual: 30000, chassis: '4206942069' },
+        { model: 'Corsa E', brand: 'Opel', license: 'DN-LA186', mileage: 34000, annual: 30000, chassis: '4206942069' },
+        { model: 'Corsa E', brand: 'Opel', license: 'DN-LA186', mileage: 34000, annual: 30000, chassis: '4206942069' },
+        { model: 'Corsa E', brand: 'Opel', license: 'DN-LA186', mileage: 34000, annual: 30000, chassis: '4206942069' },
+        { model: 'Corsa E', brand: 'Opel', license: 'DN-LA186', mileage: 34000, annual: 30000, chassis: '4206942069' },
+        { model: 'Corsa E', brand: 'Opel', license: 'DN-LA186', mileage: 34000, annual: 30000, chassis: '4206942069' },
+        { model: 'Corsa E', brand: 'Opel', license: 'DN-LA186', mileage: 34000, annual: 30000, chassis: '4206942069' },
+        { model: 'Corsa E', brand: 'Opel', license: 'DN-LA186', mileage: 34000, annual: 30000, chassis: '4206942069' },
+        { model: 'Corsa E', brand: 'Opel', license: 'DN-LA186', mileage: 34000, annual: 30000, chassis: '4206942069' },
+        { model: 'Corsa E', brand: 'Opel', license: 'DN-LA186', mileage: 34000, annual: 30000, chassis: '4206942069' },
+        { model: 'Corsa E', brand: 'Opel', license: 'DN-LA186', mileage: 34000, annual: 30000, chassis: '4206942069' },
+        { model: 'Corsa E', brand: 'Opel', license: 'DN-LA186', mileage: 34000, annual: 30000, chassis: '4206942069' },
+        { model: 'Corsa E', brand: 'Opel', license: 'DN-LA186', mileage: 34000, annual: 30000, chassis: '4206942069' },
+        { model: 'Corsa E', brand: 'Opel', license: 'DN-LA186', mileage: 34000, annual: 30000, chassis: '4206942069' },
+        { model: 'Corsa E', brand: 'Opel', license: 'DN-LA186', mileage: 34000, annual: 30000, chassis: '4206942069' },
+        { model: 'Corsa E', brand: 'Opel', license: 'DN-LA186', mileage: 34000, annual: 30000, chassis: '4206942069' },
+        { model: 'Corsa E', brand: 'Opel', license: 'DN-LA186', mileage: 34000, annual: 30000, chassis: '4206942069' },
+        { model: 'Corsa E', brand: 'Opel', license: 'DN-LA186', mileage: 34000, annual: 30000, chassis: '4206942069' },
+        { model: 'Corsa E', brand: 'Opel', license: 'DN-LA186', mileage: 34000, annual: 30000, chassis: '4206942069' },
+        { model: 'Corsa E', brand: 'Opel', license: 'DN-LA186', mileage: 34000, annual: 30000, chassis: '4206942069' },
+        { model: 'Corsa E', brand: 'Opel', license: 'DN-LA186', mileage: 34000, annual: 30000, chassis: '4206942069' },
+        { model: 'Corsa E', brand: 'Opel', license: 'DN-LA186', mileage: 34000, annual: 30000, chassis: '4206942069' },
+        { model: 'Corsa E', brand: 'Opel', license: 'DN-LA186', mileage: 34000, annual: 30000, chassis: '4206942069' },
+        { model: 'Corsa E', brand: 'Opel', license: 'DN-LA186', mileage: 34000, annual: 30000, chassis: '4206942069' },
+        { model: 'Corsa E', brand: 'Opel', license: 'DN-LA186', mileage: 34000, annual: 30000, chassis: '4206942069' },
+        { model: 'Corsa E', brand: 'Opel', license: 'DN-LA186', mileage: 34000, annual: 30000, chassis: '4206942069' },
+        { model: 'Corsa E', brand: 'Opel', license: 'DN-LA186', mileage: 34000, annual: 30000, chassis: '4206942069' },
+        { model: 'Corsa E', brand: 'Opel', license: 'DN-LA186', mileage: 34000, annual: 30000, chassis: '4206942069' },
+        { model: 'Corsa E', brand: 'Opel', license: 'DN-LA186', mileage: 34000, annual: 30000, chassis: '4206942069' },
+        { model: 'Corsa E', brand: 'Opel', license: 'DN-LA186', mileage: 34000, annual: 30000, chassis: '4206942069' },
+        { model: 'Corsa E', brand: 'Opel', license: 'DN-LA186', mileage: 34000, annual: 30000, chassis: '4206942069' },
+        { model: 'Corsa E', brand: 'Opel', license: 'DN-LA186', mileage: 34000, annual: 30000, chassis: '4206942069' },
+        { model: 'Corsa E', brand: 'Opel', license: 'DN-LA186', mileage: 34000, annual: 30000, chassis: '4206942069' },
+        { model: 'Corsa E', brand: 'Opel', license: 'DN-LA186', mileage: 34000, annual: 30000, chassis: '4206942069' },
+        { model: 'Corsa E', brand: 'Opel', license: 'DN-LA186', mileage: 34000, annual: 30000, chassis: '4206942069' },
+        { model: 'Corsa E', brand: 'Opel', license: 'DN-LA186', mileage: 34000, annual: 30000, chassis: '4206942069' },
+        { model: 'Corsa E', brand: 'Opel', license: 'DN-LA186', mileage: 34000, annual: 30000, chassis: '4206942069' },
+        { model: 'Corsa E', brand: 'Opel', license: 'DN-LA186', mileage: 34000, annual: 30000, chassis: '4206942069' },
+        { model: 'Corsa E', brand: 'Opel', license: 'DN-LA186', mileage: 34000, annual: 30000, chassis: '4206942069' },
+        { model: 'Corsa E', brand: 'Opel', license: 'DN-LA186', mileage: 34000, annual: 30000, chassis: '4206942069' },
         { model: 'Corsa E', brand: 'Opel', license: 'DN-LA186', mileage: 34000, annual: 30000, chassis: '4206942069' },
         { model: 'Astra', brand: 'Opel', license: 'DN-W4767', mileage: 20000, annual: 25000, chassis: '123456789' }
       ],
