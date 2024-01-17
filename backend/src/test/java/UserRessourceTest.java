@@ -13,6 +13,7 @@ import org.restlet.resource.ResourceException;
 import java.util.Objects;
 
 import static de.cae.XYFleet.authentication.XYAuthorizer.*;
+import static de.cae.XYFleet.ressource.XYServerResource.jSONFormat;
 import static org.jooq.codegen.XYFleet.Tables.*;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -93,5 +94,24 @@ public class UserRessourceTest extends RessourceTest {
             clientResource.release();
         }
     }
-
+    @Test
+    public void delete_validCall_shouldReturnEntryInDatabase() {
+       super.delete_validCall_shouldReturnEntryInDatabase();
+    }
+    @Override
+    @ParameterizedTest
+    @CsvSource(value = {"Forbidden (403) - The server understood the request, but is refusing to fulfill it:"+ROLE_USER, "Forbidden (403) - The server understood the request, but is refusing to fulfill it:"+ROLE_SECURITY, "Unauthorized (401) - The request requires user authentication: "}, delimiter = ':')
+    public void delete_invalidCall_shouldThrowResourceException(String responseMessage, String role) {
+        super.delete_invalidCall_shouldThrowResourceException(responseMessage, role);
+    }
+    @Override
+    @ParameterizedTest
+    @CsvSource(value = {"Unauthorized (401) - The request requires user authentication: abc", "Forbidden (403) - The server understood the request, but is refusing to fulfill it:"+ROLE_USER, "Forbidden (403) - The server understood the request, but is refusing to fulfill it:"+ROLE_SECURITY}, delimiter = ':')
+    public void get_invalidCall_shouldThrowResourceException(String responseMessage, String role) {
+        super.get_invalidCall_shouldThrowResourceException(responseMessage, role);
+    }
+    @Test
+    public void get_validCall_shouldReturnEntryInDatabase() {
+        super.get_validCall_shouldReturnEntryInDatabase();
+    }
 }

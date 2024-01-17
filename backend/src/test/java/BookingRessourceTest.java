@@ -39,98 +39,25 @@ public class BookingRessourceTest extends RessourceTest {
     }
     @BeforeEach
     public void initSingle(){
-
         scenario.merge(BOOKINGS, testRecord);
     }
     @Test
     public void delete_validCall_shouldReturnEntryInDatabase() {
-        //Arrange
-        ClientResource clientResource = new ClientResource(url+uri);
-        ChallengeResponse challengeResponse = new ChallengeResponse(ChallengeScheme.HTTP_BASIC, ROLE_ADMIN, ROLE_ADMIN);
-        clientResource.setChallengeResponse(challengeResponse);
-        clientResource.setRetryAttempts(10);
-        //Act
-        try {
-            // Send a DELETE request
-            String response = clientResource.delete(String.class);
-            // Send a GET request, to look up whether deleted or not
-            assertThrows(ResourceException.class, () -> {clientResource.get(String.class);});
-            //Assert
-            assertEquals(testRecord.formatJSON(jSONFormat), response);
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            // Release the resources when done
-            clientResource.release();
-        }
+       super.delete_validCall_shouldReturnEntryInDatabase();
     }
     @ParameterizedTest
     @CsvSource(value = {"Forbidden (403) - The server understood the request, but is refusing to fulfill it:"+ROLE_USER, "Forbidden (403) - The server understood the request, but is refusing to fulfill it:"+ROLE_SECURITY, "Unauthorized (401) - The request requires user authentication: "}, delimiter = ':')
     public void delete_invalidCall_shouldThrowResourceException(String responseMessage, String role) {
-        //Arrange
-        ClientResource clientResource = new ClientResource(url + uri);
-        ChallengeResponse challengeResponse = new ChallengeResponse(ChallengeScheme.HTTP_BASIC, role, role);
-        clientResource.setChallengeResponse(challengeResponse);
-        clientResource.setRetryAttempts(10);
-        //Act
-        try {
-            // Send a invalid DELETE request
-            ResourceException response = assertThrows(ResourceException.class, () -> {
-                clientResource.delete(String.class);
-            });
-            //Assert
-            assertEquals(responseMessage, response.getMessage());
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            // Release the resources when done
-            clientResource.release();
-        }
+        super.delete_invalidCall_shouldThrowResourceException(responseMessage, role);
     }
     @ParameterizedTest
     @CsvSource(value = {"Unauthorized (401) - The request requires user authentication: abc"}, delimiter = ':')
     public void get_invalidCall_shouldThrowResourceException(String responseMessage, String role) {
-        //Arrange
-        ClientResource clientResource = new ClientResource(url+uri);
-        ChallengeResponse challengeResponse = new ChallengeResponse(ChallengeScheme.HTTP_BASIC, role, role);
-        clientResource.setChallengeResponse(challengeResponse);
-        clientResource.setRetryAttempts(10);
-        try {
-            //Act
-            // Send a GET request
-            ResourceException response = assertThrows(ResourceException.class, () -> {
-                clientResource.get(String.class);
-            });
-            //Assert
-            assertEquals(responseMessage, response.getMessage());
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            // Release the resources when done
-            clientResource.release();
-        }
+        super.get_invalidCall_shouldThrowResourceException(responseMessage, role);
     }
 
     @Test
     public void get_validCall_shouldReturnEntryInDatabase() {
-        //Arrange
-        ClientResource clientResource = new ClientResource(url + uri);
-        ChallengeResponse challengeResponse = new ChallengeResponse(ChallengeScheme.HTTP_BASIC, ROLE_ADMIN, ROLE_ADMIN);
-        clientResource.setChallengeResponse(challengeResponse);
-        clientResource.setRetryAttempts(10);
-        try {
-            //Act
-            // Send a GET request
-            String response = clientResource.get(String.class);
-            //Assert
-            assertEquals(testRecord.formatJSON(jSONFormat), response);
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            // Release the resources when done
-            clientResource.release();
-        }
+        super.get_validCall_shouldReturnEntryInDatabase();
     }
 }
