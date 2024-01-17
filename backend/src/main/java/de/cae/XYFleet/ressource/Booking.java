@@ -4,8 +4,12 @@ import org.jooq.Result;
 import org.jooq.Record;
 import org.jooq.codegen.XYFleet.tables.records.BookingsRecord;
 import org.jooq.codegen.XYFleet.tables.records.UsersRecord;
+import org.restlet.data.Form;
 import org.restlet.resource.*;
 
+
+import java.time.LocalDate;
+import java.util.Map;
 
 import static de.cae.XYFleet.authentication.XYAuthorizer.ROLE_SECURITY;
 import static de.cae.XYFleet.authentication.XYAuthorizer.ROLE_USER;
@@ -41,7 +45,7 @@ public class Booking extends XYServerResource {
         String result = this.toString();
 
         //DELETE bookings where id = {bookingIdentifier}
-        if(Integer.parseInt(getClientInfo().getUser().getName()) == bookingIdentifier  || isInRole("admin")){
+        if(Integer.parseInt(getClientInfo().getUser().getIdentifier()) == bookingIdentifier  || isInRole("admin")){
             dslContext.delete(BOOKINGS).where(BOOKINGS.ID.eq(bookingIdentifier)).execute();
         }else{
             return "insufficient permission";
@@ -49,12 +53,25 @@ public class Booking extends XYServerResource {
         return result;
     }
 
-    @Post()
-    public void createBooking() {
+    @Put()
+    public String createBooking() {
+        String output = null;
         checkInRole(ROLE_USER);
+
+        Form form = getQuery();
+        Map<String, String> values = form.getValuesMap();
+
+        //INSERT INTO BOOKINGS VALUES {given values}
+        BookingsRecord record = new BookingsRecord(0, Integer.parseInt(values.get("driver_id")), Integer.parseInt(values.get("vehicle_id")), LocalDate.parse(values.get("leasing_start")), LocalDate.parse(values.get("leasing_end")), values.get("reasoning"));
+        record.setId(null);
+        //dslContext.insertInto(BOOKINGS);
+        record = dslContext.newRecord(BOOKINGS, record);
+        record.insert();
+
+        return record.formatJSON(jSONFormat);
     }
 
-    @Put()
+    @Post()
     public void editBooking() {
         checkInRole(ROLE_USER);
     }
