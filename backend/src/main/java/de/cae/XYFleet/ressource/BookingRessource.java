@@ -8,7 +8,7 @@ import static de.cae.XYFleet.authentication.XYAuthorizer.ROLE_SECURITY;
 import static de.cae.XYFleet.authentication.XYAuthorizer.ROLE_USER;
 import static org.jooq.codegen.XYFleet.Tables.BOOKINGS;
 
-public class BookingRessource extends XYServerResource implements Test {
+public class BookingRessource extends XYServerResource {
     private int bookingIdentifier;
 
     @Get("txt")
@@ -37,12 +37,11 @@ public class BookingRessource extends XYServerResource implements Test {
 
         String result = this.toString();
 
-        //DELETE bookings where id = {bookingIdentifier}
-        if (Integer.parseInt(getClientInfo().getUser().getName()) == bookingIdentifier || isInRole("admin")) {
-            dslContext.delete(BOOKINGS).where(BOOKINGS.ID.eq(bookingIdentifier)).execute();
-        } else {
+
+        if (Integer.parseInt(getClientInfo().getUser().getName()) != bookingIdentifier && !isInRole("admin"))
             throw new ResourceException(403);
-        }
+        //DELETE bookings where id = {bookingIdentifier}
+        dslContext.delete(BOOKINGS).where(BOOKINGS.ID.eq(bookingIdentifier)).execute();
         return result;
     }
 

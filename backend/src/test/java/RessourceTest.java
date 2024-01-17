@@ -1,7 +1,9 @@
 
 import de.cae.XYFleet.Database;
 import org.jooq.DSLContext;
+import org.jooq.UpdatableRecord;
 import org.jooq.codegen.XYFleet.tables.Users;
+import org.jooq.codegen.XYFleet.tables.records.BookingsRecord;
 import org.jooq.codegen.XYFleet.tables.records.UsersRecord;
 import org.jooq.impl.UpdatableRecordImpl;
 import org.junit.AfterClass;
@@ -17,13 +19,14 @@ import org.jooq.codegen.XYFleet.Tables.*;
 
 public class RessourceTest {
     protected static String url = "http://" + "@localhost:8080";
+    protected static String uri;
+    protected static UpdatableRecord testRecord = null;
     protected static int ADMIN_ID;
     protected static int USER_ID;
     protected static int SECURITY_ID;
     protected static Scenario scenario;
     @BeforeAll
     public static void setUp(){
-        try {
             scenario = new Scenario();
             UsersRecord test = new UsersRecord();
 
@@ -33,11 +36,6 @@ public class RessourceTest {
             ADMIN_ID = scenario.add(USERS, admin);
             USER_ID = scenario.add(USERS, user);
             SECURITY_ID = scenario.add(USERS, security);
-        }catch(Exception e){
-            e.printStackTrace();
-            cleanUp();
-            throw e;
-        }
     }
     @AfterAll
     public static void cleanUp(){

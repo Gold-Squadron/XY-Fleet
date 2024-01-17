@@ -1,13 +1,11 @@
 import org.jooq.codegen.XYFleet.tables.records.*;
-import org.junit.Before;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.function.Executable;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.restlet.data.*;
 import org.restlet.resource.ClientResource;
-import org.restlet.resource.Resource;
 import org.restlet.resource.ResourceException;
 
 import java.sql.Date;
@@ -18,12 +16,9 @@ import static org.jooq.codegen.XYFleet.Tables.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class BookingRessourceTest extends RessourceTest {
-    private static String uri;
-    private static BookingsRecord testBooking = null;
 
     @BeforeAll
     public static void initAll(){
-        try {
             //Arrange
             PricingRecord pricing = new PricingRecord(0, new Date(1, 1, 1).toLocalDate(), 3000, 5000);
             pricing.setId(scenario.add(PRICING, pricing));
@@ -40,16 +35,12 @@ public class BookingRessourceTest extends RessourceTest {
             BookingsRecord booking = new BookingsRecord(0, ADMIN_ID, vehicle.getId(), new Date(1, 1, 1).toLocalDate(), new Date(1, 1, 2).toLocalDate(), "none");
             booking.setId(scenario.add(BOOKINGS, booking));
             uri = "/booking/" + booking.getId();
-            testBooking = booking;
-        }catch(Exception e){
-            e.printStackTrace();
-            cleanUp();
-            throw e;
-        }
+            testRecord = booking;
     }
-    @Before
-    public void setupSingle(){
-            testBooking.merge();
+    @BeforeEach
+    public void initSingle(){
+
+        scenario.merge(BOOKINGS, testRecord);
     }
     @Test
     public void delete_validCall_shouldReturnEntryInDatabase() {
@@ -62,23 +53,19 @@ public class BookingRessourceTest extends RessourceTest {
         try {
             // Send a DELETE request
             String response = clientResource.delete(String.class);
-            // Send a GET request, to look up whether delted or not
-            String response2 = clientResource.get(String.class);
-
+            // Send a GET request, to look up whether deleted or not
+            assertThrows(ResourceException.class, () -> {clientResource.get(String.class);});
             //Assert
-            assertEquals(testBooking.formatJSON(jSONFormat), response);
-            assertNull(response2);
-
+            assertEquals(testRecord.formatJSON(jSONFormat), response);
         } catch (Exception e) {
             e.printStackTrace();
-            cleanUp();
         } finally {
             // Release the resources when done
             clientResource.release();
         }
     }
     @ParameterizedTest
-    @CsvSource({"insufficient permission, "+ROLE_USER, "Unauthorized (401) - The request requires user authentication,"+ROLE_SECURITY, "Unauthorized (401) - The request requires user authentication,"})
+    @CsvSource(value = {"Forbidden (403) - The server understood the request, but is refusing to fulfill it:"+ROLE_USER, "Forbidden (403) - The server understood the request, but is refusing to fulfill it:"+ROLE_SECURITY, "Unauthorized (401) - The request requires user authentication: "}, delimiter = ':')
     public void delete_invalidCall_shouldThrowResourceException(String responseMessage, String role) {
         //Arrange
         ClientResource clientResource = new ClientResource(url + uri);
@@ -95,14 +82,13 @@ public class BookingRessourceTest extends RessourceTest {
             assertEquals(responseMessage, response.getMessage());
         } catch (Exception e) {
             e.printStackTrace();
-            cleanUp();
         } finally {
             // Release the resources when done
             clientResource.release();
         }
     }
     @ParameterizedTest
-    @CsvSource({"Unauthorized (401) - The request requires user authentication,"})
+    @CsvSource(value = {"Unauthorized (401) - The request requires user authentication: abc"}, delimiter = ':')
     public void get_invalidCall_shouldThrowResourceException(String responseMessage, String role) {
         //Arrange
         ClientResource clientResource = new ClientResource(url+uri);
@@ -116,11 +102,10 @@ public class BookingRessourceTest extends RessourceTest {
                 clientResource.get(String.class);
             });
             //Assert
-            assertEquals(testBooking.formatJSON(jSONFormat), response);
+            assertEquals(responseMessage, response.getMessage());
 
         } catch (Exception e) {
             e.printStackTrace();
-            cleanUp();
         } finally {
             // Release the resources when done
             clientResource.release();
@@ -139,11 +124,10 @@ public class BookingRessourceTest extends RessourceTest {
             // Send a GET request
             String response = clientResource.get(String.class);
             //Assert
-            assertEquals(testBooking.formatJSON(jSONFormat), response);
+            assertEquals(testRecord.formatJSON(jSONFormat), response);
 
         } catch (Exception e) {
             e.printStackTrace();
-            cleanUp();
         } finally {
             // Release the resources when done
             clientResource.release();
