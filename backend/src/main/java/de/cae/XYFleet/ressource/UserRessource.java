@@ -64,7 +64,7 @@ public class UserRessource extends XYServerResource {
     }
 
     @Post()
-    public void changeUser() throws ResourceException {
+    public String changeUser() throws ResourceException {
         checkInRole(ROLE_ADMIN);
 
         Form form = getQuery();
@@ -82,10 +82,17 @@ public class UserRessource extends XYServerResource {
             };
         }
 
-        if (moreStep == null) throw new ResourceException(400, "nothing to do. no params in query given!!!", "nothing to do. no params in query given");
+        if (moreStep == null)
+            throw new ResourceException(400, "nothing to do. no params in query given");
+
+        if(dslContext.fetchOne(USERS, USERS.NAME.eq(form.getValues("name"))) != null)
+            throw new ResourceException(400, "column: name, user with name:" +form.getValues("name")+ "already exists");
+
 
         //UPDATE users SET ({given values}) WHERE id = {bookingIdentifier}
-        moreStep.where(USERS.ID.eq(bookingIdentifier)).execute();
+        UsersRecord record = moreStep.where(USERS.ID.eq(bookingIdentifier)).returning().fetchOne();
+        if (record == null) throw new ResourceException(500, "internal Server Error");
+        return record.formatJSON(jSONFormat);
     }
 
     @Delete
