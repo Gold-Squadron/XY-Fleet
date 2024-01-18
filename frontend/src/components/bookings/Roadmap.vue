@@ -6,12 +6,15 @@ let vehicles = ref(["Blue Van", "Red Van", "Green Smart", "Phillip's broken e-sc
 
 class Booking {
   constructor(public car: String, public start: number, public end : number) {}
+  isWithin(day : number) : Boolean {
+    return this.start <= day && this.end >= day;
+  }
 }
 
 let bookings = ref([new Booking("Blue Van", 3, 7)])
 
-function test() {
-  alert("first")
+function isWithin(vehicle : string, day : number) : Boolean {
+  return bookings.value.every((car) => car.car == vehicle && car.isWithin(day));
 }
 
 function showBookingDialog(carIndex : number,startDay: number, endDay: number) {
@@ -26,30 +29,30 @@ function afterLoad() {
     console.log(`init ${index}`);
     const container : HTMLElement  = document.querySelector('#el' + index)!;
     //if(container == null) return;
-    const ball : HTMLElement  = document.querySelector('#btn' + index)!;
+    const button : HTMLElement  = document.querySelector('#btn' + index)!;
     //if(ball == null) return;
-    const startPos : number = ball.getBoundingClientRect().x;
+    const startPos : number = button.getBoundingClientRect().x;
     container.onmousemove = function (event : MouseEvent) {
       let x = event.clientX;
       x = x - x % dayWidth;
-      if(x < startPos) return;
-      ball.style.position = "absolute";
-      ball.style.left = `${x}px`;
+      if(x < startPos || isWithin(vehicles.value[index], x)) return;
+      button.style.position = "absolute";
+      button.style.left = `${x}px`;
     }
     container.onmouseout = function (event : MouseEvent) {
       console.log("out")
       //const relatedTargetAsHTML : HTMLElement = event.relatedTarget;
-      if(event.relatedTarget && event.relatedTarget.id == ball.id) {
+      if(event.relatedTarget && event.relatedTarget.id == button.id) {
         return;
       }
-      ball.style.position = "initial";
+      button.style.position = "initial";
     }
 
     let startDay : number = 0;
-    ball.onmousedown = function (event : MouseEvent) {
+    button.onmousedown = function (event : MouseEvent) {
       startDay = Math.round((event.x - startPos) / dayWidth);
     }
-    ball.onmouseup = function (event : MouseEvent) {
+    button.onmouseup = function (event : MouseEvent) {
       showBookingDialog(index, startDay, Math.round((event.x - startPos) / dayWidth));
     }
   }
@@ -80,13 +83,13 @@ onMounted(() => afterLoad());
         <BTd style="width: 85vw" colspan="2">
           <div v-if="true" style="height: 30px">
 <!--            <BBadge bg-variant="info">+</BBadge>-->
-            <BButton class="small-rm-btn" variant="outline-primary" v-bind:id="'btn' + index">+</BButton>
             <div class="h-100 position-absolute">
-              <span class="badge badge-warning position-absolute" v-for="b in bookings.filter((el) => el.car === str)"
-                    :style="`top: -20px;width: ${dayWidth * (b.end - b.start + 1)}px; left: ${dayWidth * (b.start - 0.5)}px`" >
-                {{ b.start + " - " + b.end}}
+              <span class="badge badge-warning position-relative" v-for="b in bookings.filter((el) => el.car === str)"
+                    :style="`top: 0px;width: ${dayWidth * (b.end - b.start + 1)}px; left: ${dayWidth * (b.start - 0.5)}px`" >
+                {{ b.start + ((b.start != b.end) ? (" - " + b.end) : "")}}
               </span>
             </div>
+            <BButton class="small-rm-btn" variant="outline-primary" v-bind:id="'btn' + index">+</BButton>
           </div>
         </BTd>
       </BTr>
