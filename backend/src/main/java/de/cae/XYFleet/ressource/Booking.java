@@ -50,8 +50,9 @@ public class Booking extends XYServerResource {
     }
 
     @Post()
-    public void createBooking() {
+    public String createBooking() {
         checkInRole(ROLE_USER);
+        return null;
     }
 
     @Put()
