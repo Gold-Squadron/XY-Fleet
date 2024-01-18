@@ -1,23 +1,24 @@
 <script setup lang="ts">
-import {onMounted, ref} from 'vue';
+import {computed, onMounted, ref} from 'vue';
+import type {GanttBarObject} from "@infectoone/vue-ganttastic";
 
 const dayWidth = 1.5 * parseFloat(getComputedStyle(document.documentElement).fontSize);
 let vehicles = ref(["Blue Van", "Red Van", "Green Smart", "Phillip's broken e-scooter"]);
 
 class Booking {
-  constructor(public car: String, public start: number, public end : number) {}
+  constructor(public car: string, public start: Date, public end : Date) {}
   isWithin(day : number) : Boolean {
-    return this.start <= day && this.end >= day;
+    return true; //his.start <= day && this.end >= day;
   }
 }
 
-let bookings = ref([new Booking("Blue Van", 3, 7)])
+let bookings = ref([new Booking("Blue Van", new Date(), new Date("2021-07-13 19:00"))])
 
 function isWithin(vehicle : string, day : number) : Boolean {
   return bookings.value.every((car) => car.car == vehicle && car.isWithin(day));
 }
 
-function showBookingDialog(carIndex : number,startDay: number, endDay: number) {
+function showBookingDialog(carIndex : number, startDay: Date, endDay: Date) {
   if(startDay > endDay) [startDay, endDay] = [endDay, startDay]
 
   bookings.value.push(new Booking(vehicles.value[carIndex], startDay, endDay));
@@ -25,76 +26,69 @@ function showBookingDialog(carIndex : number,startDay: number, endDay: number) {
 }
 
 function afterLoad() {
-  for (let index = 0; index < vehicles.value.length; index++) {
-    console.log(`init ${index}`);
-    const container : HTMLElement  = document.querySelector('#el' + index)!;
-    //if(container == null) return;
-    const button : HTMLElement  = document.querySelector('#btn' + index)!;
-    //if(ball == null) return;
-    const startPos : number = button.getBoundingClientRect().x;
-    container.onmousemove = function (event : MouseEvent) {
-      let x = event.clientX;
-      x = x - x % dayWidth;
-      if(x < startPos || isWithin(vehicles.value[index], x)) return;
-      button.style.position = "absolute";
-      button.style.left = `${x}px`;
-    }
-    container.onmouseout = function (event : MouseEvent) {
-      console.log("out")
-      //const relatedTargetAsHTML : HTMLElement = event.relatedTarget;
-      if(event.relatedTarget && event.relatedTarget.id == button.id) {
-        return;
+}
+const xx = computed( () => {
+  let map = new Map<string, GanttBarObject[]>();
+  vehicles.value.forEach(name => map.set(name, []))
+  bookings.value.forEach( (booking) => {
+    let x : GanttBarObject = {
+      myBeginDate: booking.start,
+      myEndDate: booking.end,
+      ganttBarConfig: {
+          id: booking.car + booking.start, // ... and a unique "id" property
+          label: "Lorem ipsum dolor"
       }
-      button.style.position = "initial";
     }
-
-    let startDay : number = 0;
-    button.onmousedown = function (event : MouseEvent) {
-      startDay = Math.round((event.x - startPos) / dayWidth);
-    }
-    button.onmouseup = function (event : MouseEvent) {
-      showBookingDialog(index, startDay, Math.round((event.x - startPos) / dayWidth));
+    map.get(booking.car)?.push(x);
+  })
+  return map;
+})
+const row1BarList = ref([
+  {
+    myBeginDate: "2021-07-13 13:00",
+    myEndDate: "2021-07-13 19:00",
+    ganttBarConfig: {
+      // each bar must have a nested ganttBarConfig object ...
+      id: "unique-id-1", // ... and a unique "id" property
+      label: "Lorem ipsum dolor"
     }
   }
-}
+])
+const row2BarList = ref([
+  {
+    myBeginDate: "2021-07-13 00:00",
+    myEndDate: "2021-07-14 02:00",
+    ganttBarConfig: {
+      id: "another-unique-id-2",
+      hasHandles: true,
+      label: "Hey, look at me",
+      style: {
+        // arbitrary CSS styling for your bar
+        background: "#e09b69",
+        borderRadius: "20px",
+        color: "black"
+      },
+      class: "foo" // you can also add CSS classes to your bars!
+    }
+  }
+])
 
 onMounted(() => afterLoad());
 </script>
 
 <template class="" >
-  <BTableSimple  class="roadmap-main-comp table-bordered " responsive>
-    <BThead class="table-dark">
-      <BTr>
-        <BTh>Cars</BTh>
-        <BTh v-for='m in ["Jan"]'>
-            <div style="">
-              <span>{{m}}</span>
-              <br>
-              <span v-for="i in 31" :style="'text-align: center; display: inline-block; width: ' + dayWidth + 'px;'">
-                {{i}}
-              </span>
-            </div>
-          </BTh>
-      </BTr>
-    </BThead>
-    <BTbody class="table-dark">
-      <BTr v-for="(str, index) in vehicles" v-bind:id="'el' + index">
-        <BTh >{{str}}</BTh>
-        <BTd style="width: 85vw" colspan="2">
-          <div v-if="true" style="height: 30px">
-<!--            <BBadge bg-variant="info">+</BBadge>-->
-            <div class="h-100 position-absolute">
-              <span class="badge badge-warning position-relative" v-for="b in bookings.filter((el) => el.car === str)"
-                    :style="`top: 0px;width: ${dayWidth * (b.end - b.start + 1)}px; left: ${dayWidth * (b.start - 0.5)}px`" >
-                {{ b.start + ((b.start != b.end) ? (" - " + b.end) : "")}}
-              </span>
-            </div>
-            <BButton class="small-rm-btn" variant="outline-primary" v-bind:id="'btn' + index">+</BButton>
-          </div>
-        </BTd>
-      </BTr>
-    </BTbody>
-  </BTableSimple >
+  <div class="align-self-auto">
+    <g-gantt-chart
+        chart-start="2021-07-12 12:00"
+        chart-end="2021-08-14 12:00"
+        precision="day"
+        bar-start="myBeginDate"
+        bar-end="myEndDate"
+        width="95%">
+      <g-gantt-row v-for="vehicle in vehicles" :label="vehicle" :bars="xx.get(vehicle)" />
+    </g-gantt-chart>
+  </div>
+
 </template>
 
 <style scoped>
