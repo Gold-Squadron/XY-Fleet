@@ -1,22 +1,17 @@
+import org.jooq.UpdatableRecord;
 import org.jooq.codegen.XYFleet.tables.records.*;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
-import org.restlet.data.*;
-import org.restlet.resource.ClientResource;
-import org.restlet.resource.ResourceException;
 
 import java.sql.Date;
 
 import static de.cae.XYFleet.authentication.XYAuthorizer.*;
-import static de.cae.XYFleet.ressource.XYServerResource.jSONFormat;
 import static org.jooq.codegen.XYFleet.Tables.*;
-import static org.junit.jupiter.api.Assertions.*;
 
-public class BookingRessourceTest extends RessourceTest {
-
+public class BookingResourceTest extends EntryResourceTest {
     @BeforeAll
     public static void initAll(){
             //Arrange

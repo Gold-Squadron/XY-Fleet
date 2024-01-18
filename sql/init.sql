@@ -7,7 +7,7 @@ create table if not exists SWT.users
     id        int auto_increment
         primary key,
     name      varchar(255) not null unique,
-    passwort varchar(255) not null,
+    password varchar(255) not null,
     role  varchar(255) not null,
     is_driver tinyint(1) not null
 );
