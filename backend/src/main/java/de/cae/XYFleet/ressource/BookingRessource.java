@@ -38,7 +38,7 @@ public class BookingRessource extends XYServerResource {
         String result = this.toString();
 
 
-        if (Integer.parseInt(getClientInfo().getUser().getName()) != bookingIdentifier && !isInRole("admin"))
+        if (Integer.parseInt(getClientInfo().getUser().getIdentifier()) != bookingIdentifier && !isInRole("admin"))
             throw new ResourceException(403);
         //DELETE bookings where id = {bookingIdentifier}
         dslContext.delete(BOOKINGS).where(BOOKINGS.ID.eq(bookingIdentifier)).execute();

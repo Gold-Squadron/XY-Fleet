@@ -46,7 +46,10 @@ public class BookingRessourceTest extends RessourceTest {
        super.delete_validCall_shouldReturnEntryInDatabase();
     }
     @ParameterizedTest
-    @CsvSource(value = {"Forbidden (403) - The server understood the request, but is refusing to fulfill it:"+ROLE_USER, "Forbidden (403) - The server understood the request, but is refusing to fulfill it:"+ROLE_SECURITY, "Unauthorized (401) - The request requires user authentication: "}, delimiter = ':')
+    @CsvSource(value = {
+            "Forbidden (403) - The server understood the request, but is refusing to fulfill it:"+ROLE_USER,
+            "Forbidden (403) - The server understood the request, but is refusing to fulfill it:"+ROLE_SECURITY,
+            "Unauthorized (401) - The request requires user authentication: "}, delimiter = ':')
     public void delete_invalidCall_shouldThrowResourceException(String responseMessage, String role) {
         super.delete_invalidCall_shouldThrowResourceException(responseMessage, role);
     }

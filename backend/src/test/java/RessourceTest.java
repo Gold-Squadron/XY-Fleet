@@ -72,6 +72,7 @@ public class RessourceTest {
 
     public void get_invalidCall_shouldThrowResourceException(String responseMessage, String role) {
         //Arrange
+        if (role==null) role = "";
         ClientResource clientResource = new ClientResource(url + uri);
         ChallengeResponse challengeResponse = new ChallengeResponse(ChallengeScheme.HTTP_BASIC, role, role);
         clientResource.setChallengeResponse(challengeResponse);
@@ -117,6 +118,8 @@ public class RessourceTest {
 
     public void delete_invalidCall_shouldThrowResourceException(String responseMessage, String role) {
         //Arrange
+        if(role==null) role = "";
+        System.out.println("responseMessage: " +responseMessage + ", role: "+ role);
         ClientResource clientResource = new ClientResource(url + uri);
         ChallengeResponse challengeResponse = new ChallengeResponse(ChallengeScheme.HTTP_BASIC, role, role);
         clientResource.setChallengeResponse(challengeResponse);

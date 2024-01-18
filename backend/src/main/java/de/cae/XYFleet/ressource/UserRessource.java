@@ -73,6 +73,7 @@ public class UserRessource extends XYServerResource {
         UpdateSetMoreStep<UsersRecord> moreStep = null;
 
         for (Parameter param : form) {
+            if(param.getValue() == null) throw new ResourceException(400, "no value for given param: "+param.getName());
             moreStep = switch (param.getName()) {
                 case "name" -> firstStep.set(USERS.NAME, param.getValue());
                 case "passwort" -> firstStep.set(USERS.PASSWORT, param.getValue());
@@ -101,7 +102,7 @@ public class UserRessource extends XYServerResource {
 
         String result = this.toString();
 
-        if (Integer.parseInt(getClientInfo().getUser().getName()) == bookingIdentifier)
+        if (Integer.parseInt(getClientInfo().getUser().getIdentifier()) == bookingIdentifier)
             throw new ResourceException(400, "you cannot delete the account you are logged in with!");
 
         //DELETE users WHERE id = {bookingIdentifier}
