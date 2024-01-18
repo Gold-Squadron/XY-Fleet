@@ -5,9 +5,7 @@ import org.jooq.Result;
 import org.jooq.codegen.XYFleet.tables.records.BookingsRecord;
 import org.jooq.codegen.XYFleet.tables.records.UsersRecord;
 import org.restlet.data.Status;
-import org.restlet.resource.Get;
-import org.restlet.resource.Put;
-import org.restlet.resource.ResourceException;
+import org.restlet.resource.*;
 
 import static org.jooq.codegen.XYFleet.tables.Bookings.BOOKINGS;
 
@@ -19,9 +17,16 @@ public class Bookings extends XYServerResource {
         return result.formatJSON(jSONFormat);
     }
     @Put
-    public String createBooking(){
+    public String createBookings(){
         isInRole(XYAuthorizer.ROLE_ADMIN);
         return new Booking().createBooking();
     }
-
+    @Post
+    public void postBookings(){
+        throw new ResourceException(405);
+    }
+    @Delete
+    public void deleteBookings(){
+        throw new ResourceException(405);
+    }
 }
