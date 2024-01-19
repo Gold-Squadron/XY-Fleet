@@ -23,7 +23,7 @@ public class UserRessourceTest extends RessourceTest {
     @BeforeAll
     public static void initAll() {
         //Arrange
-        UsersRecord user = new UsersRecord(0, "mMustermann", "123", "user", Byte.parseByte("1"));
+        UsersRecord user = new UsersRecord(0, "mMustermann", "123", "user", (byte) 1);
         user.setId(scenario.add(USERS, user));
         uri = "/user/" + user.getId();
         testRecord = user;
@@ -44,7 +44,7 @@ public class UserRessourceTest extends RessourceTest {
         clientResource.setQueryValue("name", "mMusterFrau");
         clientResource.setQueryValue("is_driver", "1");
         clientResource.setQueryValue("role", "security");
-        clientResource.setQueryValue("passwort", "123");
+        clientResource.setQueryValue("password", "123");
 
         clientResource.setChallengeResponse(challengeResponse);
         clientResource.setRetryAttempts(10);

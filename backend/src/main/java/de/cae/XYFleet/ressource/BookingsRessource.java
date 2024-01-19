@@ -5,7 +5,7 @@ import org.restlet.resource.Get;
 
 public class BookingsRessource extends XYServerResource {
     @Get("txt")
-    public String toString(){
+    public String toString() {
         isInRole(XYAuthorizer.ROLE_SECURITY);
         return "this is the bookings URI.";
     }

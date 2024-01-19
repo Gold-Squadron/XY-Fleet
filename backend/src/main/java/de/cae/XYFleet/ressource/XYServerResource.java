@@ -16,7 +16,7 @@ public abstract class XYServerResource extends ServerResource {
     protected DSLContext dslContext;
 
     protected void checkInRole(String roleName) {
-        if(!isInRole(roleName)){
+        if (!isInRole(roleName)) {
             throw new ResourceException(Status.CLIENT_ERROR_FORBIDDEN);
         }
     }
