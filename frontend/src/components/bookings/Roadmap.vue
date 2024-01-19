@@ -36,55 +36,33 @@ const xx = computed( () => {
       myEndDate: booking.end,
       ganttBarConfig: {
           id: booking.car + booking.start, // ... and a unique "id" property
-          label: "Lorem ipsum dolor"
+          label: "Lorem ipsum dolor",
+          hasHandles: false,
+          class: "bar-normal"
       }
     }
     map.get(booking.car)?.push(x);
   })
   return map;
 })
-const row1BarList = ref([
-  {
-    myBeginDate: "2021-07-13 13:00",
-    myEndDate: "2021-07-13 19:00",
-    ganttBarConfig: {
-      // each bar must have a nested ganttBarConfig object ...
-      id: "unique-id-1", // ... and a unique "id" property
-      label: "Lorem ipsum dolor"
-    }
-  }
-])
-const row2BarList = ref([
-  {
-    myBeginDate: "2021-07-13 00:00",
-    myEndDate: "2021-07-14 02:00",
-    ganttBarConfig: {
-      id: "another-unique-id-2",
-      hasHandles: true,
-      label: "Hey, look at me",
-      style: {
-        // arbitrary CSS styling for your bar
-        background: "#e09b69",
-        borderRadius: "20px",
-        color: "black"
-      },
-      class: "foo" // you can also add CSS classes to your bars!
-    }
-  }
-])
+
+
+const onContextmenuBar = (bar: GanttBarObject, e: MouseEvent, datetime?: string) => {
+  console.log("contextmenu-bar", bar, e, datetime)
+}
 
 onMounted(() => afterLoad());
 </script>
 
 <template class="" >
-  <div class="align-self-auto">
+  <div style="">
     <g-gantt-chart
         chart-start="2021-07-12 12:00"
         chart-end="2021-08-14 12:00"
         precision="day"
         bar-start="myBeginDate"
         bar-end="myEndDate"
-        width="95%">
+        @contextmenu-bar="onContextmenuBar($event.bar, $event.e, $event.datetime)">
       <g-gantt-row v-for="vehicle in vehicles" :label="vehicle" :bars="xx.get(vehicle)" />
     </g-gantt-chart>
   </div>
@@ -92,6 +70,9 @@ onMounted(() => afterLoad());
 </template>
 
 <style scoped>
+
+
+
   .roadmap-main-comp {
     margin: 10px;
   }

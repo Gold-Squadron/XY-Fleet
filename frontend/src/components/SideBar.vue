@@ -18,7 +18,7 @@
      max-width: 53px;
      flex-grow: 1;
      background-color: #d2d2d2;
-     z-index: 1;
+     z-index: 4;
      flex-grow: 1;
      background-color: #d2d2d2;
    }
