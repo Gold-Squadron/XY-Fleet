@@ -32,9 +32,9 @@ public abstract class ResourceTest {
         scenario = new Scenario();
         UsersRecord test = new UsersRecord();
 
-        UsersRecord admin = new UsersRecord(0, ROLE_ADMIN, ROLE_ADMIN, ROLE_ADMIN, Byte.valueOf("1"));
-        UsersRecord user = new UsersRecord(0, ROLE_USER, ROLE_USER, ROLE_USER, Byte.valueOf("1"));
-        UsersRecord security = new UsersRecord(0, ROLE_SECURITY, ROLE_SECURITY, ROLE_SECURITY, Byte.valueOf("0"));
+        UsersRecord admin = new UsersRecord(0, ROLE_ADMIN, ROLE_ADMIN, ROLE_ADMIN, (byte) 1 );
+        UsersRecord user = new UsersRecord(0, ROLE_USER, ROLE_USER, ROLE_USER, (byte) 1);
+        UsersRecord security = new UsersRecord(0, ROLE_SECURITY, ROLE_SECURITY, ROLE_SECURITY, (byte) 0);
         ADMIN_ID = scenario.add(USERS, admin);
         USER_ID = scenario.add(USERS, user);
         SECURITY_ID = scenario.add(USERS, security);
