@@ -8,7 +8,7 @@ import static de.cae.XYFleet.authentication.XYAuthorizer.ROLE_SECURITY;
 import static de.cae.XYFleet.authentication.XYAuthorizer.ROLE_USER;
 import static org.jooq.codegen.XYFleet.Tables.BOOKINGS;
 
-public class BookingRessource extends XYServerResource {
+public class BookingResource extends XYServerResource {
     private int Identifier;
 
     @Get("txt")
