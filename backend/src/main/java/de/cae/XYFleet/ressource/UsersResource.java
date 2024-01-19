@@ -3,8 +3,9 @@ package de.cae.XYFleet.ressource;
 import org.jooq.Record;
 import org.jooq.Record4;
 import org.jooq.Result;
+import org.restlet.data.Status;
 import org.restlet.resource.*;
-
+import org.restlet.data.Reference;
 import static de.cae.XYFleet.authentication.XYAuthorizer.ROLE_ADMIN;
 import static org.jooq.codegen.XYFleet.tables.Users.USERS;
 
@@ -19,8 +20,8 @@ public class UsersResource extends XYServerResource{
     }
     @Put
     public String createUser(){
-        isInRole(ROLE_ADMIN);
-        return new UserResource().createUser();
+        checkInRole(ROLE_ADMIN);
+        return new UserResource().handlePut(getQuery().getValuesMap());
     }
     @Post
     public String postUser(){

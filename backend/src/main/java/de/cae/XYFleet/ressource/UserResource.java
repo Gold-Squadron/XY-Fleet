@@ -28,10 +28,9 @@ public class UserResource extends XYServerResource {
     @Put
     public String createUser() throws ResourceException{
         checkInRole(ROLE_ADMIN);
-
-        //get Query entries
-        Form form = getQuery();
-        Map<String, String> values = form.getValuesMap();
+        return handlePut(getQuery().getValuesMap());
+    }
+    public String handlePut(Map<String, String> values) throws ResourceException{
 
         //Assert input
         String[] expected = {"name", "password", "is_driver", "role"};
@@ -47,11 +46,7 @@ public class UserResource extends XYServerResource {
         user.merge();
 
         return user.formatJSON(jSONFormat);
-        //dslContext.insertInto(USERS, USERS.NAME, USERS.PASSWORT, USERS.ROLE, USERS.IS_DRIVER)
-        //        .values(values.get("name"), values.get("passwort"), values.get("role"), Byte.parseByte(values.get("is_driver")))
-        //        .execute();
     }
-
     @Get()
     public String toString() throws ResourceException{
         checkInRole(ROLE_ADMIN);

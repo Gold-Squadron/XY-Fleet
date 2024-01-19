@@ -50,40 +50,16 @@ public class UserResourceTest extends EntryResourceTest {
 public void post_validCall_shouldReturnEntryInDatabase(String params) {
         super.post_validCall_shouldReturnEntryInDatabase(params);
     }
-    @ParameterizedTest
-    @CsvSource(value = {
-            "Forbidden (403) - The server understood the request, but is refusing to fulfill it:" + ROLE_USER + ":mMusterFrau",
-            "Forbidden (403) - The server understood the request, but is refusing to fulfill it:" + ROLE_SECURITY + ":mMusterFrau",
-            "Unauthorized (401) - The request requires user authentication:abc:mMusterFrau",
-            "Bad Request (400) - The request could not be understood by the server due to malformed syntax:" + ROLE_ADMIN + ":",
-            "Bad Request (400) - The request could not be understood by the server due to malformed syntax:" + ROLE_ADMIN + ":" + ROLE_ADMIN}, delimiter = ':')
-    public void post_invalidCall_shouldReturnEntryInDatabase(String responseMessage, String role, String value) {
-        ClientResource clientResource = new ClientResource(url + uri);
-        ChallengeResponse challengeResponse = new ChallengeResponse(ChallengeScheme.HTTP_BASIC, role, role);
-        //Query
-        clientResource.setQueryValue("name", value);
-
-        clientResource.setChallengeResponse(challengeResponse);
-        clientResource.setRetryAttempts(10);
-
-
-        try {
-            //Act
-            //Assert
-            // Send a post request
-            ResourceException response = assertThrows(ResourceException.class, () -> {
-                clientResource.post(null);
-            });
-
-            assertEquals(responseMessage, response.getMessage());
-            //Objects.requireNonNull(Objects.requireNonNull(Database.getDSLContext()).fetchOne(USERS, USERS.NAME.eq("mMusterFrau"))).delete();
-            //assert clientResource.get(String.class) !=null;
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            // Release the resources when done
-            clientResource.release();
-        }
+     @Override
+     @ParameterizedTest
+     @CsvSource(value = {
+             "Forbidden (403) - The server understood the request, but is refusing to fulfill it:" + ROLE_USER + ":name=mMusterFrau",
+             "Forbidden (403) - The server understood the request, but is refusing to fulfill it:" + ROLE_SECURITY + ":name=mMusterFrau",
+             "Unauthorized (401) - The request requires user authentication:abc:name=mMusterFrau",
+             "Bad Request (400) - The request could not be understood by the server due to malformed syntax:" + ROLE_ADMIN + ":",
+             "Bad Request (400) - The request could not be understood by the server due to malformed syntax:" + ROLE_ADMIN + ":name=" + ROLE_ADMIN}, delimiter = ':')
+     public void post_invalidCall_shouldReturnEntryInDatabase(String responseMessage, String role, String params) {
+    super.post_invalidCall_shouldReturnEntryInDatabase(responseMessage, role, params);
     }
     @Override
     @Test

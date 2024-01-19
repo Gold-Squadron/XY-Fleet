@@ -18,11 +18,13 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 public class UsersResourceTest extends ResourceTest {
 
     @BeforeAll
-    public static void initAll(){
+    public static void initAll() {
         UsersRecord user = new UsersRecord(0, "mMustermann", "123", "user", Byte.parseByte("1"));
-        ResourceTest.uri = "/user";
-        ResourceTest.testRecord =  Database.getDSLContext().select(Users.USERS.ID, Users.USERS.NAME, Users.USERS.ROLE, Users.USERS.IS_DRIVER).from(Users.USERS).fetch();
+        uri = "/user";
+        testRecord = Database.getDSLContext().select(Users.USERS.ID, Users.USERS.NAME, Users.USERS.ROLE, Users.USERS.IS_DRIVER).from(Users.USERS).fetch();
+        table = USERS;
     }
+
     @Override
     @ParameterizedTest
     @CsvSource(value = {
@@ -33,6 +35,7 @@ public class UsersResourceTest extends ResourceTest {
     public void get_invalidCall_shouldThrowResourceException(String responseMessage, String role) {
         super.get_invalidCall_shouldThrowResourceException(responseMessage, role);
     }
+
     @Override
     @Test
     public void get_validCall_shouldReturnEntryInDatabase() {
@@ -42,42 +45,32 @@ public class UsersResourceTest extends ResourceTest {
     @Override
     @ParameterizedTest
     @CsvSource(value = {
-            "Method Not Allowed (405) - The method specified in the request is not allowed for the resource identified by the request URI" + ROLE_USER,
+            "Method Not Allowed (405) - The method specified in the request is not allowed for the resource identified by the request URI:" + ROLE_USER,
             "Unauthorized (401) - The request requires user authentication:abc",
     }, delimiter = ':')
     public void delete_invalidCall_shouldThrowResourceException(String responseMessage, String role) {
         super.delete_invalidCall_shouldThrowResourceException(responseMessage, role);
     }
+
     @ParameterizedTest
-    @CsvSource(value = {}, delimiter = ':')
-    public void put_validCall_shouldReturnEntryInDatabase(){
-        //Arrange
-        //String query = "?name=mMusterFrau&passwort=123&is_driver=0&role=security";
-        ClientResource clientResource = new ClientResource(ResourceTest.url + ResourceTest.uri);
-        ChallengeResponse challengeResponse = new ChallengeResponse(ChallengeScheme.HTTP_BASIC, ROLE_ADMIN, ROLE_ADMIN);
-        //Query
-        clientResource.setQueryValue("name", "mMusterFrau");
-        clientResource.setQueryValue("is_driver", "1");
-        clientResource.setQueryValue("role", "security");
-        clientResource.setQueryValue("password", "123");
+    @CsvSource(value = {
+            "name=mMusterKerl&password=123&role=security&is_driver=1",
+            "name=lhelbig3&password=HelloWorld&role=user&is_driver=0"}, delimiter = ':')
+    public void put_validCall_shouldReturnEntryInDatabase(String params) {
+        super.put_validCall_shouldReturnEntryInDatabase(params);
+    }
 
-        clientResource.setChallengeResponse(challengeResponse);
-        clientResource.setRetryAttempts(10);
-        try {
-            //Assert
-            // Send a post request
-            assertDoesNotThrow(() -> {
-                clientResource.put(null);
-            });
-
-            //TODO this is a very unpleasent way to delete the created entry
-            Objects.requireNonNull(Objects.requireNonNull(Database.getDSLContext()).fetchOne(USERS, USERS.NAME.eq("mMusterFrau"))).delete();
-            //assert clientResource.get(String.class) !=null;
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            // Release the resources when done
-            clientResource.release();
-        }
+    @Override
+    @ParameterizedTest
+    @CsvSource(value = {
+            "Forbidden (403) - The server understood the request, but is refusing to fulfill it:"+ROLE_SECURITY+":name=mMusterKerl&password=123&role=security&is_driver=1",
+            "Forbidden (403) - The server understood the request, but is refusing to fulfill it:"+ROLE_USER+":name=lhelbig&password=HelloWorld&role=user&is_driver=0",
+            "Bad Request (400) - The request could not be understood by the server due to malformed syntax:"+ROLE_ADMIN+":&password=123&role=security&is_driver=1",
+            "Bad Request (400) - The request could not be understood by the server due to malformed syntax:"+ROLE_ADMIN+":name=password=123&role=security&is_driver=1",
+            "Bad Request (400) - The request could not be understood by the server due to malformed syntax:"+ROLE_ADMIN+":name="+ROLE_ADMIN+"&password=123&role=security&is_driver=1",
+            "Bad Request (400) - The request could not be understood by the server due to malformed syntax:"+ROLE_ADMIN+":"
+    }, delimiter=':')
+    public void put_invalidCall_shouldThrowResourceException(String responseMessage, String role, String params) {
+        super.put_invalidCall_shouldThrowResourceException(responseMessage, role, params);
     }
 }

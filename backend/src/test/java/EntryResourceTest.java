@@ -21,11 +21,12 @@ public abstract class EntryResourceTest extends ResourceTest {
         clientResource.setChallengeResponse(challengeResponse);
         clientResource.setRetryAttempts(10);
         //Query
-        if (params == null) params = "";
-        String[] paramList = params.split("&");
-        for (String param : paramList) {
-            String[] temp = param.split("=");
-            clientResource.setQueryValue(temp[0], temp[1]);
+        if (params != null) {
+            String[] paramList = params.split("&");
+            for (String param : paramList) {
+                String[] temp = param.split("=");
+                clientResource.setQueryValue(temp[0], temp[1]);
+            }
         }
         try {
             //Act
@@ -39,7 +40,7 @@ public abstract class EntryResourceTest extends ResourceTest {
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            scenario.merge(USERS, testRecord);
+            scenario.merge(table, testRecord);
             // Release the resources when done
             clientResource.release();
         }
@@ -53,13 +54,13 @@ public abstract class EntryResourceTest extends ResourceTest {
         clientResource.setRetryAttempts(10);
 
         //Query
-        if (params == null) params = "";
-        String[] paramList = params.split("&");
-        for (String param : paramList) {
-            String[] temp = param.split("=");
-            clientResource.setQueryValue(temp[0], temp[1]);
+        if (params !=null) {
+            String[] paramList = params.split("&");
+            for (String param : paramList) {
+                String[] temp = param.split("=");
+                clientResource.setQueryValue(temp[0], temp[1]);
+            }
         }
-
         try {
             //Act
             //Assert

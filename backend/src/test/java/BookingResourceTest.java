@@ -31,6 +31,7 @@ public class BookingResourceTest extends EntryResourceTest {
             booking.setId(scenario.add(BOOKINGS, booking));
             uri = "/booking/" + booking.getId();
             testRecord = booking;
+            table = BOOKINGS;
     }
     @BeforeEach
     public void initSingle(){
@@ -40,6 +41,7 @@ public class BookingResourceTest extends EntryResourceTest {
     public void delete_validCall_shouldReturnEntryInDatabase() {
        super.delete_validCall_shouldReturnEntryInDatabase();
     }
+    @Override
     @ParameterizedTest
     @CsvSource(value = {
             "Forbidden (403) - The server understood the request, but is refusing to fulfill it:"+ROLE_USER,

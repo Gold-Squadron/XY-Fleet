@@ -113,7 +113,6 @@ public abstract class ResourceTest {
     public void delete_invalidCall_shouldThrowResourceException(String responseMessage, String role) {
         //Arrange
         if (role == null) role = "";
-        System.out.println("responseMessage: " + responseMessage + ", role: " + role);
         ClientResource clientResource = new ClientResource(url + uri);
         ChallengeResponse challengeResponse = new ChallengeResponse(ChallengeScheme.HTTP_BASIC, role, role);
         clientResource.setChallengeResponse(challengeResponse);
@@ -189,7 +188,9 @@ public abstract class ResourceTest {
             paramList = params.split("&");
             for (String param : paramList) {
                 String[] temp = param.split("=");
-                clientResource.setQueryValue(temp[0], temp[1]);
+                if (temp.length == 2) {
+                    clientResource.setQueryValue(temp[0], temp[1]);
+                }
             }
         }
 
@@ -208,11 +209,13 @@ public abstract class ResourceTest {
             //DELETE if wrong error occured or it got falsely accepted.
             Condition condition = DSL.noCondition(); // Start with a true condition
 
-            if (paramList != null){
+            if (paramList != null) {
                 for (String param : paramList) {
                     String[] temp = param.split("=");
-                    Field<String> myField = table.field(temp[0], String.class);
-                    condition = condition.and(myField.eq(DSL.val(temp[1], myField.getDataType())));
+                    if (temp.length == 2) {
+                        Field<String> myField = table.field(temp[0], String.class);
+                        condition = condition.and(myField.eq(DSL.val(temp[1], myField.getDataType())));
+                    }
                 }
                 Database.getDSLContext().deleteFrom(table).where(condition).execute();
             }
@@ -220,9 +223,9 @@ public abstract class ResourceTest {
             clientResource.release();
         }
     }
+
     @AfterAll
     public static void cleanUp() {
-        System.out.println("cleanUp");
         scenario.cleanUp();
     }
 
