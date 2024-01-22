@@ -25,7 +25,7 @@ public class BookingResource extends XYServerResource {
     protected void doInit() throws ResourceException {
         super.doInit();
         try {
-            Identifier = Integer.parseInt(getAttribute("Identifier"));
+            Identifier = Integer.parseInt(getAttribute("identifier"));
         } catch (NumberFormatException e) {
             Identifier = -1;
         }
