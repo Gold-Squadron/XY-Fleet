@@ -31,12 +31,14 @@ public class BookingResourceTest extends EntryResourceTest {
             booking.setId(scenario.add(BOOKINGS, booking));
             uri = "/booking/" + booking.getId();
             testRecord = booking;
+            testTable = testRecord;
             table = BOOKINGS;
     }
     @BeforeEach
     public void initSingle(){
         scenario.merge(BOOKINGS, testRecord);
     }
+    @Override
     @Test
     public void delete_validCall_shouldReturnEntryInDatabase() {
        super.delete_validCall_shouldReturnEntryInDatabase();
@@ -55,7 +57,7 @@ public class BookingResourceTest extends EntryResourceTest {
     public void get_invalidCall_shouldThrowResourceException(String responseMessage, String role) {
         super.get_invalidCall_shouldThrowResourceException(responseMessage, role);
     }
-
+    @Override
     @Test
     public void get_validCall_shouldReturnEntryInDatabase() {
         super.get_validCall_shouldReturnEntryInDatabase();
