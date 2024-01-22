@@ -20,6 +20,6 @@ public abstract class XYServerResource extends ServerResource {
             throw new ResourceException(Status.CLIENT_ERROR_FORBIDDEN);
         }
     }
-
-
+    abstract  public String createEntity() throws ResourceException;
+    abstract public String toString() throws ResourceException;
 }

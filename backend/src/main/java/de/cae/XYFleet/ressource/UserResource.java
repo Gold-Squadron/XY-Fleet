@@ -12,21 +12,11 @@ import java.util.Map;
 import static de.cae.XYFleet.authentication.XYAuthorizer.*;
 import static org.jooq.codegen.XYFleet.Tables.USERS;
 
-public class UserResource extends XYServerResource {
-    private int Identifier;
+public class UserResource extends EntryResource {
 
     @Override
-    protected void doInit() throws ResourceException {
-        super.doInit();
-        try {
-            Identifier = Integer.parseInt(getAttribute("Identifier"));
-        } catch (NumberFormatException e) {
-            Identifier = -1;
-        }
-    }
-
     @Put
-    public String createUser() throws ResourceException {
+    public String createEntity() throws ResourceException {
         checkInRole(ROLE_ADMIN);
         return handlePut(getQuery().getValuesMap());
     }
@@ -49,18 +39,19 @@ public class UserResource extends XYServerResource {
 
         return user.formatJSON(jSONFormat);
     }
+    @Override
     @Get()
     public String toString() throws ResourceException {
         checkInRole(ROLE_ADMIN);
         //SELECT * FROM users where id = {Identifier}
-        UsersRecord result = dslContext.fetchOne(USERS, USERS.ID.eq(Identifier));
+        UsersRecord result = dslContext.fetchOne(USERS, USERS.ID.eq(identifier));
 
         if (result == null) throw new ResourceException(404, "not found");
         return result.formatJSON(jSONFormat);
     }
-
+    @Override
     @Post()
-    public String changeUser() throws ResourceException {
+    public String editEntry() throws ResourceException {
         checkInRole(ROLE_ADMIN);
 
         Form form = getQuery();
@@ -89,22 +80,22 @@ public class UserResource extends XYServerResource {
 
 
         //UPDATE users SET ({given values}) WHERE id = {Identifier}
-        UsersRecord record = moreStep.where(USERS.ID.eq(Identifier)).returning().fetchOne();
+        UsersRecord record = moreStep.where(USERS.ID.eq(identifier)).returning().fetchOne();
         if (record == null) throw new ResourceException(500, "internal Server Error");
         return record.formatJSON(jSONFormat);
     }
-
+    @Override
     @Delete
-    public String deleteUser() throws ResourceException {
+    public String deleteEntry() throws ResourceException {
         checkInRole(ROLE_ADMIN);
 
         String result = this.toString();
 
-        if (Integer.parseInt(getClientInfo().getUser().getIdentifier()) == Identifier)
+        if (Integer.parseInt(getClientInfo().getUser().getIdentifier()) == identifier)
             throw new ResourceException(400, "you cannot delete the account you are logged in with!");
 
         //DELETE users WHERE id = {Identifier}
-        dslContext.delete(USERS).where(USERS.ID.eq(Identifier)).execute();
+        dslContext.delete(USERS).where(USERS.ID.eq(identifier)).execute();
 
         return result;
     }

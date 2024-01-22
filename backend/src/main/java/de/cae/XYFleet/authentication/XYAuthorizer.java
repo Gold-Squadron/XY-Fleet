@@ -30,9 +30,9 @@ public class XYAuthorizer extends Application {
 
     private Router createBaseRouter() {
         Router router = new Router(getContext());
-        router.attach("/booking/{bookingIdentifier}", BookingResource.class);
+        router.attach("/booking/{identifier}", BookingResource.class);
         router.attach("/booking", BookingsResource.class);
-        router.attach("/user/{bookingIdentifier}", UserResource.class);
+        router.attach("/user/{identifier}", UserResource.class);
         router.attach("/user", UsersResource.class);
         router.attach("/xywing", VehicleResource.class);
         router.attach("/test2", test.class);
