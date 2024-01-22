@@ -12,7 +12,7 @@ class Booking {
   }
 }
 
-let bookings = ref([new Booking("Blue Van", new Date(), new Date("2021-07-13 19:00"))])
+let bookings = ref([new Booking("Blue Van", new Date(), new Date("2023-07-13 19:00"))])
 
 function isWithin(vehicle : string, day : number) : Boolean {
   return bookings.value.every((car) => car.car == vehicle && car.isWithin(day));
@@ -57,9 +57,9 @@ onMounted(() => afterLoad());
 <template class="" >
   <div style="">
     <g-gantt-chart
-        chart-start="2021-07-12 12:00"
-        chart-end="2021-08-14 12:00"
-        precision="day"
+        :chart-start="new Date()"
+        chart-end="2024-08-14 12:00"
+        precision="month"
         bar-start="myBeginDate"
         bar-end="myEndDate"
         @contextmenu-bar="onContextmenuBar($event.bar, $event.e, $event.datetime)">
