@@ -1,14 +1,12 @@
 import de.cae.XYFleet.Database;
 import org.jooq.*;
 import org.jooq.Record;
-import org.jooq.codegen.XYFleet.Tables;
 import org.jooq.codegen.XYFleet.tables.records.UsersRecord;
 import org.jooq.impl.DSL;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.restlet.data.ChallengeResponse;
 import org.restlet.data.ChallengeScheme;
-import org.restlet.representation.Representation;
 import org.restlet.resource.ClientResource;
 import org.restlet.resource.ResourceException;
 
@@ -21,7 +19,7 @@ public abstract class ResourceTest {
     protected static String url = "http://" + "@localhost:8080";
     protected static String uri;
     protected static Table<?> table;
-    protected static Formattable testRecord = null;
+    protected static Formattable testTable;
     protected static int ADMIN_ID;
     protected static int USER_ID;
     protected static int SECURITY_ID;
@@ -55,7 +53,7 @@ public abstract class ResourceTest {
                 clientResource.get(String.class);
             });
             //Assert
-            assertEquals(testRecord.formatJSON(jSONFormat), response);
+            assertEquals(testTable.formatJSON(jSONFormat), response);
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
@@ -99,7 +97,7 @@ public abstract class ResourceTest {
             // Send a GET request
             String response = clientResource.get(String.class);
             //Assert
-            assertEquals(testRecord.formatJSON(jSONFormat), response);
+            assertEquals(testTable.formatJSON(jSONFormat), response);
 
         } catch (
                 Exception e) {

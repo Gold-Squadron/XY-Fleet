@@ -5,11 +5,6 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
-import org.restlet.data.ChallengeResponse;
-import org.restlet.data.ChallengeScheme;
-import org.restlet.resource.ClientResource;
-
-import java.util.Objects;
 
 import static de.cae.XYFleet.authentication.XYAuthorizer.*;
 import static org.jooq.codegen.XYFleet.Tables.USERS;
@@ -21,7 +16,7 @@ public class UsersResourceTest extends ResourceTest {
     public static void initAll() {
         UsersRecord user = new UsersRecord(0, "mMustermann", "123", "user", Byte.parseByte("1"));
         uri = "/user";
-        testRecord = Database.getDSLContext().select(Users.USERS.ID, Users.USERS.NAME, Users.USERS.ROLE, Users.USERS.IS_DRIVER).from(Users.USERS).fetch();
+        testTable = Database.getDSLContext().select(Users.USERS.ID, Users.USERS.NAME, Users.USERS.ROLE, Users.USERS.IS_DRIVER).from(Users.USERS).fetch();
         table = USERS;
     }
 
