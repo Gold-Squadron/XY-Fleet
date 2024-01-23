@@ -1,22 +1,17 @@
+import org.jooq.UpdatableRecord;
 import org.jooq.codegen.XYFleet.tables.records.*;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
-import org.restlet.data.*;
-import org.restlet.resource.ClientResource;
-import org.restlet.resource.ResourceException;
 
 import java.sql.Date;
 
 import static de.cae.XYFleet.authentication.XYAuthorizer.*;
-import static de.cae.XYFleet.ressource.XYServerResource.jSONFormat;
 import static org.jooq.codegen.XYFleet.Tables.*;
-import static org.junit.jupiter.api.Assertions.*;
 
-public class BookingRessourceTest extends RessourceTest {
-
+public class BookingResourceTest extends EntryResourceTest {
     @BeforeAll
     public static void initAll(){
             //Arrange
@@ -36,15 +31,19 @@ public class BookingRessourceTest extends RessourceTest {
             booking.setId(scenario.add(BOOKINGS, booking));
             uri = "/booking/" + booking.getId();
             testRecord = booking;
+            testTable = testRecord;
+            table = BOOKINGS;
     }
     @BeforeEach
     public void initSingle(){
         scenario.merge(BOOKINGS, testRecord);
     }
+    @Override
     @Test
     public void delete_validCall_shouldReturnEntryInDatabase() {
        super.delete_validCall_shouldReturnEntryInDatabase();
     }
+    @Override
     @ParameterizedTest
     @CsvSource(value = {
             "Forbidden (403) - The server understood the request, but is refusing to fulfill it:"+ROLE_USER,
@@ -58,7 +57,7 @@ public class BookingRessourceTest extends RessourceTest {
     public void get_invalidCall_shouldThrowResourceException(String responseMessage, String role) {
         super.get_invalidCall_shouldThrowResourceException(responseMessage, role);
     }
-
+    @Override
     @Test
     public void get_validCall_shouldReturnEntryInDatabase() {
         super.get_validCall_shouldReturnEntryInDatabase();

@@ -1,33 +1,25 @@
-
 import de.cae.XYFleet.Database;
-import org.jooq.DSLContext;
-import org.jooq.UpdatableRecord;
-import org.jooq.codegen.XYFleet.tables.Users;
-import org.jooq.codegen.XYFleet.tables.records.BookingsRecord;
+import org.jooq.*;
+import org.jooq.Record;
 import org.jooq.codegen.XYFleet.tables.records.UsersRecord;
-import org.jooq.impl.UpdatableRecordImpl;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
+import org.jooq.impl.DSL;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.restlet.data.ChallengeResponse;
 import org.restlet.data.ChallengeScheme;
 import org.restlet.resource.ClientResource;
 import org.restlet.resource.ResourceException;
-import org.restlet.security.User;
 
 import static de.cae.XYFleet.authentication.XYAuthorizer.*;
 import static de.cae.XYFleet.ressource.XYServerResource.jSONFormat;
 import static org.jooq.codegen.XYFleet.tables.Users.USERS;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 
-import org.jooq.codegen.XYFleet.Tables.*;
-
-public class RessourceTest {
+public abstract class ResourceTest {
     protected static String url = "http://" + "@localhost:8080";
     protected static String uri;
-    protected static UpdatableRecord testRecord = null;
+    protected static Table<?> table;
+    protected static Formattable testTable;
     protected static int ADMIN_ID;
     protected static int USER_ID;
     protected static int SECURITY_ID;
@@ -61,7 +53,7 @@ public class RessourceTest {
                 clientResource.get(String.class);
             });
             //Assert
-            assertEquals(testRecord.formatJSON(jSONFormat), response);
+            assertEquals(testTable.formatJSON(jSONFormat), response);
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
@@ -72,7 +64,7 @@ public class RessourceTest {
 
     public void get_invalidCall_shouldThrowResourceException(String responseMessage, String role) {
         //Arrange
-        if (role==null) role = "";
+        if (role == null) role = "";
         ClientResource clientResource = new ClientResource(url + uri);
         ChallengeResponse challengeResponse = new ChallengeResponse(ChallengeScheme.HTTP_BASIC, role, role);
         clientResource.setChallengeResponse(challengeResponse);
@@ -105,7 +97,7 @@ public class RessourceTest {
             // Send a GET request
             String response = clientResource.get(String.class);
             //Assert
-            assertEquals(testRecord.formatJSON(jSONFormat), response);
+            assertEquals(testTable.formatJSON(jSONFormat), response);
 
         } catch (
                 Exception e) {
@@ -118,8 +110,7 @@ public class RessourceTest {
 
     public void delete_invalidCall_shouldThrowResourceException(String responseMessage, String role) {
         //Arrange
-        if(role==null) role = "";
-        System.out.println("responseMessage: " +responseMessage + ", role: "+ role);
+        if (role == null) role = "";
         ClientResource clientResource = new ClientResource(url + uri);
         ChallengeResponse challengeResponse = new ChallengeResponse(ChallengeScheme.HTTP_BASIC, role, role);
         clientResource.setChallengeResponse(challengeResponse);
@@ -140,9 +131,99 @@ public class RessourceTest {
         }
     }
 
+    public void put_validCall_shouldReturnEntryInDatabase(String params) {
+        //Arrange
+
+        ClientResource clientResource = new ClientResource(url + uri);
+        ChallengeResponse challengeResponse = new ChallengeResponse(ChallengeScheme.HTTP_BASIC, ROLE_ADMIN, ROLE_ADMIN);
+        clientResource.setChallengeResponse(challengeResponse);
+        clientResource.setRetryAttempts(10);
+
+        //Query
+        if (params == null) params = "";
+        String[] paramList = params.split("&");
+        for (String param : paramList) {
+            String[] temp = param.split("=");
+            clientResource.setQueryValue(temp[0], temp[1]);
+        }
+
+        try {
+            //Assert
+            // Send a post request
+            assertDoesNotThrow(() -> {
+                clientResource.put(null);
+            });
+
+            //DELETE if wrong error occured or it got falsely accepted.
+            Condition condition = DSL.trueCondition(); // Start with a true condition
+
+            for (String param : paramList) {
+                String[] temp = param.split("=");
+                Field<String> myField = table.field(temp[0], String.class);
+                condition = condition.and(myField.eq(DSL.val(temp[1], myField.getDataType())));
+            }
+            Record result = Database.getDSLContext().deleteFrom(table).where(condition).returning().fetchOne();
+            assertNotNull(result);
+        } catch (Exception e) {
+
+            e.printStackTrace();
+        } finally {
+            // Release the resources when done
+            clientResource.release();
+        }
+    }
+
+    public void put_invalidCall_shouldThrowResourceException(String responseMessage, String role, String params) {
+        //Arrange
+        ClientResource clientResource = new ClientResource(url + uri);
+        ChallengeResponse challengeResponse = new ChallengeResponse(ChallengeScheme.HTTP_BASIC, role, role);
+        clientResource.setChallengeResponse(challengeResponse);
+        clientResource.setRetryAttempts(10);
+
+        //Query
+        String[] paramList = null;
+        if (params != null) {
+            paramList = params.split("&");
+            for (String param : paramList) {
+                String[] temp = param.split("=");
+                if (temp.length == 2) {
+                    clientResource.setQueryValue(temp[0], temp[1]);
+                }
+            }
+        }
+
+        try {
+            //Act
+            //Assert
+            // Send a put request
+            ResourceException response = assertThrows(ResourceException.class, () -> {
+                clientResource.put(null);
+            });
+
+            assertEquals(responseMessage, response.getMessage());
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            //DELETE if wrong error occured or it got falsely accepted.
+            Condition condition = DSL.noCondition(); // Start with a true condition
+
+            if (paramList != null) {
+                for (String param : paramList) {
+                    String[] temp = param.split("=");
+                    if (temp.length == 2) {
+                        Field<String> myField = table.field(temp[0], String.class);
+                        condition = condition.and(myField.eq(DSL.val(temp[1], myField.getDataType())));
+                    }
+                }
+                Database.getDSLContext().deleteFrom(table).where(condition).execute();
+            }
+            // Release the resources when done
+            clientResource.release();
+        }
+    }
+
     @AfterAll
     public static void cleanUp() {
-        System.out.println("cleanUp");
         scenario.cleanUp();
     }
 

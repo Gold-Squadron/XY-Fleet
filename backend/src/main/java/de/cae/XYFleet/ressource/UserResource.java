@@ -12,14 +12,14 @@ import java.util.Map;
 import static de.cae.XYFleet.authentication.XYAuthorizer.*;
 import static org.jooq.codegen.XYFleet.Tables.USERS;
 
-public class UserRessource extends XYServerResource {
+public class UserResource extends XYServerResource {
     private int Identifier;
 
     @Override
     protected void doInit() throws ResourceException {
         super.doInit();
         try {
-            Identifier = Integer.parseInt(getAttribute("Identifier"));
+            Identifier = Integer.parseInt(getAttribute("identifier"));
         } catch (NumberFormatException e) {
             Identifier = -1;
         }
@@ -28,13 +28,12 @@ public class UserRessource extends XYServerResource {
     @Put
     public String createUser() throws ResourceException {
         checkInRole(ROLE_ADMIN);
-
-        //get Query entries
-        Form form = getQuery();
-        Map<String, String> values = form.getValuesMap();
+        return handlePut(getQuery().getValuesMap());
+    }
+    public String handlePut(Map<String, String> values) throws ResourceException{
 
         //Assert input
-        String[] expected = {"name", "passwort", "is_driver", "role"};
+        String[] expected = {"name", "password", "is_driver", "role"};
         //check if all expected values are given
         for (String a : expected)
             if (values.get(a) == null) throw new ResourceException(400, "column: " + a + ", missing value.");
@@ -43,17 +42,13 @@ public class UserRessource extends XYServerResource {
             throw new ResourceException(400, "column: name, user with name:" + values.get("name") + "already exists");
 
         //INSERT INTO user (name, passwort, role, is_driver) VALUES ({query values})
-        UsersRecord user = new UsersRecord(0, values.get("name"), values.get("passwort"), values.get("role"), Byte.parseByte(values.get("is_driver")));
+        UsersRecord user  = new UsersRecord(0, values.get("name"), values.get("password"), values.get("role"), Byte.parseByte(values.get("is_driver")));
         user.setId(null);
         user = dslContext.newRecord(USERS, user);
         user.merge();
 
         return user.formatJSON(jSONFormat);
-        //dslContext.insertInto(USERS, USERS.NAME, USERS.PASSWORT, USERS.ROLE, USERS.IS_DRIVER)
-        //        .values(values.get("name"), values.get("passwort"), values.get("role"), Byte.parseByte(values.get("is_driver")))
-        //        .execute();
     }
-
     @Get()
     public String toString() throws ResourceException {
         checkInRole(ROLE_ADMIN);
@@ -78,7 +73,7 @@ public class UserRessource extends XYServerResource {
                 throw new ResourceException(400, "no value for given param: " + param.getName());
             moreStep = switch (param.getName()) {
                 case "name" -> firstStep.set(USERS.NAME, param.getValue());
-                case "passwort" -> firstStep.set(USERS.PASSWORD, param.getValue());
+                case "password" -> firstStep.set(USERS.PASSWORD, param.getValue());
                 case "role" -> firstStep.set(USERS.ROLE, param.getValue());
                 case "is_driver" -> firstStep.set(USERS.IS_DRIVER, Byte.parseByte(param.getValue()));
                 default ->
