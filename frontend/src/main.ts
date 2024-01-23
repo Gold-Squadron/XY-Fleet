@@ -5,7 +5,7 @@ import 'bootstrap-vue-next/dist/bootstrap-vue-next.css'
 
 import ganttastic from '@infectoone/vue-ganttastic'
 
-import { createApp } from 'vue'
+import {computed, createApp} from 'vue'
 import App from './App.vue'
 
 export enum Views {
@@ -14,6 +14,13 @@ export enum Views {
     ROADMAP,
     VEHICLE_DASHBOARD,
     USER_MANAGEMENT
+}
+
+export class Booking {
+    constructor(public car: string = "", public start: Date = new Date(), public end : Date = new Date(), public reason: string = "", public driver: string = "nsimon") {}
+    isWithin(day : number) : Boolean {
+        return true; //his.start <= day && this.end >= day;
+    }
 }
 
 const app = createApp(App);

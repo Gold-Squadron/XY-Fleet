@@ -4,7 +4,9 @@
 
 <template>
   <nav class="navbar navbar-expand-sm navbar-light bg-light shadow-custom">
-    <a class="navbar-brand text-white">XY-Fleet</a>
+    <a class="navbar-brand text-white p-0">
+      <img src="/src/assets/logo.png" alt="XY-Fleet" height="55rem">
+    </a>
 
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav mr-auto"></ul>
@@ -38,7 +40,11 @@
     cursor: pointer;
   }
 
-  i:hover{
-    color: #e0e0e0 !important;
-  }
+i:hover{
+  color: #e0e0e0 !important;
+}
+
+a:hover {
+  background-color: #407fb7 !important;
+}
 </style>
