@@ -8,6 +8,14 @@ import ganttastic from '@infectoone/vue-ganttastic'
 import { createApp } from 'vue'
 import App from './App.vue'
 
+export enum Views {
+    NONE,
+    CALENDAR,
+    ROADMAP,
+    VEHICLE_DASHBOARD,
+    USER_MANAGEMENT
+}
+
 const app = createApp(App);
 
 app.use(ganttastic)
