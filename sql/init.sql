@@ -1,4 +1,4 @@
-DROP SCHEMA SWT;
+DROP SCHEMA if exists SWT;
 
 create schema if not exists SWT;
 
