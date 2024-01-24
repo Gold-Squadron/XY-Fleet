@@ -2,7 +2,7 @@ package de.cae.XYFleet.ressource;
 
 import org.restlet.resource.Get;
 
-public class Vehicle extends XYServerResource {
+public class VehicleResource extends XYServerResource {
     @Get("txt")
     public String toString() {
         // Print the requested URI path

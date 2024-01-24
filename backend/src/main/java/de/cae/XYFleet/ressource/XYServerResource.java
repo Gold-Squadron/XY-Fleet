@@ -12,19 +12,14 @@ import org.restlet.resource.ServerResource;
 
 public abstract class XYServerResource extends ServerResource {
 
-    protected static final JSONFormat jSONFormat = new JSONFormat().recordFormat(JSONFormat.RecordFormat.OBJECT);
-    protected DSLContext dslContext;
+    public static final JSONFormat jSONFormat = new JSONFormat().recordFormat(JSONFormat.RecordFormat.OBJECT);
+    protected DSLContext dslContext = Database.getDSLContext();;
 
     protected void checkInRole(String roleName) {
-        if(!isInRole(roleName)){
+        if (!isInRole(roleName)) {
             throw new ResourceException(Status.CLIENT_ERROR_FORBIDDEN);
         }
     }
 
-    @Override
-    protected void doInit() throws ResourceException {
-        super.doInit();
-        dslContext = Database.getDSLContext();
-    }
 
 }
