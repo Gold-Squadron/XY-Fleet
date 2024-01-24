@@ -26,12 +26,4 @@ public class UsersResource extends XYServerResource{
         checkInRole(ROLE_ADMIN);
         return new UserResource().handlePut(getQuery().getValuesMap());
     }
-    @Post
-    public String postEntity(){
-        throw new ResourceException(405);
-    }
-    @Delete
-    public String deleteEntity(){
-        throw new ResourceException(405);
-    }
 }

@@ -7,6 +7,8 @@ import org.jooq.Record;
 import org.jooq.tools.json.JSONArray;
 import org.jooq.tools.json.JSONObject;
 import org.restlet.data.Status;
+import org.restlet.resource.Delete;
+import org.restlet.resource.Post;
 import org.restlet.resource.ResourceException;
 import org.restlet.resource.ServerResource;
 
@@ -21,5 +23,14 @@ public abstract class XYServerResource extends ServerResource {
         }
     }
     abstract  public String createEntity() throws ResourceException;
+    @Override
     abstract public String toString() throws ResourceException;
+    @Post
+    public String editEntry(){
+        throw new ResourceException(405);
+    }
+    @Delete
+    public String deleteEntry(){
+        throw new ResourceException(405);
+    }
 }

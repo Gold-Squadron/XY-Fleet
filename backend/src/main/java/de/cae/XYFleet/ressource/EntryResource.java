@@ -15,6 +15,8 @@ public  abstract class EntryResource extends XYServerResource{
             identifier = -1;
         }
     }
+    @Override
     abstract public String deleteEntry() throws ResourceException;
+    @Override
     abstract public String editEntry() throws ResourceException;
 }

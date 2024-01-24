@@ -11,14 +11,19 @@ import java.util.Objects;
 
 import static de.cae.XYFleet.authentication.XYAuthorizer.ROLE_ADMIN;
 import static de.cae.XYFleet.authentication.XYAuthorizer.ROLE_SECURITY;
-import static org.jooq.codegen.XYFleet.Tables.VEHICLES;
+import static org.jooq.codegen.XYFleet.Tables.*;
 
 public class VehicleResource extends EntryResource {
     @Override
     @Delete
     public String deleteEntry() throws ResourceException {
         checkInRole(ROLE_ADMIN);
-        return null;
+
+        String result = this.toString();
+
+        //DELETE vehicles where id = {Identifier}
+        dslContext.delete(VEHICLES).where(VEHICLES.ID.eq(identifier)).execute();
+        return result;
     }
 
     @Override
@@ -40,8 +45,19 @@ public class VehicleResource extends EntryResource {
                 moreStep = firstStep.set(myField, value);
             }
         }
+        //check if valid call
         if (moreStep == null)
             throw new ResourceException(400, "nothing to do. no params in query given");
+        //check insurance_id
+        String insurance_id = VEHICLES.INSURANCE_ID.getUnqualifiedName().first();
+        if(valuesMap.containsKey(insurance_id)
+                && dslContext.fetchOne(INSURANCES, INSURANCES.ID.eq(Integer.parseInt(valuesMap.get(insurance_id))))==null)
+                throw new ResourceException(400, "non existing Insurance_id given");
+        //check pricing_id
+        String pricing_id = VEHICLES.PRICING_ID.getUnqualifiedName().first();
+        if(valuesMap.containsKey(pricing_id)
+                && dslContext.fetchOne(PRICING, PRICING.ID.eq(Integer.parseInt(valuesMap.get(pricing_id))))==null)
+            throw new ResourceException(400, "non existing Insurance_id given");
 
         //UPDATE vehicles SET ({given values}) WHERE id = {Identifier}
         VehiclesRecord record = moreStep.where(VEHICLES.ID.eq(identifier)).returning().fetchOne();
@@ -61,24 +77,31 @@ public class VehicleResource extends EntryResource {
 
         //check if all expected values are given
 
-        VehiclesRecord user = dslContext.newRecord(VEHICLES);
-        //INSERT INTO user  VALUES ({query values})
+        VehiclesRecord vehicle = dslContext.newRecord(VEHICLES);
+        //INSERT INTO vehicles  VALUES ({query values})
         for (Field<?> field : fields) {
             String value = valueMap.get(field.getUnqualifiedName().first());
             if (!Objects.equals(field.getUnqualifiedName().first(), "id")) {
-                if (value == null) throw new ResourceException(405, "Missing value for initialization.");
+                if (value == null) throw new ResourceException(400, "Missing value for initialization.");
                 Field<String> myField = DSL.field(field.getName(), String.class);
-                user.set(myField, value);
-
+                vehicle.set(myField, value);
             }
         }
+        vehicle.setId(null);
+        //check correctness of values
+        //check PricingId
+        String pricing_id = VEHICLES.PRICING_ID.getUnqualifiedName().first();
+        if(dslContext.fetchOne(PRICING, PRICING.ID.eq(Integer.parseInt(valueMap.get(pricing_id))))==null)
+            throw new ResourceException(400, "nob existing Pricing Id given");
+        //check InsuranceId
+        String insurance_id = VEHICLES.INSURANCE_ID.getUnqualifiedName().first();
+        if(dslContext.fetchOne(INSURANCES, INSURANCES.ID.eq(Integer.parseInt(valueMap.get(insurance_id))))==null)
+            throw new ResourceException(400, "non existing Insurance Id given");
 
-        user.setId(null);
-
-        user.merge();
+        vehicle.merge();
 
         //CREATE vehicles VALUES ({given values})
-        return user.formatJSON(jSONFormat);
+        return vehicle.formatJSON(jSONFormat);
     }
 
     @Override

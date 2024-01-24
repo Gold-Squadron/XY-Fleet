@@ -85,7 +85,9 @@ public class UserResourceTest extends EntryResourceTest {
 
     @Override
     @ParameterizedTest
-    @CsvSource(value = {"Unauthorized (401) - The request requires user authentication: abc", "Forbidden (403) - The server understood the request, but is refusing to fulfill it:" + ROLE_USER, "Forbidden (403) - The server understood the request, but is refusing to fulfill it:" + ROLE_SECURITY}, delimiter = ':')
+    @CsvSource(value = {"Unauthorized (401) - The request requires user authentication: abc",
+            "Forbidden (403) - The server understood the request, but is refusing to fulfill it:" + ROLE_USER,
+            "Forbidden (403) - The server understood the request, but is refusing to fulfill it:" + ROLE_SECURITY}, delimiter = ':')
     public void get_invalidCall_shouldThrowResourceException(String responseMessage, String role) {
         super.get_invalidCall_shouldThrowResourceException(responseMessage, role);
     }
