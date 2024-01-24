@@ -6,40 +6,19 @@ import {useModal} from "bootstrap-vue-next";
 import {Booking} from "@/main";
 
 const dayWidth = 1.5 * parseFloat(getComputedStyle(document.documentElement).fontSize);
+
+//Demodata
 let vehicles = ref(["Blue Van", "Red Van", "Green Smart", "Phillip's broken e-scooter", "No Smart", "Clown Car"]);
-
-declare global {
-  interface Date {
-    translateDays(days : number): Date;
-  }
-}
-
-Date.prototype.translateDays = function (days : number): Date {
-  return new Date(this.getTime() + days * 24 * 60 * 60 * 1000);
-};
-
-
-
 let bookings = ref([new Booking("Blue Van", new Date(Date.now()), new Date("2024-02-2 19:00"), "Amokfahrt")])
+
 bookings.value.push(new Booking("Green Smart", new Date("2024-02-2 10:00"), new Date("2024-02-3 24:00")));
-
-function isWithin(vehicle : string, day : number) : Boolean {
-  return bookings.value.every((car) => car.car == vehicle && car.isWithin(day));
-}
-
-function showBookingDialog(carIndex : number, startDay: Date, endDay: Date) {
-  if(startDay > endDay) [startDay, endDay] = [endDay, startDay]
-
-  bookings.value.push(new Booking(vehicles.value[carIndex], startDay, endDay));
-
-}
 
 let chartStart : Ref<Date> = ref(new Date().translateDays(-4));
 let chartEnd = computed(() => {return chartStart.value.translateDays(31)})
 
-
-// any due to damn event browser support
-function MouseWheelHandler(inp : any) : boolean {
+/// shifts the time/day on the component when the mouse scrolls
+/// any due to damn event browser support
+function mouseWheelHandler(inp : any) : boolean {
   const e = window.event || inp; // old IE support
   const delta = Math.max(-1, Math.min(1, (e.wheelDelta || -e.detail)));
 
@@ -50,15 +29,7 @@ function MouseWheelHandler(inp : any) : boolean {
   return false;
 }
 
-function afterLoad() {
-  let scrollable = document.getElementById("roadmap");
-  if (typeof scrollable != null) {
-    scrollable?.addEventListener("mousewheel", MouseWheelHandler, false);
-    scrollable?.addEventListener("DOMMouseScroll", MouseWheelHandler, false);
-  }
-
-}
-
+//transforms the raw data into the rendering format
 const generatedBars = computed( () => {
   let map = new Map<string, GanttBarObject[]>();
   vehicles.value.forEach(name => map.set(name, []))
@@ -67,7 +38,7 @@ const generatedBars = computed( () => {
       myBeginDate: booking.start,
       myEndDate: booking.end,
       ganttBarConfig: {
-          id: booking.car + booking.start,//booking.car + booking.start, // ... and a unique "id" property
+          id: booking.car + booking.start, // ... and a unique "id" property
           label: booking.reason ? booking.reason : booking.driver,
           hasHandles: false,
           class: "bar-normal"
@@ -78,27 +49,27 @@ const generatedBars = computed( () => {
   return map;
 })
 
+//this is where we query the server for new information... IF WE HAD ANY
 //TODO remove the parameter once the REST Interface works
 function refresh(booking : Booking) : void {
-  //alert(JSON.stringify(booking))
   bookings.value.push(booking);
 }
 
-function test(a : any) {
-  console.log(a)
-}
+const {show, hide, modal} = useModal('creation-dialog')
 
-const onContextmenuBar = (bar: GanttBarObject, e: MouseEvent, datetime?: string) => {
-  console.log("contextmenu-bar", bar, e, datetime)
+function afterLoad() {
+  let scrollable = document.getElementById("roadmap");
+  if (typeof scrollable != null) { // For different browsers - I regret using HTML already
+    scrollable?.addEventListener("mousewheel", mouseWheelHandler, false);
+    scrollable?.addEventListener("DOMMouseScroll", mouseWheelHandler, false);
+  }
 }
 
 onMounted(() => afterLoad());
-
-const {show, hide, modal} = useModal('creation-dialog')
 </script>
 
-<template class="" >
-  <p style="display: none" v-for="vehicle in vehicles">{{ generatedBars.get(vehicle) }}</p>
+<template>
+  <p class="d-none" v-for="vehicle in vehicles">{{ generatedBars.get(vehicle) }}</p> <!-- Debug -->
   <div style="">
     <g-gantt-chart id="roadmap"
         :chart-start="chartStart"
@@ -109,7 +80,7 @@ const {show, hide, modal} = useModal('creation-dialog')
         bar-end="myEndDate"
         :highlighted-units=[27,28,3,4,10,11]
         color-scheme="default"> <!-- https://github.com/zunnzunn/vue-ganttastic/blob/master/docs/GGanttChart.md#color-schemes -->
-      <div v-for="vehicle in vehicles">
+      <div v-for="vehicle in vehicles"> <!-- create a row for each vehicle -->
         <g-gantt-row  :label="vehicle" :bars="generatedBars.get(vehicle)"/>
       </div>
     </g-gantt-chart>
@@ -139,7 +110,7 @@ const {show, hide, modal} = useModal('creation-dialog')
     margin-right: 0.5rem;
   }
 
-  /*TODO: figure out why this doesn't work automatically*/
+  /* TODO: figure out why this doesn't work automatically */
   .text-bg-secondary {
     background: #407fb7 ;
   }

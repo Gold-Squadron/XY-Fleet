@@ -8,6 +8,7 @@ import ganttastic from '@infectoone/vue-ganttastic'
 import {computed, createApp} from 'vue'
 import App from './App.vue'
 
+//region Types
 export enum Views {
     NONE,
     CALENDAR,
@@ -22,6 +23,19 @@ export class Booking {
         return true; //his.start <= day && this.end >= day;
     }
 }
+//endregion Types
+
+//region Date Helper Method
+declare global {
+    interface Date {
+        translateDays(days : number): Date;
+    }
+}
+
+Date.prototype.translateDays = function (days : number): Date {
+    return new Date(this.getTime() + days * 24 * 60 * 60 * 1000);
+};
+//endregion Date Helper Method
 
 const app = createApp(App);
 
