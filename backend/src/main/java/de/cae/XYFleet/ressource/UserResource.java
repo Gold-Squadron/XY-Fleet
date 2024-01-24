@@ -13,15 +13,15 @@ import static de.cae.XYFleet.authentication.XYAuthorizer.*;
 import static org.jooq.codegen.XYFleet.Tables.USERS;
 
 public class UserResource extends XYServerResource {
-    private int Identifier;
+    private int identifier;
 
     @Override
     protected void doInit() throws ResourceException {
         super.doInit();
         try {
-            Identifier = Integer.parseInt(getAttribute("identifier"));
+            identifier = Integer.parseInt(getAttribute("identifier"));
         } catch (NumberFormatException e) {
-            Identifier = -1;
+            identifier = -1;
         }
     }
 
@@ -53,7 +53,7 @@ public class UserResource extends XYServerResource {
     public String toString() throws ResourceException {
         checkInRole(ROLE_ADMIN);
         //SELECT * FROM users where id = {Identifier}
-        UsersRecord result = dslContext.fetchOne(USERS, USERS.ID.eq(Identifier));
+        UsersRecord result = dslContext.fetchOne(USERS, USERS.ID.eq(identifier));
 
         if (result == null) throw new ResourceException(404, "not found");
         return result.formatJSON(jSONFormat);
@@ -89,7 +89,7 @@ public class UserResource extends XYServerResource {
 
 
         //UPDATE users SET ({given values}) WHERE id = {Identifier}
-        UsersRecord record = moreStep.where(USERS.ID.eq(Identifier)).returning().fetchOne();
+        UsersRecord record = moreStep.where(USERS.ID.eq(identifier)).returning().fetchOne();
         if (record == null) throw new ResourceException(500, "internal Server Error");
         return record.formatJSON(jSONFormat);
     }
@@ -100,11 +100,11 @@ public class UserResource extends XYServerResource {
 
         String result = this.toString();
 
-        if (Integer.parseInt(getClientInfo().getUser().getIdentifier()) == Identifier)
+        if (Integer.parseInt(getClientInfo().getUser().getIdentifier()) == identifier)
             throw new ResourceException(400, "you cannot delete the account you are logged in with!");
 
         //DELETE users WHERE id = {Identifier}
-        dslContext.delete(USERS).where(USERS.ID.eq(Identifier)).execute();
+        dslContext.delete(USERS).where(USERS.ID.eq(identifier)).execute();
 
         return result;
     }
