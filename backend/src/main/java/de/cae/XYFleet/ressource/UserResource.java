@@ -12,21 +12,11 @@ import java.util.Map;
 import static de.cae.XYFleet.authentication.XYAuthorizer.*;
 import static org.jooq.codegen.XYFleet.Tables.USERS;
 
-public class UserResource extends XYServerResource {
-    private int identifier;
+public class UserResource extends EntryResource {
 
     @Override
-    protected void doInit() throws ResourceException {
-        super.doInit();
-        try {
-            identifier = Integer.parseInt(getAttribute("identifier"));
-        } catch (NumberFormatException e) {
-            identifier = -1;
-        }
-    }
-
     @Put
-    public String createUser() throws ResourceException {
+    public String createEntity() throws ResourceException {
         checkInRole(ROLE_ADMIN);
         return handlePut(getQuery().getValuesMap());
     }
@@ -49,6 +39,7 @@ public class UserResource extends XYServerResource {
 
         return user.formatJSON(jSONFormat);
     }
+    @Override
     @Get()
     public String toString() throws ResourceException {
         checkInRole(ROLE_ADMIN);
@@ -58,9 +49,9 @@ public class UserResource extends XYServerResource {
         if (result == null) throw new ResourceException(404, "not found");
         return result.formatJSON(jSONFormat);
     }
-
+    @Override
     @Post()
-    public String changeUser() throws ResourceException {
+    public String editEntry() throws ResourceException {
         checkInRole(ROLE_ADMIN);
 
         Form form = getQuery();
@@ -93,9 +84,9 @@ public class UserResource extends XYServerResource {
         if (record == null) throw new ResourceException(500, "internal Server Error");
         return record.formatJSON(jSONFormat);
     }
-
+    @Override
     @Delete
-    public String deleteUser() throws ResourceException {
+    public String deleteEntry() throws ResourceException {
         checkInRole(ROLE_ADMIN);
 
         String result = this.toString();

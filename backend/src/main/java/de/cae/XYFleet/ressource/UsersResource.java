@@ -10,6 +10,8 @@ import static de.cae.XYFleet.authentication.XYAuthorizer.ROLE_ADMIN;
 import static org.jooq.codegen.XYFleet.tables.Users.USERS;
 
 public class UsersResource extends XYServerResource{
+
+    @Override
     @Get
     public String toString(){
         checkInRole(ROLE_ADMIN);
@@ -18,17 +20,10 @@ public class UsersResource extends XYServerResource{
 
         return result.formatJSON(jSONFormat);
     }
+    @Override
     @Put
-    public String createUser(){
+    public String createEntity(){
         checkInRole(ROLE_ADMIN);
         return new UserResource().handlePut(getQuery().getValuesMap());
-    }
-    @Post
-    public String postUser(){
-        throw new ResourceException(405);
-    }
-    @Delete
-    public String deleteUser(){
-        throw new ResourceException(405);
     }
 }
