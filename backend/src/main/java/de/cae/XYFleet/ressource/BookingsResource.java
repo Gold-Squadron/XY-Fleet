@@ -10,6 +10,7 @@ import org.restlet.resource.Post;
 import org.restlet.resource.Put;
 import org.restlet.resource.ResourceException;
 import static org.jooq.codegen.XYFleet.Tables.BOOKINGS;
+import org.restlet.resource.ResourceException;
 
 public class BookingsResource extends XYServerResource {
     @Get("txt")
@@ -19,7 +20,7 @@ public class BookingsResource extends XYServerResource {
         return result.formatJSON(jSONFormat);
     }
     @Put
-    public String createBookings(){
+    public String createEntity(){
         isInRole(XYAuthorizer.ROLE_ADMIN);
         return null;
     }
