@@ -40,6 +40,7 @@
 </script>
 
 <template>
+  <!-- TODO validation and proper autocomplete -->
   <BModal v-if="true" id="creation-dialog" @on-cancel="hide()" @ok="$emit.call(null, 'createBooking', res)" size="lg" hide-header>
     <div class="modal-header">
       <h3>Neue Fahrt eintragen</h3>
