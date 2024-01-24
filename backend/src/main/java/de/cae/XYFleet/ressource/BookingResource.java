@@ -4,6 +4,8 @@ import org.jooq.codegen.XYFleet.tables.records.BookingsRecord;
 import org.restlet.resource.*;
 
 
+import java.util.Map;
+
 import static de.cae.XYFleet.authentication.XYAuthorizer.*;
 import static org.jooq.codegen.XYFleet.Tables.BOOKINGS;
 
@@ -42,6 +44,12 @@ public class BookingResource extends EntryResource {
     @Post()
     public String editEntry() {
         checkInRole(ROLE_USER);
+        return null;
+    }
+
+    @Override
+    public String handlePut(Map<String, String> values) throws ResourceException {
+        //TODO must be implemented for create Booking
         return null;
     }
 
