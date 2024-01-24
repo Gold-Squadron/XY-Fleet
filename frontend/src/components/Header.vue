@@ -5,7 +5,7 @@
 <template>
   <nav class="navbar navbar-expand-sm navbar-light bg-light shadow-custom">
     <a class="navbar-brand text-white p-0">
-      <img src="/src/assets/logo.png" alt="XY-Fleet" height="55rem">
+      <img src="src/assets/logo.png" alt="XY-Fleet" height="55rem">
     </a>
 
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
@@ -14,31 +14,31 @@
 
       <i class="bi bi-gear text-white"/>
       <i class="bi bi-person-circle text-white"/>
-      </div>
+    </div>
   </nav>
 
 </template>
 
 <style scoped>
-  nav{
-    z-index: 5;
-  }
-  
-  .shadow-custom{
-    box-shadow: 0 0 15px 2px black;
-  }
-  .navbar-light{
-    background-color: #407fb7 !important;
+nav{
+  z-index: 5;
+}
 
-    font-size: 25px;
-  }
+.shadow-custom{
+  box-shadow: 0 0 15px 2px black;
+}
+.navbar-light{
+  background-color: #407fb7 !important;
 
-  i {
-    transition: color 0.1s;
-    margin: 0 2px;
-    padding: 0 10px;
-    cursor: pointer;
-  }
+  font-size: 25px;
+}
+
+i {
+  transition: color 0.1s;
+  margin: 0 2px;
+  padding: 0 10px;
+  cursor: pointer;
+}
 
 i:hover{
   color: #e0e0e0 !important;
