@@ -2,7 +2,6 @@ package de.cae.XYFleet.ressource;
 
 import de.cae.XYFleet.authentication.XYAuthorizer;
 import org.restlet.resource.Get;
-import org.restlet.resource.ResourceException;
 
 public class BookingsResource extends XYServerResource {
     @Override

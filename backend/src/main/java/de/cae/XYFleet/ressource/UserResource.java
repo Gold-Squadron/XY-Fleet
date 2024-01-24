@@ -39,7 +39,10 @@ public class UserResource extends EntryResource {
 
         return user.formatJSON(jSONFormat);
     }
+<<<<<<< HEAD
     @Override
+=======
+>>>>>>> main
     @Get()
     public String toString() throws ResourceException {
         checkInRole(ROLE_ADMIN);
