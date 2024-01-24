@@ -16,6 +16,7 @@ public class BookingsResource extends XYServerResource {
     @Get("txt")
     public String toString() {
         isInRole(XYAuthorizer.ROLE_SECURITY);
+        //SELECT * FROM bookings
         Result<Record> result = dslContext.select().from(BOOKINGS).fetch();
         return result.formatJSON(jSONFormat);
     }
