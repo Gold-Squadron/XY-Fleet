@@ -24,12 +24,4 @@ public class BookingsResource extends XYServerResource {
         isInRole(XYAuthorizer.ROLE_ADMIN);
         return null;
     }
-    @Post
-    public void postBookings(){
-        throw new ResourceException(405);
-    }
-    @Delete
-    public void deleteBookings(){
-        throw new ResourceException(405);
-    }
 }
