@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {computed, onMounted, ref} from 'vue';
+import {computed, onMounted, type Ref, ref} from 'vue';
 import {type GanttBarObject, GGanttRow} from "@infectoone/vue-ganttastic";
 import CreateBookingModal from "@/components/bookings/CreateBookingModal.vue";
 import {useModal} from "bootstrap-vue-next";
@@ -34,7 +34,29 @@ function showBookingDialog(carIndex : number, startDay: Date, endDay: Date) {
 
 }
 
+let chartStart : Ref<Date> = ref(new Date().translateDays(-4));
+let chartEnd = computed(() => {return chartStart.value.translateDays(31)})
+
+
+// any due to damn event browser support
+function MouseWheelHandler(inp : any) : boolean {
+  const e = window.event || inp; // old IE support
+  const delta = Math.max(-1, Math.min(1, (e.wheelDelta || -e.detail)));
+
+  console.log(delta)
+
+  chartStart.value = chartStart.value.translateDays(delta * 1/4)
+
+  return false;
+}
+
 function afterLoad() {
+  let scrollable = document.getElementById("roadmap");
+  if (typeof scrollable != null) {
+    scrollable?.addEventListener("mousewheel", MouseWheelHandler, false);
+    scrollable?.addEventListener("DOMMouseScroll", MouseWheelHandler, false);
+  }
+
 }
 
 const generatedBars = computed( () => {
@@ -62,6 +84,9 @@ function refresh(booking : Booking) : void {
   bookings.value.push(booking);
 }
 
+function test(a : any) {
+  console.log(a)
+}
 
 const onContextmenuBar = (bar: GanttBarObject, e: MouseEvent, datetime?: string) => {
   console.log("contextmenu-bar", bar, e, datetime)
@@ -75,13 +100,15 @@ const {show, hide, modal} = useModal('creation-dialog')
 <template class="" >
   <p style="display: none" v-for="vehicle in vehicles">{{ generatedBars.get(vehicle) }}</p>
   <div style="">
-    <g-gantt-chart
-        :chart-start="new Date().translateDays(-4)"
-        chart-end="2024-02-14 12:00"
+    <g-gantt-chart id="roadmap"
+        :chart-start="chartStart"
+        :chart-end="chartEnd"
         precision="day"
         :grid="true"
         bar-start="myBeginDate"
-        bar-end="myEndDate">
+        bar-end="myEndDate"
+        :highlighted-units=[27,28,3,4,10,11]
+        color-scheme="default"> <!-- https://github.com/zunnzunn/vue-ganttastic/blob/master/docs/GGanttChart.md#color-schemes -->
       <div v-for="vehicle in vehicles">
         <g-gantt-row  :label="vehicle" :bars="generatedBars.get(vehicle)"/>
       </div>
