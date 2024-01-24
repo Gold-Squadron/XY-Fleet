@@ -27,5 +27,6 @@ declare module 'vue' {
     MainView: typeof import('./src/components/MainView.vue')['default']
     Roadmap: typeof import('./src/components/bookings/Roadmap.vue')['default']
     SideBar: typeof import('./src/components/SideBar.vue')['default']
+    VehicleDashboard: typeof import('./src/components/VehicleDashboard.vue')['default']
   }
 }
