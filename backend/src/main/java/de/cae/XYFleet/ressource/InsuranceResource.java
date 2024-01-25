@@ -78,7 +78,8 @@ public class InsuranceResource extends EntryResource {
     public String editEntry() throws ResourceException {
         checkInRole(ROLE_ADMIN);
 
-        java.util.Map<String, String> valuesMap = getQuery().getValuesMap();
+
+        Map<String, String> valuesMap = getQuery().getValuesMap();
 
         Field<?>[] fields = INSURANCES.fields();
         //build up query for database
