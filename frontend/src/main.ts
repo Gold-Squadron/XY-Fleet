@@ -18,6 +18,7 @@ export enum Views {
 }
 
 export class Booking {
+    status: string = "";
     constructor(public car: string = "", public start: Date = new Date(), public end : Date = new Date(), public reason: string = "", public driver: string = "nsimon") {}
     isWithin(day : number) : Boolean {
         return true; //his.start <= day && this.end >= day;

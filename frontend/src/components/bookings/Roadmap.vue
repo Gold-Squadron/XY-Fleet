@@ -51,8 +51,12 @@ const generatedBars = computed( () => {
 
 //this is where we query the server for new information... IF WE HAD ANY
 //TODO remove the parameter once the REST Interface works
-function refresh(booking : Booking) : void {
+function createVirtualBooking(booking : Booking) : void {
   bookings.value.push(booking);
+}
+
+function refresh() {
+  //I would put my REST-Call here... IF I HAD ANY
 }
 
 const {show, hide, modal} = useModal('creation-dialog')
@@ -87,7 +91,7 @@ onMounted(() => afterLoad());
     <div class="float-right m-5">
       <b-button variant="primary" size="lg" @click="show"> Neue Fahrt eintragen </b-button>
     </div>
-    <CreateBookingModal @createBooking="refresh" :cars="vehicles"/>
+    <CreateBookingModal @refresh="refresh" @createVirtualBooking="booking => bookings.push(booking)" :cars="vehicles"/>
   </div>
 
 </template>
