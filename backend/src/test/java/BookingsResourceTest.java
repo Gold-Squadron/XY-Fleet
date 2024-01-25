@@ -32,6 +32,7 @@ public class BookingsResourceTest extends ResourceTest{
         booking.setId(scenario.add(BOOKINGS, booking));
         uri = "/booking";
         testTable = Database.getDSLContext().select().from(BOOKINGS).fetch();
+        table=BOOKINGS;
     }
 
     @Override
