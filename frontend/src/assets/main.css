@@ -1,5 +1,9 @@
 @import './base.css';
 
+.g-gantt-row-label {
+  z-index: 0 !important;
+}
+
 a,
 .green {
   text-decoration: none;
