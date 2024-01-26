@@ -4,6 +4,7 @@ import org.jooq.codegen.XYFleet.tables.records.BookingsRecord;
 import org.restlet.resource.*;
 
 
+import java.time.LocalDate;
 import java.util.Map;
 
 import static de.cae.XYFleet.authentication.XYAuthorizer.*;
@@ -49,7 +50,26 @@ public class BookingResource extends EntryResource {
 
     @Override
     public String handlePut(Map<String, String> values) throws ResourceException {
-        //TODO must be implemented for create Booking
+
+        //INSERT INTO BOOKINGS VALUES {given values}
+        //dslContext.insertInto(BOOKINGS);
+        if ((values.get("driver_id"))==null){
+            throw new ResourceException(400,"driver_id is null");
+        }
+        if (Integer.parseInt(values.get("vehicle_id")) ==0){
+
+        }
+        if (values.get("reasoning").isBlank()){
+
+        }
+        BookingsRecord record = new BookingsRecord(0, Integer.parseInt(values.get("driver_id")), Integer.parseInt(values.get("vehicle_id")), LocalDate.parse(values.get("leasing_start")), LocalDate.parse(values.get("leasing_end")), values.get("reasoning"));
+        record.setId(null);
+        //dslContext.insertInto(BOOKINGS);
+        record = dslContext.newRecord(BOOKINGS, record);
+        record.insert();
+
+
+
         return null;
     }
 
