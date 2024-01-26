@@ -24,7 +24,7 @@ public class InsuranceResource extends EntryResource {
 
         String result = this.toString();
 
-        //DELETE vehicles where id = {Identifier}
+        //DELETE insurance where id = {Identifier}
         dslContext.delete(INSURANCES).where(INSURANCES.ID.eq(identifier)).execute();
         return result;
     }
