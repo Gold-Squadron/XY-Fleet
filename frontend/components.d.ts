@@ -13,8 +13,10 @@ declare module 'vue' {
     BCardSubtitle: typeof import('bootstrap-vue-next')['BCardSubtitle']
     BCardTitle: typeof import('bootstrap-vue-next')['BCardTitle']
     BForm: typeof import('bootstrap-vue-next')['BForm']
+    BFormCheckbox: typeof import('bootstrap-vue-next')['BFormCheckbox']
     BFormGroup: typeof import('bootstrap-vue-next')['BFormGroup']
     BFormInput: typeof import('bootstrap-vue-next')['BFormInput']
+    BFormSelect: typeof import('bootstrap-vue-next')['BFormSelect']
     BPopover: typeof import('bootstrap-vue-next')['BPopover']
     BTable: typeof import('bootstrap-vue-next')['BTable']
     Header: typeof import('./src/components/Header.vue')['default']
@@ -22,6 +24,7 @@ declare module 'vue' {
     LoginWindow: typeof import('./src/components/LoginWindow.vue')['default']
     MainView: typeof import('./src/components/MainView.vue')['default']
     SideBar: typeof import('./src/components/SideBar.vue')['default']
+    UserManagement: typeof import('./src/components/UserManagement.vue')['default']
     VehicleDashboard: typeof import('./src/components/VehicleDashboard.vue')['default']
   }
 }

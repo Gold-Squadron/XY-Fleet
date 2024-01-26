@@ -4,6 +4,7 @@ import SideBar from "@/components/SideBar.vue";
 import VehicleDashboard from "@/components/VehicleDashboard.vue";
 import { ref } from "vue"
 import { Views } from "@/main"
+import UserManagement from "@/components/UserManagement.vue";
 
 const currentView = ref(Views.NONE)
 
@@ -19,7 +20,8 @@ function setCurrentView(to : Views) : void {
 
     <!-- Container for the different tabs -->
     <div class="w-100 overflow-y-scroll">
-        <VehicleDashboard v-if="currentView == Views.VEHICLE_DASHBOARD"/>
+      <VehicleDashboard v-if="currentView == Views.VEHICLE_DASHBOARD"/>
+      <UserManagement v-else></UserManagement>
     </div>
   </div>
 </template>
