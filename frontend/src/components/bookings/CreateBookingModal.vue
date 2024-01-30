@@ -1,6 +1,6 @@
 <script setup lang="ts">
   import {useModal} from "bootstrap-vue-next";
-  import {computed, type Ref, ref} from "vue";
+  import {computed, type Ref, ref, toRaw} from "vue";
   import {Booking} from "@/main";
 
   defineProps<{
@@ -22,7 +22,7 @@
           },
           // setter
           set(newValue : string) {
-            res.value.start?.setDate(new Date(newValue).getDate())
+            res.value.start?.setTime(new Date(newValue).getTime())
           }
         }),
         endDate: computed({
@@ -31,7 +31,7 @@
           },
           // setter
           set(newValue : string) {
-            res.value.end?.setDate(new Date(newValue).getDate())
+            res.value.end?.setTime(new Date(newValue).getTime())
           }
         })
       }
@@ -45,7 +45,7 @@
   }
   
   function preview() {
-    let virtual : Booking = structuredClone(res.value);
+    let virtual : Booking = structuredClone(toRaw(res.value));
     virtual.status = "preview";
     emit('createVirtualBooking', virtual)
   }

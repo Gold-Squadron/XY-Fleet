@@ -22,8 +22,6 @@ function mouseWheelHandler(inp : any) : boolean {
   const e = window.event || inp; // old IE support
   const delta = Math.max(-1, Math.min(1, (e.wheelDelta || -e.detail)));
 
-  console.log(delta)
-
   chartStart.value = chartStart.value.translateDays(delta * 1/4)
 
   return false;
@@ -35,13 +33,14 @@ const generatedBars = computed( () => {
   vehicles.value.forEach(name => map.set(name, []))
   bookings.value.forEach( (booking) => {
     let x : GanttBarObject = {
-      myBeginDate: booking.start,
-      myEndDate: booking.end,
+      myBeginDate: booking.getStartDateAsReference(),
+      myEndDate: booking.getEndDateAsReference(),
       ganttBarConfig: {
           id: booking.car + booking.start, // ... and a unique "id" property
           label: booking.reason ? booking.reason : booking.driver,
-          hasHandles: false,
-          class: "bar-normal"
+          hasHandles: booking.status === 'preview',
+          immobile: booking.status !== 'preview',
+          class: `bar-${booking.status}`
       }
     }
     map.get(booking.car)?.push(x);
@@ -52,6 +51,7 @@ const generatedBars = computed( () => {
 //this is where we query the server for new information... IF WE HAD ANY
 //TODO remove the parameter once the REST Interface works
 function createVirtualBooking(booking : Booking) : void {
+  console.log(booking)
   bookings.value.push(booking);
 }
 
@@ -91,7 +91,7 @@ onMounted(() => afterLoad());
     <div class="float-right m-5">
       <b-button variant="primary" size="lg" @click="show"> Neue Fahrt eintragen </b-button>
     </div>
-    <CreateBookingModal @refresh="refresh" @createVirtualBooking="booking => bookings.push(booking)" :cars="vehicles"/>
+    <CreateBookingModal @refresh="refresh" @createVirtualBooking="createVirtualBooking" :cars="vehicles"/>
   </div>
 
 </template>
