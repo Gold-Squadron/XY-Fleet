@@ -14,6 +14,17 @@ export enum Views {
     USER_MANAGEMENT
 }
 
+export enum Roles{
+    ADMIN,
+    SECRUITY,
+    TRAVEL_OFFICE
+}
+
+export class User {
+    constructor(public name: String = "", public email: String = "" ,public password: String = "1234", public role: Roles = Roles.ADMIN, public isDriver: boolean = false) {
+    }
+}
+
 const app = createApp(App);
 //token that will be used for REST requests
 //could be refactored to a better way to store session tokens

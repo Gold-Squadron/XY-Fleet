@@ -7,24 +7,32 @@ export {}
 
 declare module 'vue' {
   export interface GlobalComponents {
+    AddUserModal: typeof import('./src/components/userManagement/AddUserModal.vue')['default']
     BButton: typeof import('bootstrap-vue-next')['BButton']
     BCard: typeof import('bootstrap-vue-next')['BCard']
     BCardBody: typeof import('bootstrap-vue-next')['BCardBody']
     BCardSubtitle: typeof import('bootstrap-vue-next')['BCardSubtitle']
     BCardTitle: typeof import('bootstrap-vue-next')['BCardTitle']
+    BCol: typeof import('bootstrap-vue-next')['BCol']
     BForm: typeof import('bootstrap-vue-next')['BForm']
     BFormCheckbox: typeof import('bootstrap-vue-next')['BFormCheckbox']
     BFormGroup: typeof import('bootstrap-vue-next')['BFormGroup']
     BFormInput: typeof import('bootstrap-vue-next')['BFormInput']
+    BFormRow: typeof import('bootstrap-vue-next')['BFormRow']
     BFormSelect: typeof import('bootstrap-vue-next')['BFormSelect']
+    BInputGroup: typeof import('bootstrap-vue-next')['BInputGroup']
+    BModal: typeof import('bootstrap-vue-next')['BModal']
     BPopover: typeof import('bootstrap-vue-next')['BPopover']
     BTable: typeof import('bootstrap-vue-next')['BTable']
+    BTooltip: typeof import('bootstrap-vue-next')['BTooltip']
+    CreateBookingModal: typeof import('./src/components/bookings/CreateBookingModal.vue')['default']
     Header: typeof import('./src/components/Header.vue')['default']
     HelloWorld: typeof import('./src/components/HelloWorld.vue')['default']
     LoginWindow: typeof import('./src/components/LoginWindow.vue')['default']
     MainView: typeof import('./src/components/MainView.vue')['default']
+    Roadmap: typeof import('./src/components/bookings/Roadmap.vue')['default']
     SideBar: typeof import('./src/components/SideBar.vue')['default']
-    UserManagement: typeof import('./src/components/UserManagement.vue')['default']
+    UserManagement: typeof import('./src/components/userManagement/UserManagement.vue')['default']
     VehicleDashboard: typeof import('./src/components/VehicleDashboard.vue')['default']
   }
 }

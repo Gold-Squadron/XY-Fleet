@@ -4,7 +4,7 @@ import SideBar from "@/components/SideBar.vue";
 import VehicleDashboard from "@/components/VehicleDashboard.vue";
 import { ref } from "vue"
 import { Views } from "@/main"
-import UserManagement from "@/components/UserManagement.vue";
+import UserManagement from "@/components/userManagement/UserManagement.vue";
 
 const currentView = ref(Views.NONE)
 

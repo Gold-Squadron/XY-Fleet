@@ -1,8 +1,45 @@
 <!--suppress VueUnrecognizedSlot -->
 <script setup lang="ts">
+  import { type Ref, ref, toRaw } from 'vue';
+  import AddUserModal from "@/components/userManagement/AddUserModal.vue";
+  import { type TableItem, useModal } from "bootstrap-vue-next";
+  import { Roles, User } from "@/main";
 
+  const { show } = useModal('creation-dialog')
   const SELECTION_COLOR: string = '#9a9a9a45'
   let selectedRows: number[] = []
+
+  // Demodata
+  let users = ref([new User('Luca Außem', 'luca-aussem@t-online.de', '1234', Roles.ADMIN, true), new User('Noah Simon', 'snoah@gmail.com', '4321')]);
+
+  // Convert the raw data into the rendering format
+  let usersCoverted: Ref<TableItem[]> = ref([])
+  function convertUserData() : TableItem[]{
+    let dataConverted: TableItem[] = []
+    let dataRaw = users.value
+
+    dataRaw.forEach((data) => {
+      let dataObj: {[key: string]: string|boolean|number} = {}
+      let values: any = toRaw(data)
+
+      Object.keys(data).forEach(param => {
+        dataObj[param] = values[param]
+      })
+
+      dataConverted.push(dataObj)
+    })
+
+    return dataConverted
+  }
+  usersCoverted.value = convertUserData()
+
+  function addUser(user: User) : void{
+    console.log(user)
+    usersCoverted.value = []
+    users.value.push(user)
+    usersCoverted.value = convertUserData()
+  }
+
   function selectRow(index: number) : void{
     let rowDom: HTMLElement = document.getElementsByTagName('tr')[index + 1]
 
@@ -47,7 +84,8 @@
 
 <template>
   <div class="pl-3">
-    <b-table :fields="fields" :items="items">
+    <b-button variant="primary" size="md" @click="show" class="mt-4 mb-3">Add User</b-button>
+    <b-table :fields="fields" :items="usersCoverted">
       <template #head(cb)="">
         <b-form-checkbox @change="changeAll()" id="selectAllCheckbox"></b-form-checkbox>
       </template>
@@ -61,6 +99,8 @@
         <b-form-select v-model="data.item.isDriver" :options="selectDriver"></b-form-select>
       </template>
     </b-table>
+
+    <AddUserModal @createUser="addUser"></AddUserModal>
   </div>
 </template>
 
@@ -71,9 +111,6 @@
 </style>
 
 <script lang="ts">
-  let user1 = {'name':'Luca Außem','email':'l123@t.de','role':'admin','isDriver': true}
-  let user2 = {'name':'Luca Außem2','email': 'l123@gmail.de','role': 'office','isDriver': false}
-  let user = [user1, user2]
   export default {
     data() {
       return {
@@ -84,11 +121,10 @@
           {key: 'role', label: 'Role'},
           {key: 'isDriver', label: 'Is Driver'}
         ],
-        items: user,
         selectRoles: [
-          {value: 'admin', text: 'Admin'},
-          {value: 'secruity', text: 'Secruity'},
-          {value: 'office', text: 'Travel Office'}
+          {value: Roles.ADMIN, text: 'Admin'},
+          {value: Roles.SECRUITY, text: 'Secruity'},
+          {value: Roles.TRAVEL_OFFICE, text: 'Travel Office'}
         ],
         selectDriver: [
           {value: 'true', text: 'Yes'},
