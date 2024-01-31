@@ -7,6 +7,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
 import java.sql.Date;
+import java.time.LocalDate;
 
 import static de.cae.XYFleet.authentication.XYAuthorizer.*;
 import static org.jooq.codegen.XYFleet.Tables.*;
@@ -15,7 +16,7 @@ public class BookingResourceTest extends EntryResourceTest {
     @BeforeAll
     public static void initAll(){
             //Arrange
-            PricingRecord pricing = new PricingRecord(0, new Date(1, 1, 1).toLocalDate(), 3000, 5000);
+            PricingRecord pricing = new PricingRecord(0, LocalDate.parse("2023-01-01"), 3000, 5000);
             pricing.setId(scenario.add(PRICING, pricing));
             //dslContext.insertInto(PRICING).values(pricing).onDuplicateKeyIgnore().execute();
 
@@ -23,11 +24,11 @@ public class BookingResourceTest extends EntryResourceTest {
             insurances.setId(scenario.add(INSURANCES, insurances));
             //dslContext.insertInto(INSURANCES).values(insurances).onDuplicateKeyIgnore().execute();
 
-            VehiclesRecord vehicle = new VehiclesRecord(0, "STO-XY-123", "VW", "Käfer", "123", 2000, 4000, insurances.getId(), pricing.getId());
+            VehiclesRecord vehicle = new VehiclesRecord(0, "STO-XY-123", "VW", "Käfer", "123", 2000, 2000,4000, insurances.getId(),"car" ,pricing.getId() );
             vehicle.setId(scenario.add(VEHICLES, vehicle));
             //dslContext.insertInto(VEHICLES).values(vehicle).onDuplicateKeyIgnore().execute();
 
-            BookingsRecord booking = new BookingsRecord(0, ADMIN_ID, vehicle.getId(), new Date(1, 1, 1).toLocalDate(), new Date(1, 1, 2).toLocalDate(), "none");
+            BookingsRecord booking = new BookingsRecord(0, ADMIN_ID, vehicle.getId(),  LocalDate.parse("2023-01-01"),  LocalDate.parse("2023-01-01"), "none", 200);
             booking.setId(scenario.add(BOOKINGS, booking));
             uri = "/booking/" + booking.getId();
             testRecord = booking;
@@ -46,14 +47,14 @@ public class BookingResourceTest extends EntryResourceTest {
     @Override
     @ParameterizedTest
     @CsvSource(value = {
-            "Forbidden (403) - The server understood the request, but is refusing to fulfill it:"+ROLE_USER,
-            "Forbidden (403) - The server understood the request, but is refusing to fulfill it:"+ROLE_SECURITY,
-            "Unauthorized (401) - The request requires user authentication: "}, delimiter = ':')
+            FORBIDDEN+":"+ROLE_USER,
+            FORBIDDEN+":"+ROLE_SECURITY,
+            UNAUTHORIZED+": "}, delimiter = ':')
     public void delete_invalidCall_shouldThrowResourceException(String responseMessage, String role) {
         super.delete_invalidCall_shouldThrowResourceException(responseMessage, role);
     }
     @ParameterizedTest
-    @CsvSource(value = {"Unauthorized (401) - The request requires user authentication: abc"}, delimiter = ':')
+    @CsvSource(value = {UNAUTHORIZED+": abc"}, delimiter = ':')
     public void get_invalidCall_shouldThrowResourceException(String responseMessage, String role) {
         super.get_invalidCall_shouldThrowResourceException(responseMessage, role);
     }

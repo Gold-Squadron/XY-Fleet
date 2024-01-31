@@ -1,6 +1,5 @@
 import org.jooq.UpdatableRecord;
 import org.jooq.codegen.XYFleet.tables.records.*;
-import org.junit.BeforeClass;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -19,7 +18,6 @@ public class UserResourceTest extends EntryResourceTest {
     @BeforeAll
     public static void initAll() {
         //Arrange
-        System.out.println("before all!");
         UsersRecord user = new UsersRecord(0, "mMustermann", "123", "user", Byte.parseByte("1"));
         user.setId(scenario.add(USERS, user));
         uri = "/user/" + user.getId();
@@ -42,11 +40,11 @@ public class UserResourceTest extends EntryResourceTest {
     @Override
     @ParameterizedTest
     @CsvSource(value = {
-            "Forbidden (403) - The server understood the request, but is refusing to fulfill it:" + ROLE_USER + ":name=mMusterFrau&password=123&role=security&is_driver=1",
-            "Forbidden (403) - The server understood the request, but is refusing to fulfill it:" + ROLE_SECURITY + ":name=mMusterFrau&password=123&role=security&is_driver=1",
-            "Unauthorized (401) - The request requires user authentication:abc:name=mMusterFrau&password=123&role=security&is_driver=1",
-            "Bad Request (400) - The request could not be understood by the server due to malformed syntax:" + ROLE_ADMIN + ":",
-            "Bad Request (400) - The request could not be understood by the server due to malformed syntax:" + ROLE_ADMIN + ":name=" + ROLE_ADMIN + "&password=123&role=security&is_driver=1"}, delimiter = ':')
+            FORBIDDEN+":" + ROLE_USER + ":name=mMusterFrau&password=123&role=security&is_driver=1",
+            FORBIDDEN+":" + ROLE_SECURITY + ":name=mMusterFrau&password=123&role=security&is_driver=1",
+            UNAUTHORIZED+":abc:name=mMusterFrau&password=123&role=security&is_driver=1",
+            BAD_REQUEST+":" + ROLE_ADMIN + ":",
+            BAD_REQUEST+":" + ROLE_ADMIN + ":name=" + ROLE_ADMIN + "&password=123&role=security&is_driver=1"}, delimiter = ':')
     public void put_invalidCall_shouldThrowResourceException(String responseMessage, String role, String params) {
         super.put_invalidCall_shouldThrowResourceException(responseMessage, role, params);
     }
@@ -61,11 +59,11 @@ public class UserResourceTest extends EntryResourceTest {
     @Override
     @ParameterizedTest
     @CsvSource(value = {
-            "Forbidden (403) - The server understood the request, but is refusing to fulfill it:" + ROLE_USER + ":name=mMusterFrau",
-            "Forbidden (403) - The server understood the request, but is refusing to fulfill it:" + ROLE_SECURITY + ":name=mMusterFrau",
-            "Unauthorized (401) - The request requires user authentication:abc:name=mMusterFrau",
-            "Bad Request (400) - The request could not be understood by the server due to malformed syntax:" + ROLE_ADMIN + ":",
-            "Bad Request (400) - The request could not be understood by the server due to malformed syntax:" + ROLE_ADMIN + ":name=" + ROLE_ADMIN}, delimiter = ':')
+            FORBIDDEN+":" + ROLE_USER + ":name=mMusterFrau",
+            FORBIDDEN+":" + ROLE_SECURITY + ":name=mMusterFrau",
+            UNAUTHORIZED+":abc:name=mMusterFrau",
+            BAD_REQUEST+":" + ROLE_ADMIN + ":",
+            BAD_REQUEST+":" + ROLE_ADMIN + ":name=" + ROLE_ADMIN}, delimiter = ':')
     public void post_invalidCall_shouldReturnEntryInDatabase(String responseMessage, String role, String params) {
         super.post_invalidCall_shouldReturnEntryInDatabase(responseMessage, role, params);
     }
@@ -78,16 +76,16 @@ public class UserResourceTest extends EntryResourceTest {
 
     @Override
     @ParameterizedTest
-    @CsvSource(value = {"Forbidden (403) - The server understood the request, but is refusing to fulfill it:" + ROLE_USER, "Forbidden (403) - The server understood the request, but is refusing to fulfill it:" + ROLE_SECURITY, "Unauthorized (401) - The request requires user authentication: "}, delimiter = ':')
+    @CsvSource(value = {FORBIDDEN+":" + ROLE_USER, FORBIDDEN+":" + ROLE_SECURITY, UNAUTHORIZED+": "}, delimiter = ':')
     public void delete_invalidCall_shouldThrowResourceException(String responseMessage, String role) {
         super.delete_invalidCall_shouldThrowResourceException(responseMessage, role);
     }
 
     @Override
     @ParameterizedTest
-    @CsvSource(value = {"Unauthorized (401) - The request requires user authentication: abc",
-            "Forbidden (403) - The server understood the request, but is refusing to fulfill it:" + ROLE_USER,
-            "Forbidden (403) - The server understood the request, but is refusing to fulfill it:" + ROLE_SECURITY}, delimiter = ':')
+    @CsvSource(value = {UNAUTHORIZED+": abc",
+            FORBIDDEN+":" + ROLE_USER,
+            FORBIDDEN+":" + ROLE_SECURITY}, delimiter = ':')
     public void get_invalidCall_shouldThrowResourceException(String responseMessage, String role) {
         super.get_invalidCall_shouldThrowResourceException(responseMessage, role);
     }
