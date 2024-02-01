@@ -23,13 +23,13 @@ public class FilterResource extends ServerResource {
     protected DSLContext dslContext = Database.getDSLContext();
     @Get()
     public String filterBooking() throws ResourceException {
-        if (!isInRole(ROLE_SECURITY)) {
+        if (!isInRole(ROLE_SECURITY))
             throw new ResourceException(Status.CLIENT_ERROR_FORBIDDEN);
-        }
+
         Form form = getQuery();
-        if(form.getValues("start")== null || form.getValues("end")==null){
+        if(form.getValues("start")== null || form.getValues("end")==null)
             throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, "no start or end date given");
-        }
+
         LocalDate start;
         LocalDate end;
         try{
@@ -42,10 +42,8 @@ public class FilterResource extends ServerResource {
         //WITH subquery AS (SELECT * FROM bookings WHERE bookings.leasing_start <= {end} AND bookings.leasing_end >= {start})
         Field<Integer> subquery = field(dslContext.select(BOOKINGS.VEHICLE_ID).from(BOOKINGS).
                 where(BOOKINGS.LEASING_START.lessOrEqual(end).and(BOOKINGS.LEASING_END.greaterOrEqual(start))));
-
         //SELECT * FROM vehicles WHERE vehicles.id = subquery ORDERBY (vehicles.annual_performance - (vehicle.expected_mileage + vehicle.mileage))
-        Result<Record> result = dslContext.select().from(VEHICLES).
-                where(VEHICLES.ID.eq(subquery)).
+        Result<Record> result = dslContext.select().from(VEHICLES).where(VEHICLES.ID.eq(subquery)).
                 orderBy((VEHICLES.ANNUAL_PERFORMANCE.subtract(VEHICLES.EXPECTED_MILEAGE.subtract(VEHICLES.MILEAGE)))).fetch();
 
         return result.formatJSON(jSONFormat);
