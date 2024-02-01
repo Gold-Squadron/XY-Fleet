@@ -23,9 +23,9 @@ public class UsersResourceTest extends ResourceTest {
     @Override
     @ParameterizedTest
     @CsvSource(value = {
-            "Forbidden (403) - The server understood the request, but is refusing to fulfill it:" + ROLE_USER,
-            "Forbidden (403) - The server understood the request, but is refusing to fulfill it:" + ROLE_SECURITY,
-            "Unauthorized (401) - The request requires user authentication:abc",
+            FORBIDDEN+":" + ROLE_USER,
+            FORBIDDEN+":" + ROLE_SECURITY,
+            UNAUTHORIZED+":abc",
     }, delimiter = ':')
     public void get_invalidCall_shouldThrowResourceException(String responseMessage, String role) {
         super.get_invalidCall_shouldThrowResourceException(responseMessage, role);
@@ -40,8 +40,8 @@ public class UsersResourceTest extends ResourceTest {
     @Override
     @ParameterizedTest
     @CsvSource(value = {
-            "Method Not Allowed (405) - The method specified in the request is not allowed for the resource identified by the request URI:" + ROLE_USER,
-            "Unauthorized (401) - The request requires user authentication:abc",
+            METHOD_NOT_ALLOWED+":" + ROLE_USER,
+            UNAUTHORIZED+":abc",
     }, delimiter = ':')
     public void delete_invalidCall_shouldThrowResourceException(String responseMessage, String role) {
         super.delete_invalidCall_shouldThrowResourceException(responseMessage, role);
@@ -58,12 +58,12 @@ public class UsersResourceTest extends ResourceTest {
     @Override
     @ParameterizedTest
     @CsvSource(value = {
-            "Forbidden (403) - The server understood the request, but is refusing to fulfill it:"+ROLE_SECURITY+":name=mMusterKerl&password=123&role=security&is_driver=1",
-            "Forbidden (403) - The server understood the request, but is refusing to fulfill it:"+ROLE_USER+":name=lhelbig&password=HelloWorld&role=user&is_driver=0",
-            "Bad Request (400) - The request could not be understood by the server due to malformed syntax:"+ROLE_ADMIN+":&password=123&role=security&is_driver=1",
-            "Bad Request (400) - The request could not be understood by the server due to malformed syntax:"+ROLE_ADMIN+":name=password=123&role=security&is_driver=1",
-            "Bad Request (400) - The request could not be understood by the server due to malformed syntax:"+ROLE_ADMIN+":name="+ROLE_ADMIN+"&password=123&role=security&is_driver=1",
-            "Bad Request (400) - The request could not be understood by the server due to malformed syntax:"+ROLE_ADMIN+":"
+            FORBIDDEN+":"+ROLE_SECURITY+":name=mMusterKerl&password=123&role=security&is_driver=1",
+            FORBIDDEN+":"+ROLE_USER+":name=lhelbig&password=HelloWorld&role=user&is_driver=0",
+            BAD_REQUEST+":"+ROLE_ADMIN+":&password=123&role=security&is_driver=1",
+            BAD_REQUEST+":"+ROLE_ADMIN+":name=password=123&role=security&is_driver=1",
+            BAD_REQUEST+":"+ROLE_ADMIN+":name="+ROLE_ADMIN+"&password=123&role=security&is_driver=1",
+            BAD_REQUEST+":"+ROLE_ADMIN+":"
     }, delimiter=':')
     public void put_invalidCall_shouldThrowResourceException(String responseMessage, String role, String params) {
         super.put_invalidCall_shouldThrowResourceException(responseMessage, role, params);
