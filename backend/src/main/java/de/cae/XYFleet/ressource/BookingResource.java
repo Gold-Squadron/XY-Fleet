@@ -1,6 +1,7 @@
 package de.cae.XYFleet.ressource;
 
 import org.jooq.codegen.XYFleet.tables.records.BookingsRecord;
+import org.restlet.data.Status;
 import org.restlet.resource.*;
 
 
@@ -16,8 +17,7 @@ public class BookingResource extends EntryResource {
         checkInRole(ROLE_SECURITY);
         //SELECT * FROM bookings where id = {Identifier}
         BookingsRecord result = dslContext.fetchOne(BOOKINGS, BOOKINGS.ID.eq(identifier));
-
-        if (result == null) throw new ResourceException(404, "not found");
+        if (result == null) throw new ResourceException(Status.CLIENT_ERROR_NOT_FOUND, "not found");
         return result.formatJSON(jSONFormat);
     }
     @Override
@@ -27,9 +27,6 @@ public class BookingResource extends EntryResource {
 
         String result = this.toString();
 
-
-        if (Integer.parseInt(getClientInfo().getUser().getIdentifier()) != identifier && !isInRole(ROLE_ADMIN))
-            throw new ResourceException(403);
         //DELETE bookings where id = {Identifier}
         dslContext.delete(BOOKINGS).where(BOOKINGS.ID.eq(identifier)).execute();
         return result;
