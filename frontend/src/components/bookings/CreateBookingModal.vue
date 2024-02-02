@@ -1,6 +1,6 @@
 <script setup lang="ts">
   import {useModal} from "bootstrap-vue-next";
-  import {computed, type Ref, ref, toRaw} from "vue";
+  import {computed, type Ref, ref} from "vue";
   import {Booking} from "@/main";
 
   defineProps<{
@@ -8,11 +8,12 @@
   }>()
 
 
+
   const emit = defineEmits<{
     createVirtualBooking: [booking : Booking]
     refresh: []
   }>()
-// : void
+  
   let res = ref(new Booking())
   let comp =
       {

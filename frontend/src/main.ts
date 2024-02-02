@@ -19,6 +19,7 @@ export enum Views {
 }
 
 export class Booking {
+
     private refStart : Ref<Date> | null = null;
     private refEnd : Ref<Date> | null = null;
 
@@ -51,6 +52,7 @@ export class Booking {
         }
         return this.refEnd;
     }
+
 }
 //endregion Types
 

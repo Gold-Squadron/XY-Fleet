@@ -16,6 +16,7 @@ bookings.value.push(new Booking("Green Smart", new Date("2024-02-2 10:00"), new 
 
 let chartStart : Ref<Date> = ref(new Date().translateDays(-4));
 let chartEnd = computed(() => {return chartStart.value.translateDays(31)})
+
 let previewMode = false;
 
 /// shifts the time/day on the component when the mouse scrolls
@@ -104,6 +105,7 @@ onMounted(() => afterLoad());
         <g-gantt-row  :label="vehicle" :bars="generatedBars.get(vehicle)"/>
       </div>
     </g-gantt-chart>
+
     <div v-if="previewMode" class="float-right m-5">
       <b-button variant="secondary" size="lg" @click="finishPreview(false)"> Zurück </b-button>
       <b-button variant="primary" size="lg" @click="finishPreview(true)"> Speichern </b-button>
