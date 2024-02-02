@@ -27,6 +27,12 @@ export class Booking {
         this.refStart = null;
         this.refEnd = null;
     }
+
+    //make your own function supporting, ref-less (aka. back to *null*) deep copy
+    clone() : Booking {
+        return new Booking(this.car, this.start, this.end, this.reason, this.driver)
+    }
+
     isWithin(day : number) : Boolean {
         return true; //his.start <= day && this.end >= day;
     }

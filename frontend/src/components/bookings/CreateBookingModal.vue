@@ -45,13 +45,13 @@
   }
   
   function preview() {
-    let virtual : Booking = structuredClone(toRaw(res.value));
+    let virtual : Booking = res.value.clone();
     virtual.status = "preview";
     emit('createVirtualBooking', virtual)
   }
 
   function addBooking() {
-    emit('createVirtualBooking', res.value) // DEBUG
+    emit('createVirtualBooking', res.value.clone()) // DEBUG
     // [REST-Call] FINAL
     //emit('refresh') FINAL
     reset()
