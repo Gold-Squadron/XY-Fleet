@@ -7,10 +7,9 @@
 
   const { show } = useModal('creation-dialog')
   const SELECTION_COLOR: string = '#9a9a9a45'
-  let selectedRows: number[] = []
 
   // Demodata
-  let users = ref([new User('Luca Außem', 'luca-aussem@t-online.de', '1234', Roles.ADMIN, true), new User('Noah Simon', 'snoah@gmail.com', '4321')]);
+  let users = ref([new User('22323fcvd', 'Luca Außem', 'luca-aussem@t-online.de', '1234', Roles.ADMIN, true), new User('c84nfakhf', 'Noah Simon', 'snoah@gmail.com', '4321')]);
 
   // Convert the raw data into the rendering format
   let usersCoverted: Ref<TableItem[]> = ref([])
@@ -34,50 +33,49 @@
   usersCoverted.value = convertUserData()
 
   function addUser(user: User) : void{
-    console.log(user)
+    // !TODO! Add user to database
     usersCoverted.value = []
     users.value.push(user)
     usersCoverted.value = convertUserData()
   }
 
-  function selectRow(index: number) : void{
-    let rowDom: HTMLElement = document.getElementsByTagName('tr')[index + 1]
+  function removeUser() : void{
+    // !TODO! Remove user from database
+    // !TODO! Add confirmation modal
 
-    if(rowDom.style.backgroundColor == ''){
-      rowDom.style.backgroundColor = SELECTION_COLOR
-      selectedRows.push(index)
-    }else {
-      let arrIndex: number = selectedRows.indexOf(index) - 1
-      rowDom.style.backgroundColor = ''
-
-      if(arrIndex >= 0){
-        selectedRows.splice(arrIndex, 1)
-      }else{
-        selectedRows.shift()
-      }
+    if(selectedIds.value.length == 0){
+      return
     }
 
-    // Check if "select all" checkbox needs to be (un-)checked
-    let checkbox: HTMLInputElement = <HTMLInputElement> document.getElementById('selectAllCheckbox')
-    checkbox.checked = document.getElementsByTagName('tr').length - 1 == selectedRows.length
+    usersCoverted.value = []
+    users.value = users.value.filter(user => !selectedIds.value.includes(user.getId()))
+    usersCoverted.value = convertUserData()
+
+    selectedIds.value = []
   }
 
-  function changeAll() : void{
-    let rowDoms = document.getElementsByTagName('tr')
-    let selectionNum: number = selectedRows.length
-    let select: boolean = (rowDoms.length - 1) != selectionNum
-    selectedRows = []
+  //!TODO! Add correct type
+  let selectedIds: Ref<any> = ref([])
 
-    for(let i=1; i<rowDoms.length; i++){
-      let rowDom: HTMLElement = rowDoms[i]
-      let checkbox: HTMLInputElement = <HTMLInputElement> document.getElementById(`rowCheckbox-${i - 1}`)
+  function selectRow(index: number) : void{
+    let id = users.value[index].getId()
+    let idIndex = selectedIds.value.indexOf(id)
 
-      if(select){
-        selectedRows.push(i - 1)
-      }
+    if(idIndex == -1){
+      selectedIds.value.push(id)
+    }else{
+      selectedIds.value.splice(idIndex, 1)
+    }
+  }
+  function changeAll(){
+    let numberOfSelections: number = selectedIds.value.length
+    selectedIds.value = []
 
-      rowDom.style.backgroundColor = select ? SELECTION_COLOR : ''
-      checkbox.checked = select
+    // Select all
+    if(numberOfSelections != users.value.length){
+      users.value.forEach(user => {
+        selectedIds.value.push(user.getId())
+      })
     }
   }
 </script>
@@ -85,12 +83,14 @@
 <template>
   <div class="pl-3">
     <b-button variant="primary" size="md" @click="show" class="mt-4 mb-3">Add User</b-button>
-    <b-table :fields="fields" :items="usersCoverted">
+    <b-button variant="primary" size="md" @click="removeUser()" :disabled="selectedIds.length == 0" class="ml-3 mt-4 mb-3">Remove User</b-button>
+
+    <b-table :fields="fields" :items="usersCoverted" :tbody-tr-class="rowClass">
       <template #head(cb)="">
-        <b-form-checkbox @change="changeAll()" id="selectAllCheckbox"></b-form-checkbox>
+        <b-form-checkbox @change="changeAll()" :checked="(selectedIds.length == users.length) && (users.length != 0)" id="selectAllCheckbox"></b-form-checkbox>
       </template>
       <template #cell(cb)="data">
-        <b-form-checkbox :id="`rowCheckbox-${data.index}`" @change="selectRow(data.index)"></b-form-checkbox>
+        <b-form-checkbox :id="`rowCheckbox-${data.index}`" :checked="selectedIds.includes(data.item.id)" @change="selectRow(data.index)"></b-form-checkbox>
       </template>
       <template #cell(role)="data: any">
         <b-form-select v-model="data.item.role" :options="selectRoles"></b-form-select>
@@ -107,6 +107,10 @@
 <style scoped>
   select{
     width: fit-content;
+  }
+
+  .test{
+    opacity: 0.5;
   }
 </style>
 
@@ -130,6 +134,12 @@
           {value: 'true', text: 'Yes'},
           {value: 'false', text: 'No'}
         ]
+      }
+    },
+    methods:{
+      //!TODO! Change background color when selected
+      rowClass(item:any, type:any){
+        return null
       }
     }
   }

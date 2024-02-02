@@ -21,7 +21,11 @@ export enum Roles{
 }
 
 export class User {
-    constructor(public name: String = "", public email: String = "" ,public password: String = "1234", public role: Roles = Roles.ADMIN, public isDriver: boolean = false) {
+    constructor(private id: String = "", public name: String = "", public email: String = "" ,public password: String = "1234", public role: Roles = Roles.ADMIN, public isDriver: boolean = false) {
+    }
+
+    public getId(): String{
+        return this.id
     }
 }
 
