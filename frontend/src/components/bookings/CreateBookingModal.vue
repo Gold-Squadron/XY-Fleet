@@ -49,6 +49,7 @@
     let virtual : Booking = res.value.clone();
     virtual.status = "preview";
     emit('createVirtualBooking', virtual)
+    hide(); // minimize the dialog temporarily
   }
 
   function addBooking() {
