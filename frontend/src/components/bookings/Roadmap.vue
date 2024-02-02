@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import {computed, onMounted, type Ref, ref} from 'vue';
 import {type GanttBarObject, GGanttRow} from "@infectoone/vue-ganttastic";
+import {type UnwrapRefSimple} from "@vue/reactivity"
 import CreateBookingModal from "@/components/bookings/CreateBookingModal.vue";
 import {useModal} from "bootstrap-vue-next";
 import {Booking} from "@/main";
@@ -15,6 +16,7 @@ bookings.value.push(new Booking("Green Smart", new Date("2024-02-2 10:00"), new 
 
 let chartStart : Ref<Date> = ref(new Date().translateDays(-4));
 let chartEnd = computed(() => {return chartStart.value.translateDays(31)})
+let previewMode = false;
 
 /// shifts the time/day on the component when the mouse scrolls
 /// any due to damn event browser support
@@ -52,6 +54,7 @@ const generatedBars = computed( () => {
 //TODO remove the parameter once the REST Interface works
 function createVirtualBooking(booking : Booking) : void {
   console.log(booking)
+  if(booking.status === "preview") previewMode = true;
   bookings.value.push(booking);
 }
 
@@ -60,6 +63,19 @@ function refresh() {
 }
 
 const {show, hide, modal} = useModal('creation-dialog')
+
+function finishPreview(save : boolean) {
+  previewMode = false;
+  if(!save) {
+    const index : number = bookings.value.findIndex((x) => x.status == 'preview');
+    bookings.value.splice(index, 1);
+    return;
+  }
+  let first : UnwrapRefSimple<Booking> | undefined = bookings.value.find((x) => x.status == 'preview');
+  if(first != undefined) {
+    first.status = 'booking'
+  }
+}
 
 function afterLoad() {
   let scrollable = document.getElementById("roadmap");
@@ -88,7 +104,11 @@ onMounted(() => afterLoad());
         <g-gantt-row  :label="vehicle" :bars="generatedBars.get(vehicle)"/>
       </div>
     </g-gantt-chart>
-    <div class="float-right m-5">
+    <div v-if="previewMode" class="float-right m-5">
+      <b-button variant="secondary" size="lg" @click="finishPreview(false)"> Zurück </b-button>
+      <b-button variant="primary" size="lg" @click="finishPreview(true)"> Speichern </b-button>
+    </div>
+    <div v-else class="float-right m-5">
       <b-button variant="primary" size="lg" @click="show"> Neue Fahrt eintragen </b-button>
     </div>
     <CreateBookingModal @refresh="refresh" @createVirtualBooking="createVirtualBooking" :cars="vehicles"/>
@@ -117,5 +137,9 @@ onMounted(() => afterLoad());
   /* TODO: figure out why this doesn't work automatically */
   .text-bg-secondary {
     background: #407fb7 ;
+  }
+
+  button {
+    margin-left: 20px;
   }
 </style>
