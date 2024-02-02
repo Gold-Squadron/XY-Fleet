@@ -89,7 +89,7 @@ onMounted(() => afterLoad());
       <div class="btn-group">
         <b-button variant="warning" size="lg">Defekt eintragen</b-button>
         <b-button variant="warning" class="dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" size="lg">
-          <span class="sr-only">Toggle Dropdown</span>
+          <span class="sr-only">Toggle Dropdown for more event options</span>
         </b-button>
         <div class="dropdown-menu">
           <a class="dropdown-item" href="#" v-for="ev in additionalEvents">{{ev}}</a>
