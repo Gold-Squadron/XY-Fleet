@@ -11,8 +11,10 @@ const dayWidth = 1.5 * parseFloat(getComputedStyle(document.documentElement).fon
 //Demodata
 let vehicles = ref(["STO-XY-01", "STO-XY-02", "STO-XY-03", "STO-XY-04", "STO-XY-31", "STO-XY-41", "STO-XY-59", "STO-XY-26",]);
 let bookings : Ref<Booking[]> = ref([])
+let additionalEvents = ["TÜV Termin", "Reparaturen" , "Bereitschaft", "Auto nicht fahrbereit"]
 
 
+bookings.value.push(new Booking("Green Smart", new Date("2024-02-2 10:00"), new Date("2024-02-3 24:00")));
 
 function pushAndGenerate(number: number, number2: number, s: string, s2: string, none: string, number3: number, status : string = "") {
   let val = new Booking(vehicles.value[number - 101], new Date(s), new Date(s2), none);
@@ -149,7 +151,18 @@ onMounted(() => afterLoad());
       <b-button variant="secondary" size="lg" @click="finishPreview(false)"> Zurück </b-button>
       <b-button variant="primary" size="lg" @click="finishPreview(true)"> Speichern </b-button>
     </div>
-    <div v-else class="float-right m-5">
+    <div v-else class="float-right m-5 d-flex justify-content-end">
+      <div class="btn-group">
+        <b-button variant="warning" size="lg">Defekt eintragen</b-button>
+        <b-button variant="warning" class="dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" size="lg">
+          <span class="sr-only">Toggle Dropdown for more event options</span>
+        </b-button>
+        <div class="dropdown-menu">
+          <a class="dropdown-item" href="#" v-for="ev in additionalEvents">{{ev}}</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="#">Add a new type</a>
+        </div>
+      </div>
       <b-button variant="primary" size="lg" @click="show"> Neue Fahrt eintragen </b-button>
     </div>
     <CreateBookingModal @refresh="refresh" @createVirtualBooking="createVirtualBooking" :cars="vehicles"/>
@@ -178,9 +191,5 @@ onMounted(() => afterLoad());
   /* TODO: figure out why this doesn't work automatically */
   .text-bg-secondary {
     background: #407fb7 ;
-  }
-
-  button {
-    margin-left: 20px;
   }
 </style>

@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@infectoone/vue-ganttastic": "file:../../../oss/lib/vue-ganttastic/infectoone-vue-ganttastic-2.2.0.tgz",
+    "@floating-ui/vue": "^1.0.6",
     "bootstrap": "^4.3.2",
     "bootstrap-icons": "^1.11.2",
     "bootstrap-vue-next": "^0.14.10",
