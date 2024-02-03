@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import {computed, onMounted, type Ref, ref} from 'vue';
+import {computed, type CSSProperties, onMounted, type Ref, ref} from 'vue';
 import {type GanttBarObject, GGanttRow} from "@infectoone/vue-ganttastic";
 import {type UnwrapRefSimple} from "@vue/reactivity"
 import CreateBookingModal from "@/components/bookings/CreateBookingModal.vue";
@@ -9,12 +9,35 @@ import {Booking} from "@/main";
 const dayWidth = 1.5 * parseFloat(getComputedStyle(document.documentElement).fontSize);
 
 //Demodata
-let vehicles = ref(["Blue Van", "Red Van", "Green Smart", "Phillip's broken e-scooter", "No Smart", "Clown Car"]);
-let bookings = ref([new Booking("Blue Van", new Date(Date.now()), new Date("2024-02-2 19:00"), "Amokfahrt")])
+let vehicles = ref(["STO-XY-01", "STO-XY-02", "STO-XY-03", "STO-XY-04", "STO-XY-31", "STO-XY-41", "STO-XY-59", "STO-XY-26",]);
+let bookings : Ref<Booking[]> = ref([])
 
-bookings.value.push(new Booking("Green Smart", new Date("2024-02-2 10:00"), new Date("2024-02-3 24:00")));
 
-let chartStart : Ref<Date> = ref(new Date().translateDays(-4));
+
+function pushAndGenerate(number: number, number2: number, s: string, s2: string, none: string, number3: number, status : string = "") {
+  let val = new Booking(vehicles.value[number - 101], new Date(s), new Date(s2), none);
+  val.driver = ["lhelbig", "nsimon", "jwilleke", "laußem"][number2 - 100];
+  val.status = status;
+  console.log(val)
+  bookings.value.push(val)
+}
+
+pushAndGenerate(101, 100, '2024-03-01', '2024-03-07', 'Betriebsausflug', 1000);
+pushAndGenerate(102, 100, '2024-03-14', '2024-03-15', 'none', 200);
+pushAndGenerate(101, 100, '2024-03-20', '2024-03-30', 'Betriebsreise', 2800);
+pushAndGenerate(103, 101, '2024-03-05', '2024-03-05', 'none', 100);
+pushAndGenerate(103, 101, '2024-03-12', '2024-03-12', 'none', 100);
+pushAndGenerate(103, 101, '2024-03-19', '2024-03-19', 'none', 100);
+pushAndGenerate(103, 101, '2024-03-26', '2024-03-26', 'none', 100);
+pushAndGenerate(102, 101, '2024-03-20', '2024-03-24', 'Betriebsausflug', 600);
+pushAndGenerate(102, 102, '2024-03-10', '2024-03-18', 'Deutschlandtour', 1000);
+pushAndGenerate(101, 103, '2024-03-11', '2024-03-13', 'none', 200);
+pushAndGenerate(102, 103, '2024-03-20', '2024-03-25', 'none', 300);
+pushAndGenerate(105, 103, '2024-03-11', '2024-03-13', 'none', 200);
+pushAndGenerate(107, 103, '2024-03-20', '2024-03-25', 'none', 300);
+pushAndGenerate(106, 103, '2024-03-5', '2024-04-5', 'Nicht Betriebsfähig', 300, "broken");
+
+let chartStart : Ref<Date> = ref(new Date().translateDays(25));
 let chartEnd = computed(() => {return chartStart.value.translateDays(31)})
 
 let previewMode = false;
@@ -30,20 +53,32 @@ function mouseWheelHandler(inp : any) : boolean {
   return false;
 }
 
+
+
 //transforms the raw data into the rendering format
 const generatedBars = computed( () => {
   let map = new Map<string, GanttBarObject[]>();
   vehicles.value.forEach(name => map.set(name, []))
   bookings.value.forEach( (booking) => {
+    let stylingContent : CSSProperties = {
+      borderRadius: "5px",
+      background: "linear-gradient(117deg, rgba(97,217,3,1) 0%, rgba(21,124,0,1) 100%)",
+      color: "white"
+    };
+    if(booking.status == "broken") stylingContent.background =  "linear-gradient(117deg, rgba(217,3,3,1) 0%, rgba(124,29,0,1) 100%)";
+    let label = booking.reason != 'none' ? booking.reason : booking.driver;
+    if(booking.html) label = "";
     let x : GanttBarObject = {
       myBeginDate: booking.getStartDateAsReference(),
       myEndDate: booking.getEndDateAsReference(),
       ganttBarConfig: {
-          id: booking.car + booking.start, // ... and a unique "id" property
-          label: booking.reason ? booking.reason : booking.driver,
+          id: booking.car + booking.start.getTime(), // ... and a unique "id" property
+          label: label,
           hasHandles: booking.status === 'preview',
           immobile: booking.status !== 'preview',
-          class: `bar-${booking.status}`
+          style: stylingContent,
+          class: `bar-${booking.status}`,
+          html: booking.html
       }
     }
     map.get(booking.car)?.push(x);
@@ -84,6 +119,10 @@ function afterLoad() {
     scrollable?.addEventListener("mousewheel", mouseWheelHandler, false);
     scrollable?.addEventListener("DOMMouseScroll", mouseWheelHandler, false);
   }
+
+  for (let booking in bookings.value) {
+
+  }
 }
 
 onMounted(() => afterLoad());
@@ -99,7 +138,7 @@ onMounted(() => afterLoad());
         :grid="true"
         bar-start="myBeginDate"
         bar-end="myEndDate"
-        :highlighted-units=[27,28,3,4,10,11]
+        :highlighted-units=[3,4,10,11,17,18,24,25,31]
         color-scheme="default"> <!-- https://github.com/zunnzunn/vue-ganttastic/blob/master/docs/GGanttChart.md#color-schemes -->
       <div v-for="vehicle in vehicles"> <!-- create a row for each vehicle -->
         <g-gantt-row  :label="vehicle" :bars="generatedBars.get(vehicle)"/>
