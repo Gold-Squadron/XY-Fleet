@@ -27,7 +27,20 @@
       inputRole = Roles.TRAVEL_OFFICE
     }
 
-    return new User(name.value, email.value, password.value, inputRole, isDriver.value == 'true')
+    // Generate id
+    let id: String = ''
+
+    while ((!checkId(id)) && (id != '')){
+      id = Math.random().toString(16)
+      id = id.substring(id.length - 6)
+    }
+
+    return new User(id ,name.value, email.value, password.value, inputRole, isDriver.value == 'true')
+  }
+
+  function checkId(id: String) : boolean{
+    // !Todo! Check if id is in use
+    return true
   }
 </script>
 
