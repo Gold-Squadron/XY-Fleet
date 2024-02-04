@@ -10,6 +10,7 @@ const dayWidth = 1.5 * parseFloat(getComputedStyle(document.documentElement).fon
 //Demodata
 let vehicles = ref(["Blue Van", "Red Van", "Green Smart", "Phillip's broken e-scooter", "No Smart", "Clown Car"]);
 let bookings = ref([new Booking("Blue Van", new Date(Date.now()), new Date("2024-02-2 19:00"), "Amokfahrt")])
+let additionalEvents = ["TÜV Termin", "Reparaturen" , "Bereitschaft", "Auto nicht fahrbereit"]
 
 bookings.value.push(new Booking("Green Smart", new Date("2024-02-2 10:00"), new Date("2024-02-3 24:00")));
 
@@ -84,7 +85,18 @@ onMounted(() => afterLoad());
         <g-gantt-row  :label="vehicle" :bars="generatedBars.get(vehicle)"/>
       </div>
     </g-gantt-chart>
-    <div class="float-right m-5">
+    <div class="float-right m-5 d-flex justify-content-end">
+      <div class="btn-group">
+        <b-button variant="warning" size="lg">Defekt eintragen</b-button>
+        <b-button variant="warning" class="dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" size="lg">
+          <span class="sr-only">Toggle Dropdown for more event options</span>
+        </b-button>
+        <div class="dropdown-menu">
+          <a class="dropdown-item" href="#" v-for="ev in additionalEvents">{{ev}}</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="#">Add a new type</a>
+        </div>
+      </div>
       <b-button variant="primary" size="lg" @click="show"> Neue Fahrt eintragen </b-button>
     </div>
     <CreateBookingModal @createBooking="refresh" :cars="vehicles"/>
@@ -113,5 +125,9 @@ onMounted(() => afterLoad());
   /* TODO: figure out why this doesn't work automatically */
   .text-bg-secondary {
     background: #407fb7 ;
+  }
+
+  button {
+    margin-left: 20px;
   }
 </style>
