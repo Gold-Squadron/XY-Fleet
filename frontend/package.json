@@ -11,6 +11,7 @@
     "type-check": "vue-tsc --noEmit -p tsconfig.vitest.json --composite false"
   },
   "dependencies": {
+    "@floating-ui/vue": "^1.0.6",
     "@infectoone/vue-ganttastic": "^2.2.0",
     "bootstrap": "^4.3.2",
     "bootstrap-icons": "^1.11.2",
