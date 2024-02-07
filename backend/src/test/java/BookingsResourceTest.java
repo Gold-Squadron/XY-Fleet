@@ -29,7 +29,7 @@ public class BookingsResourceTest extends ResourceTest{
         VehiclesRecord vehicle = new VehiclesRecord(0, "STO-XY-123", "VW", "Käfer", "123", 20000, 2000, 4000, insurances.getId(), "car",pricing.getId());
         vehicle.setId(scenario.add(VEHICLES, vehicle));
 
-        BookingsRecord booking = new BookingsRecord(0, ADMIN_ID, vehicle.getId(),  LocalDate.parse("2023-01-01"),  LocalDate.parse("2023-01-02"), "none", 200);
+        BookingsRecord booking = new BookingsRecord(0, ADMIN_ID, vehicle.getId(),  LocalDate.parse("2023-01-01"),  LocalDate.parse("2023-01-02"), "none", 200, null);
         booking.setId(scenario.add(BOOKINGS, booking));
         uri = "/booking";
         testTable = Database.getDSLContext().select().from(BOOKINGS).fetch();
