@@ -6,7 +6,7 @@ import VehicleDashboard from "@/components/VehicleDashboard.vue";
 import { ref } from "vue"
 import { Views } from "@/main"
 
-const currentView = ref(Views.NONE)
+const currentView = ref(Views.ROADMAP)
 
 function setCurrentView(to : Views) : void {
   currentView.value = to;
