@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import { useModal } from "bootstrap-vue-next";
+  import {useModal} from "bootstrap-vue-next";
 
-const { hide } = useModal('confirmation-dialog')
+  const {hide} = useModal('confirmation-dialog')
 
-defineEmits<{
-  (event: "removeUser") : void
-}>()
+  defineEmits<{
+    (event: "removeUser"): void
+  }>()
 </script>
 
 <template>
@@ -17,7 +17,8 @@ defineEmits<{
     </b-row>
     <b-row>
       <b-col>
-        <b-button class="mt-3" size="sm" variant="danger" block @click="$emit.call(null, 'removeUser'); hide()">Yes</b-button>
+        <b-button class="mt-3" size="sm" variant="danger" block @click="$emit.call(null, 'removeUser'); hide()">Yes
+        </b-button>
       </b-col>
       <b-col>
         <b-button class="mt-3" size="sm" block @click="hide()">No</b-button>

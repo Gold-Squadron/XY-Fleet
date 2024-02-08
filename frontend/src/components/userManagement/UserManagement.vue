@@ -1,27 +1,28 @@
 <!--suppress VueUnrecognizedSlot -->
 <script setup lang="ts">
-  import { type Ref, ref, toRaw } from 'vue';
-  import { type TableItem, useModal } from "bootstrap-vue-next";
+  import {type Ref, ref, toRaw} from 'vue';
+  import {type TableItem, useModal} from "bootstrap-vue-next";
   import AddUserModal from "@/components/userManagement/AddUserModal.vue";
   import ConfirmRemovalModal from "@/components/userManagement/ConfirmRemovalModal.vue";
-  import { Roles, User } from "@/main";
+  import {Roles, User} from "@/main";
 
-  function showModal(id: string) : void{
-    const { show } = useModal(id)
+  function showModal(id: string): void {
+    const {show} = useModal(id)
     show()
   }
 
   // Demodata
-  let users = ref([new User('22323fcvd', 'Luca Außem', 'luca-aussem@t-online.de','1234', Roles.ADMIN, true), new User('c84nfakhf', 'Noah Simon', 'snoah@gmail.com', '4321')]);
+  let users = ref([new User('22323fcvd', 'Luca Außem', 'luca-aussem@t-online.de', '1234', Roles.ADMIN, true), new User('c84nfakhf', 'Noah Simon', 'snoah@gmail.com', '4321')]);
 
   // Convert the raw data into the rendering format
   let usersCoverted: Ref<TableItem[]> = ref([])
-  function convertUserData() : TableItem[]{
+
+  function convertUserData(): TableItem[] {
     let dataConverted: TableItem[] = []
     let dataRaw = users.value
 
     dataRaw.forEach((data) => {
-      let dataObj: {[key: string]: string|boolean|number} = {}
+      let dataObj: { [key: string]: string | boolean | number } = {}
       let values: any = toRaw(data)
 
       Object.keys(data).forEach(param => {
@@ -33,9 +34,10 @@
 
     return dataConverted
   }
+
   usersCoverted.value = convertUserData()
 
-  function addUser(user: User) : void{
+  function addUser(user: User): void {
     // !TODO! Add user to database
 
     usersCoverted.value = []
@@ -43,7 +45,7 @@
     usersCoverted.value = convertUserData()
   }
 
-  function removeUser() : void{
+  function removeUser(): void {
     // !TODO! Remove user from database
 
     usersCoverted.value = []
@@ -57,40 +59,42 @@
 
   let selectedIds: Ref<String[]> = ref([])
 
-  function selectRow(index: number) : void{
+  function selectRow(index: number): void {
     let id = users.value[index].getId()
     let idIndex = selectedIds.value.indexOf(id)
 
-    if(idIndex == -1){
+    if (idIndex == -1) {
       selectedIds.value.push(id)
       highlightRow(index)
-    }else{
+    } else {
       selectedIds.value.splice(idIndex, 1)
       highlightRow(index, false)
     }
 
   }
-  function changeAll(forceDeselect: boolean = false) : void{
+
+  function changeAll(forceDeselect: boolean = false): void {
     let selectAll: boolean = (selectedIds.value.length != users.value.length) && !forceDeselect
     selectedIds.value = []
 
-    if(selectAll){
-      for(let i=0; i<users.value.length; i++){
+    //!TODO!
+    if (selectAll) {
+      for (let i = 0; i < users.value.length; i++) {
         selectRow(i)
       }
-    }else{
-      for(let i=0; i<users.value.length; i++){
+    } else {
+      for (let i = 0; i < users.value.length; i++) {
         selectRow(i)
         selectRow(i)
       }
     }
   }
 
-  function highlightRow(index: number, mark: boolean = true) : void{
+  function highlightRow(index: number, mark: boolean = true): void {
     const SELECTION_COLOR: string = '#9a9a9a45'
     const table: HTMLElement | null = document.getElementById('userTable')
 
-    if(!table){
+    if (!table) {
       return
     }
 
@@ -103,14 +107,18 @@
 <template>
   <div class="pl-3">
     <b-button variant="primary" size="md" @click="showModal('creation-dialog')" class="mt-4 mb-3">Add User</b-button>
-    <b-button variant="primary" size="md" @click="showModal('confirmation-dialog')" :disabled="selectedIds.length == 0" class="ml-3 mt-4 mb-3">Remove User</b-button>
+    <b-button variant="primary" size="md" @click="showModal('confirmation-dialog')" :disabled="selectedIds.length == 0"
+              class="ml-3 mt-4 mb-3">Remove User
+    </b-button>
 
     <b-table id="userTable" :fields="fields" :items="usersCoverted">
       <template #head(cb)="">
-        <b-form-checkbox @change="changeAll()" :checked="(selectedIds.length == users.length) && (users.length != 0)" id="selectAllCheckbox"></b-form-checkbox>
+        <b-form-checkbox @change="changeAll()" :checked="(selectedIds.length == users.length) && (users.length != 0)"
+                         id="selectAllCheckbox"></b-form-checkbox>
       </template>
       <template #cell(cb)="data:any">
-        <b-form-checkbox :id="`rowCheckbox-${data.index}`" :checked="selectedIds.includes(data.item.id)" @change="selectRow(data.index)"></b-form-checkbox>
+        <b-form-checkbox :id="`rowCheckbox-${data.index}`" :checked="selectedIds.includes(data.item.id)"
+                         @change="selectRow(data.index)"></b-form-checkbox>
       </template>
       <template #cell(role)="data: any">
         <b-form-select v-model="data.item.role" :options="selectRoles"></b-form-select>
@@ -126,7 +134,7 @@
 </template>
 
 <style scoped>
-  select{
+  select {
     width: fit-content;
   }
 </style>
@@ -144,7 +152,7 @@
         ],
         selectRoles: [
           {value: Roles.ADMIN, text: 'Admin'},
-          {value: Roles.SECRUITY, text: 'Secruity'},
+          {value: Roles.SECURITY, text: 'Security'},
           {value: Roles.TRAVEL_OFFICE, text: 'Travel Office'}
         ],
         selectDriver: [
@@ -154,5 +162,4 @@
       }
     }
   }
-
 </script>
