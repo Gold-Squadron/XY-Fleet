@@ -1,4 +1,16 @@
+DROP SCHEMA if exists SWT;
+
 create schema if not exists SWT;
+
+create table if not exists SWT.users
+(
+    id        int auto_increment
+        primary key,
+    name      varchar(255) not null unique,
+    password varchar(255) not null,
+    role  varchar(255) not null,
+    is_driver tinyint(1) not null
+);
 
 create table if not exists SWT.insurances
 (
@@ -47,8 +59,10 @@ create table if not exists SWT.vehicles
     model              varchar(255) not null,
     chassis_number     varchar(17)  not null,
     mileage            int          not null,
+    expected_mileage   int          not null,
     annual_performance int          not null,
     insurance_id       int          not null,
+    type               varchar(255) not null,
     pricing_id         int          null,
     constraint vehicles_insurance_fk
         foreign key (insurance_id) references insurances (id),
@@ -65,6 +79,7 @@ create table if not exists SWT.bookings
     leasing_start date         not null,
     leasing_end   date         not null,
     reasoning     varchar(255) not null,
+    expected_travel_distance int not null,
     constraint bookings_driver_fk
         foreign key (driver_id) references users (id),
     constraint bookings_vehicle_fk
