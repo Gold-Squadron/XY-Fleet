@@ -3,16 +3,14 @@
   import { Roles, User } from "@/main";
 
   const { hide } = useModal('creation-dialog')
-
   const string_false = 'false'
 
   defineEmits<{
     (event: "createUser", newUser : User) : void
   }>()
 
-  // !TODO!
-  // There is surely a better way to do this whis is not as stupid as this
-  // Make name and email mandatory
+  // !TODO! There is surely a better way to do this whis is not as stupid as this
+  // !TODO! Make name and email mandatory
   function createUser(): User{
     let name: HTMLInputElement = <HTMLInputElement> document.getElementById('name')
     let email: HTMLInputElement = <HTMLInputElement> document.getElementById('email')
