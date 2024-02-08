@@ -5,7 +5,8 @@ import 'bootstrap-vue-next/dist/bootstrap-vue-next.css'
 
 import ganttastic from '@infectoone/vue-ganttastic'
 
-import {computed, createApp} from 'vue'
+import {computed, createApp, ref} from 'vue'
+import {type Ref} from 'vue'
 import App from './App.vue'
 
 //region Types
@@ -18,10 +19,40 @@ export enum Views {
 }
 
 export class Booking {
-    constructor(public car: string = "", public start: Date = new Date(), public end : Date = new Date(), public reason: string = "", public driver: string = "nsimon") {}
+
+    private refStart : Ref<Date> | null = null;
+    private refEnd : Ref<Date> | null = null;
+
+    status: string = "";
+    constructor(public car: string = "", public start: Date = new Date(), public end : Date = new Date(), public reason: string = "", public driver: string = "nsimon") {
+        this.refStart = null;
+        this.refEnd = null;
+    }
+
+    //make your own function supporting, ref-less (aka. back to *null*) deep copy
+    clone() : Booking {
+        return new Booking(this.car, this.start, this.end, this.reason, this.driver)
+    }
+
     isWithin(day : number) : Boolean {
         return true; //his.start <= day && this.end >= day;
     }
+    getStartDateAsReference() : Ref<Date> {
+        if(this.refStart == null) {
+            this.refStart = ref(this.start);
+            console.log("initialising refStart for " + this.car + " - " + this.driver)
+        }
+        return this.refStart;
+    }
+
+    getEndDateAsReference() : Ref<Date> {
+        if(this.refEnd == null) {
+            this.refEnd = ref(this.end);
+            console.log("initialising refEnd for " + this.car + " - " + this.driver)
+        }
+        return this.refEnd;
+    }
+
 }
 //endregion Types
 
