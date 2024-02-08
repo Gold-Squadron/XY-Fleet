@@ -24,11 +24,11 @@ public class BookingResourceTest extends EntryResourceTest {
             insurances.setId(scenario.add(INSURANCES, insurances));
             //dslContext.insertInto(INSURANCES).values(insurances).onDuplicateKeyIgnore().execute();
 
-            VehiclesRecord vehicle = new VehiclesRecord(0, "STO-XY-123", "VW", "Käfer", "123", 2000, 2000,4000, insurances.getId(),"car" ,pricing.getId() );
+            VehiclesRecord vehicle = new VehiclesRecord(0, "STO-XY-123", "VW", "Käfer", "123", 2000, 4000, insurances.getId(), pricing.getId());
             vehicle.setId(scenario.add(VEHICLES, vehicle));
             //dslContext.insertInto(VEHICLES).values(vehicle).onDuplicateKeyIgnore().execute();
 
-            BookingsRecord booking = new BookingsRecord(0, ADMIN_ID, vehicle.getId(),  LocalDate.parse("2023-01-01"),  LocalDate.parse("2023-01-01"), "none", 200);
+            BookingsRecord booking = new BookingsRecord(0, ADMIN_ID, vehicle.getId(), new Date(1, 1, 1).toLocalDate(), new Date(1, 1, 2).toLocalDate(), "none");
             booking.setId(scenario.add(BOOKINGS, booking));
             uri = "/booking/" + booking.getId();
             testRecord = booking;
@@ -47,14 +47,14 @@ public class BookingResourceTest extends EntryResourceTest {
     @Override
     @ParameterizedTest
     @CsvSource(value = {
-            FORBIDDEN+":"+ROLE_USER,
-            FORBIDDEN+":"+ROLE_SECURITY,
-            UNAUTHORIZED+": "}, delimiter = ':')
+            "Forbidden (403) - The server understood the request, but is refusing to fulfill it:"+ROLE_USER,
+            "Forbidden (403) - The server understood the request, but is refusing to fulfill it:"+ROLE_SECURITY,
+            "Unauthorized (401) - The request requires user authentication: "}, delimiter = ':')
     public void delete_invalidCall_shouldThrowResourceException(String responseMessage, String role) {
         super.delete_invalidCall_shouldThrowResourceException(responseMessage, role);
     }
     @ParameterizedTest
-    @CsvSource(value = {UNAUTHORIZED+": abc"}, delimiter = ':')
+    @CsvSource(value = {"Unauthorized (401) - The request requires user authentication: abc"}, delimiter = ':')
     public void get_invalidCall_shouldThrowResourceException(String responseMessage, String role) {
         super.get_invalidCall_shouldThrowResourceException(responseMessage, role);
     }
