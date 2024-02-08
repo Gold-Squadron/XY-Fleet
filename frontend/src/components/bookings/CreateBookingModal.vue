@@ -7,10 +7,13 @@
     cars?: string[]
   }>()
 
-  defineEmits<{
-    (event: "createBooking", booking : Booking) : void
-  }>()
 
+
+  const emit = defineEmits<{
+    createVirtualBooking: [booking : Booking]
+    refresh: []
+  }>()
+  
   let res = ref(new Booking())
   let comp =
       {
@@ -20,7 +23,7 @@
           },
           // setter
           set(newValue : string) {
-            res.value.start?.setDate(new Date(newValue).getDate())
+            res.value.start?.setTime(new Date(newValue).getTime())
           }
         }),
         endDate: computed({
@@ -29,7 +32,7 @@
           },
           // setter
           set(newValue : string) {
-            res.value.end?.setDate(new Date(newValue).getDate())
+            res.value.end?.setTime(new Date(newValue).getTime())
           }
         })
       }
@@ -37,11 +40,30 @@
   const {show, hide, modal} = useModal('creation-dialog')
 
   let drivers = ref(["nsimon", "lhelbig", "laußem"])
+
+  function reset() {
+    res.value = new Booking();
+  }
+  
+  function preview() {
+    let virtual : Booking = res.value.clone();
+    virtual.status = "preview";
+    emit('createVirtualBooking', virtual)
+    hide(); // minimize the dialog temporarily
+  }
+
+  function addBooking() {
+    emit('createVirtualBooking', res.value.clone()) // DEBUG
+    // [REST-Call] FINAL
+    //emit('refresh') FINAL
+    reset()
+    hide()
+  }
 </script>
 
 <template>
   <!-- TODO validation and proper autocomplete -->
-  <BModal v-if="true" id="creation-dialog" @on-cancel="hide()" @ok="$emit.call(null, 'createBooking', res)" size="lg" hide-header>
+  <BModal v-if="true" id="creation-dialog" @on-cancel="hide()" size="lg" hide-header hide-footer>
     <div class="modal-header">
       <h3>Neue Fahrt eintragen</h3>
     </div>
@@ -81,10 +103,20 @@
       <BFormGroup label="Reason (optional):">
         <BFormInput id="reason" placeholder="I really like driving" v-model="res.reason"></BFormInput>
       </BFormGroup>
+      <hr/>
+      <BButton @click="reset()" variant="outline-warning" class="float-left">Reset</BButton>
+      <div class="d-flex justify-content-end">
+        <BButton @click="hide()">Cancel</BButton>
+        <BButton @click="preview()" variant="success">Preview</BButton>
+        <BButton @click="addBooking()" variant="outline-primary">Hinzufügen</BButton>
+      </div>
     </BForm>
   </BModal>
 </template>
 
 <style scoped>
+button {
+  margin: 1.5%;
+}
 
 </style>
