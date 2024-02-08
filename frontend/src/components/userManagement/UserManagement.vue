@@ -6,8 +6,6 @@
   import ConfirmRemovalModal from "@/components/userManagement/ConfirmRemovalModal.vue";
   import { Roles, User } from "@/main";
 
-  const SELECTION_COLOR: string = '#9a9a9a45'
-
   function showModal(id: string) : void{
     const { show } = useModal(id)
     show()
@@ -53,6 +51,8 @@
     usersCoverted.value = convertUserData()
 
     selectedIds.value = []
+
+    changeAll(true)
   }
 
   let selectedIds: Ref<String[]> = ref([])
@@ -63,20 +63,40 @@
 
     if(idIndex == -1){
       selectedIds.value.push(id)
+      highlightRow(index)
     }else{
       selectedIds.value.splice(idIndex, 1)
+      highlightRow(index, false)
     }
+
   }
-  function changeAll(){
-    let numberOfSelections: number = selectedIds.value.length
+  function changeAll(forceDeselect: boolean = false) : void{
+    let selectAll: boolean = (selectedIds.value.length != users.value.length) && !forceDeselect
     selectedIds.value = []
 
-    // Select all
-    if(numberOfSelections != users.value.length){
-      users.value.forEach(user => {
-        selectedIds.value.push(user.getId())
-      })
+    if(selectAll){
+      for(let i=0; i<users.value.length; i++){
+        selectRow(i)
+      }
+    }else{
+      for(let i=0; i<users.value.length; i++){
+        selectRow(i)
+        selectRow(i)
+      }
     }
+  }
+
+  function highlightRow(index: number, mark: boolean = true) : void{
+    const SELECTION_COLOR: string = '#9a9a9a45'
+    const table: HTMLElement | null = document.getElementById('userTable')
+
+    if(!table){
+      return
+    }
+
+    let row: any = table.children[1].children[index]
+
+    row.style.backgroundColor = mark ? SELECTION_COLOR : ''
   }
 </script>
 
@@ -85,7 +105,7 @@
     <b-button variant="primary" size="md" @click="showModal('creation-dialog')" class="mt-4 mb-3">Add User</b-button>
     <b-button variant="primary" size="md" @click="showModal('confirmation-dialog')" :disabled="selectedIds.length == 0" class="ml-3 mt-4 mb-3">Remove User</b-button>
 
-    <b-table :fields="fields" :items="usersCoverted" :tbody-tr-class="rowClass">
+    <b-table id="userTable" :fields="fields" :items="usersCoverted">
       <template #head(cb)="">
         <b-form-checkbox @change="changeAll()" :checked="(selectedIds.length == users.length) && (users.length != 0)" id="selectAllCheckbox"></b-form-checkbox>
       </template>
@@ -109,10 +129,6 @@
   select{
     width: fit-content;
   }
-
-  .test{
-    opacity: 0.5;
-  }
 </style>
 
 <script lang="ts">
@@ -135,12 +151,6 @@
           {value: 'true', text: 'Yes'},
           {value: 'false', text: 'No'}
         ]
-      }
-    },
-    methods:{
-      //!TODO! Change background color when selected
-      rowClass(item:any, type:any){
-        return null
       }
     }
   }

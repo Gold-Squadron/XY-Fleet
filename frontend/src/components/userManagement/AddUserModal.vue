@@ -9,7 +9,7 @@
     (event: "createUser", newUser : User) : void
   }>()
 
-  // !TODO! There is surely a better way to do this whis is not as stupid as this
+  // !TODO! There is surely a better way to do this which is not as stupid as this
   // !TODO! Make name and email mandatory
   function createUser(): User{
     let name: HTMLInputElement = <HTMLInputElement> document.getElementById('name')
