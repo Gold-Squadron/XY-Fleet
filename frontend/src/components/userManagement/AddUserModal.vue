@@ -10,8 +10,6 @@
   }>()
 
   // !TODO! There is surely a better way to do this which is not as stupid as this
-  // !TODO! Make name and email mandatory
-  // !TODO! E-Mail verification
   function createUser(): User {
     let name: HTMLInputElement = <HTMLInputElement>document.getElementById('name')
     let email: HTMLInputElement = <HTMLInputElement>document.getElementById('email')
@@ -48,32 +46,42 @@
 </script>
 
 <template>
-  <BModal v-if="true" id="creation-dialog" @on-cancel="hide()" @ok="$emit.call(null, 'createUser', createUser())"
-          size="lg" hide-header>
+  <BModal v-if="true" id="creation-dialog" @on-cancel="hide()" size="lg" hide-header hide-footer>
     <div class="modal-header">
       <h3>Benutzer hinzufügen</h3>
     </div>
     <br>
-    <BForm>
+    <BForm @submit="$emit.call(null, 'createUser', createUser()); hide()">
       <BFormRow>
         <BCol>
-          <BFormInput id="name" placeholder="Name"></BFormInput>
+          <b-form-floating-label label-for="name">Name</b-form-floating-label>
+          <BFormInput id="name" placeholder="Name" required></BFormInput>
         </BCol>
         <BCol>
-          <BFormInput type="email" id="email" placeholder="E-Mail Adress"></BFormInput>
+          <b-form-floating-label label-for="email">E-Mail Adresse</b-form-floating-label>
+          <BFormInput type="email" id="email" placeholder="E-Mail Address" required></BFormInput>
         </BCol>
       </BFormRow>
       <BFormRow class="mt-3">
-        <BCol>
-          <BFormInput id="password" placeholder="Password"></BFormInput>
+        <BCol class="col-5">
+          <b-form-floating-label label-for="password">Password</b-form-floating-label>
+          <BFormInput id="password" placeholder="Password" required></BFormInput>
         </BCol>
         <BCol>
+          <b-form-floating-label label-for="role">Rolle</b-form-floating-label>
           <b-form-select id="role" v-model="Roles.TRAVEL_OFFICE" :options="selectRoles" class="w-100"></b-form-select>
         </BCol>
         <BCol>
+          <b-form-floating-label label-for="isDriver">Fahrer</b-form-floating-label>
           <b-form-select id="isDriver" v-model="string_false" :options="selectDriver" class="w-100"></b-form-select>
         </BCol>
       </BFormRow>
+      <b-row class="mt-4 text-right">
+        <b-col>
+          <b-button type="submit" variant="primary" class="mr-2">Benutzer Hinzufügen</b-button>
+          <b-button type="button" @click="hide()" variant="secondary">Abbrechen</b-button>
+        </b-col>
+      </b-row>
     </BForm>
   </BModal>
 </template>
