@@ -110,7 +110,6 @@ onMounted(() => afterLoad());
       <b-button variant="secondary" size="lg" @click="finishPreview(false)"> Zurück </b-button>
       <b-button variant="primary" size="lg" @click="finishPreview(true)"> Speichern </b-button>
     </div>
-    <div v-else class="float-right m-5">
     <div class="float-right m-5 d-flex justify-content-end">
       <div class="btn-group">
         <b-button variant="warning" size="lg">Defekt eintragen</b-button>
