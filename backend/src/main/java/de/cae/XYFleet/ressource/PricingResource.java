@@ -5,6 +5,7 @@ import org.jooq.UpdateSetFirstStep;
 import org.jooq.UpdateSetMoreStep;
 import org.jooq.codegen.XYFleet.tables.records.PricingRecord;
 import org.jooq.impl.DSL;
+import org.restlet.data.Status;
 import org.restlet.resource.*;
 
 import java.util.Map;
@@ -40,7 +41,7 @@ public class PricingResource extends EntryResource {
         //SELECT * FROM pricing WHERE id = {identifier}
         PricingRecord result = dslContext.fetchOne(PRICING, PRICING.ID.eq(identifier));
 
-        if (result == null) throw new ResourceException(404, "not found");
+        if (result == null) throw new ResourceException(Status.CLIENT_ERROR_NOT_FOUND, "not found");
         return result.formatJSON(jSONFormat);
     }
 
@@ -66,13 +67,13 @@ public class PricingResource extends EntryResource {
         }
         //check if valid call
         if (moreStep == null)
-            throw new ResourceException(400, "nothing to do. no params in query given");
+            throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, "nothing to do. no params in query given");
         //check correctness of values
 
         //UPDATE pricing SET ({given values}) WHERE id = {Identifier}
         PricingRecord record = moreStep.where(PRICING.ID.eq(identifier)).returning().fetchOne();
 
-        if (record == null) throw new ResourceException(500, "internal Server Error");
+        if (record == null) throw new ResourceException(Status.SERVER_ERROR_INTERNAL, "internal Server Error");
 
         return record.formatJSON(jSONFormat);
     }
@@ -88,7 +89,7 @@ public class PricingResource extends EntryResource {
         for (Field<?> field : fields) {
             String value = valuesMap.get(field.getUnqualifiedName().first());
             if (!Objects.equals(field.getUnqualifiedName().first(), "id")) {
-                if (value == null) throw new ResourceException(400, "Missing value for initialization.");
+                if (value == null) throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, "Missing value for initialization.");
                 Field<String> myField = DSL.field(field.getName(), String.class);
                 pricing.set(myField, value);
             }

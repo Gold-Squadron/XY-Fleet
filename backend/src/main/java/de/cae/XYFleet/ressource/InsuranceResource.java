@@ -7,6 +7,7 @@ import org.jooq.codegen.XYFleet.tables.records.InsurancesRecord;
 import org.jooq.codegen.XYFleet.tables.records.UsersRecord;
 import org.jooq.codegen.XYFleet.tables.records.VehiclesRecord;
 import org.jooq.impl.DSL;
+import org.restlet.data.Status;
 import org.restlet.resource.*;
 
 import java.util.Map;
@@ -46,7 +47,7 @@ public class InsuranceResource extends EntryResource {
         for (Field<?> field : fields) {
             String value = valuesMap.get(field.getUnqualifiedName().first());
             if (!Objects.equals(field.getUnqualifiedName().first(), "id")) {
-                if (value == null) throw new ResourceException(400, "Missing value for initialization.");
+                if (value == null) throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, "Missing value for initialization.");
                 Field<String> myField = DSL.field(field.getName(), String.class);
                 insurance.set(myField, value);
             }
@@ -54,7 +55,7 @@ public class InsuranceResource extends EntryResource {
         insurance.setId(null);
         //check correctness of values
         if (dslContext.fetchOne(INSURANCES, INSURANCES.INSURANCE_NUMBER.eq(Integer.parseInt(valuesMap.get(INSURANCES.INSURANCE_NUMBER.getUnqualifiedName().first())))) != null)
-            throw new ResourceException(400, "no dublicate insurancenumber allowed");
+            throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, "no dublicate insurancenumber allowed");
 
         insurance.merge();
 
@@ -95,15 +96,15 @@ public class InsuranceResource extends EntryResource {
         }
         //check if valid call
         if (moreStep == null)
-            throw new ResourceException(400, "nothing to do. no params in query given");
+            throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, "nothing to do. no params in query given");
         //check correctness of values
         if (dslContext.fetchOne(INSURANCES, INSURANCES.INSURANCE_NUMBER.eq(Integer.parseInt(valuesMap.get(INSURANCES.INSURANCE_NUMBER.getUnqualifiedName().first())))) != null)
-            throw new ResourceException(400, "no dublicate insurancenumber allowed");
+            throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, "no dublicate insurancenumber allowed");
 
         //UPDATE insurances SET ({given values}) WHERE id = {Identifier}
         InsurancesRecord record = moreStep.where(INSURANCES.ID.eq(identifier)).returning().fetchOne();
 
-        if (record == null) throw new ResourceException(500, "internal Server Error");
+        if (record == null) throw new ResourceException(Status.SERVER_ERROR_INTERNAL, "internal Server Error");
 
         return record.formatJSON(jSONFormat);
     }

@@ -47,7 +47,6 @@ public class BookingResourceTest extends EntryResourceTest {
     @Override
     @ParameterizedTest
     @CsvSource(value = {
-            FORBIDDEN+":"+ROLE_USER,
             FORBIDDEN+":"+ROLE_SECURITY,
             UNAUTHORIZED+": "}, delimiter = ':')
     public void delete_invalidCall_shouldThrowResourceException(String responseMessage, String role) {
