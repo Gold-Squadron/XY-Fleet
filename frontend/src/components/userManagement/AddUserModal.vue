@@ -69,11 +69,11 @@
         </BCol>
         <BCol>
           <b-form-floating-label label-for="role">Rolle</b-form-floating-label>
-          <b-form-select id="role" v-model="Roles.TRAVEL_OFFICE" :options="selectRoles" class="w-100"></b-form-select>
+          <b-form-select id="role" v-model="Roles.TRAVEL_OFFICE" :options="selectRoles" class="w-100 form-control"></b-form-select>
         </BCol>
         <BCol>
           <b-form-floating-label label-for="isDriver">Fahrer</b-form-floating-label>
-          <b-form-select id="isDriver" v-model="string_false" :options="selectDriver" class="w-100"></b-form-select>
+          <b-form-select id="isDriver" v-model="string_false" :options="selectDriver" class="w-100 form-control"></b-form-select>
         </BCol>
       </BFormRow>
       <b-row class="mt-4 text-right">

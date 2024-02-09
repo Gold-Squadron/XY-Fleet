@@ -5,8 +5,14 @@
   import AddUserModal from "@/components/userManagement/AddUserModal.vue";
   import ConfirmRemovalModal from "@/components/userManagement/ConfirmRemovalModal.vue";
   import {Roles, User} from "@/main";
+  import EditUserModal from "@/components/userManagement/EditUserModal.vue";
 
-  function showModal(id: string): void {
+  let editedUserId: Ref<string> = ref('')
+  function showModal(id: string, userId: string | null = null): void {
+    if(userId){
+      editedUserId.value = userId
+    }
+
     const {show} = useModal(id)
     show()
   }
@@ -92,6 +98,24 @@
 
     row.style.backgroundColor = mark ? SELECTION_COLOR : ''
   }
+
+  function editUser(data: any) : void {
+    // !TODO! Update user in database
+
+    const user = getUserById(editedUserId.value)
+
+    console.log(user)
+
+    user.name = data.name
+    user.email = data.email
+    user.password = data.password
+
+    usersCoverted.value = convertUserData()
+  }
+
+  function getUserById(id: string) : any {
+    return users.value.find(user => user.getId() == id)
+  }
 </script>
 
 <template>
@@ -106,27 +130,37 @@
         <b-form-checkbox @change="changeAll()" :checked="(selectedIds.length == users.length) && (users.length != 0)"
                          id="selectAllCheckbox"></b-form-checkbox>
       </template>
+      <template #head(editRow)=""></template>
       <template #cell(cb)="data:any">
         <b-form-checkbox :id="`rowCheckbox-${data.index}`" :checked="selectedIds.includes(data.item.id)"
                          @change="selectRow(data.index)"></b-form-checkbox>
       </template>
       <template #cell(role)="data: any">
-        <b-form-select v-model="data.item.role" :options="selectRoles"></b-form-select>
+        {{ Roles[data.item.role] }}
       </template>
       <template #cell(isDriver)="data: any">
-        <b-form-select v-model="data.item.isDriver" :options="selectDriver"></b-form-select>
+        {{ data.item['isDriver'] ? 'Ja' : 'Nein' }}
+      </template>
+      <template #cell(editRow)="data: any">
+        <i @click="showModal('edit-dialog', data.item.id)" class="bi bi-pencil mr-5"></i>
       </template>
     </b-table>
 
     <AddUserModal @createUser="addUser"></AddUserModal>
+    <EditUserModal @updateUser="editUser"></EditUserModal>
     <ConfirmRemovalModal @removeUser="removeUser"></ConfirmRemovalModal>
   </div>
 </template>
 
 <style scoped>
-select {
-  width: fit-content;
-}
+  select {
+    width: fit-content;
+  }
+
+  .bi-pencil:hover{
+    cursor: pointer;
+    opacity: 0.6;
+  }
 </style>
 
 <script lang="ts">
@@ -138,16 +172,8 @@ select {
           {key: 'name', label: 'Name'},
           {key: 'email', label: 'E-Mail'},
           {key: 'role', label: 'Role'},
-          {key: 'isDriver', label: 'Is Driver'}
-        ],
-        selectRoles: [
-          {value: Roles.ADMIN, text: 'Admin'},
-          {value: Roles.SECURITY, text: 'Security'},
-          {value: Roles.TRAVEL_OFFICE, text: 'Travel Office'}
-        ],
-        selectDriver: [
-          {value: 'true', text: 'Yes'},
-          {value: 'false', text: 'No'}
+          {key: 'isDriver', label: 'Is Driver'},
+          {key: 'editRow', thStyle: {width: '25px'}}
         ]
       }
     }
