@@ -15,6 +15,7 @@
   let users = ref([new User('22323fcvd', 'Luca Außem', 'luca-aussem@t-online.de', '1234', Roles.ADMIN, true), new User('c84nfakhf', 'Noah Simon', 'snoah@gmail.com', '4321')]);
 
   // Convert the raw data into the rendering format
+  let selectedIds: Ref<String[]> = ref([])
   let usersCoverted: Ref<TableItem[]> = ref([])
 
   function convertUserData(): TableItem[] {
@@ -57,36 +58,25 @@
     changeAll(true)
   }
 
-  let selectedIds: Ref<String[]> = ref([])
+  function selectRow(index: number, forceDeselect: boolean = false): void {
+    let id: String = users.value[index].getId()
+    let idIndex: number = selectedIds.value.indexOf(id)
+    let addHighlight: boolean = (idIndex == -1) && (!forceDeselect)
 
-  function selectRow(index: number): void {
-    let id = users.value[index].getId()
-    let idIndex = selectedIds.value.indexOf(id)
-
-    if (idIndex == -1) {
+    if (addHighlight) {
       selectedIds.value.push(id)
-      highlightRow(index)
     } else {
       selectedIds.value.splice(idIndex, 1)
-      highlightRow(index, false)
     }
-
+    highlightRow(index, addHighlight)
   }
 
   function changeAll(forceDeselect: boolean = false): void {
-    let selectAll: boolean = (selectedIds.value.length != users.value.length) && !forceDeselect
+    let deselect: boolean = (selectedIds.value.length == users.value.length) || forceDeselect
     selectedIds.value = []
 
-    //!TODO!
-    if (selectAll) {
-      for (let i = 0; i < users.value.length; i++) {
-        selectRow(i)
-      }
-    } else {
-      for (let i = 0; i < users.value.length; i++) {
-        selectRow(i)
-        selectRow(i)
-      }
+    for (let i = 0; i < users.value.length; i++) {
+      selectRow(i, deselect)
     }
   }
 
@@ -134,9 +124,9 @@
 </template>
 
 <style scoped>
-  select {
-    width: fit-content;
-  }
+select {
+  width: fit-content;
+}
 </style>
 
 <script lang="ts">
