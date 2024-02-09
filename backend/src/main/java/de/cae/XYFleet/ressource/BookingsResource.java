@@ -1,6 +1,7 @@
 package de.cae.XYFleet.ressource;
 
 
+import org.jooq.JSONFormat;
 import org.jooq.Record;
 import de.cae.XYFleet.authentication.XYAuthorizer;
 import org.jooq.Result;
