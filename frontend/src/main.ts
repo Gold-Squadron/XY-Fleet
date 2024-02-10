@@ -2,6 +2,7 @@ import './assets/main.css'
 
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue-next/dist/bootstrap-vue-next.css'
+
 import ganttastic from '@infectoone/vue-ganttastic'
 
 import {computed, createApp, ref} from 'vue'
@@ -24,6 +25,21 @@ function generateAvatarBasedOnInitials(driver: string) {
             </span>
           </span>
 `;
+}
+
+export enum Roles{
+    ADMIN,
+    SECURITY,
+    TRAVEL_OFFICE
+}
+
+export class User {
+    constructor(private id: String = "", public name: String = "", public email: String = "" ,public password: String = "1234", public role: Roles = Roles.ADMIN, public isDriver: boolean = false) {
+    }
+
+    public getId(): String{
+        return this.id
+    }
 }
 
 export class Booking {

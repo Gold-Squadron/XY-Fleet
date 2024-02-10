@@ -11,8 +11,7 @@
   let bookings: Ref<Booking[]> = ref([])
   let additionalEvents = ["TÜV Termin", "Reparaturen", "Bereitschaft", "Auto nicht fahrbereit"]
 
-
-  bookings.value.push(new Booking("Green Smart", new Date("2024-02-2 10:00"), new Date("2024-02-3 24:00")));
+bookings.value.push(new Booking("Green Smart", new Date("2024-02-2 10:00"), new Date("2024-02-3 24:00")));
 
   function pushAndGenerate(number: number, number2: number, s: string, s2: string, none: string, number3: number, status: string = "") {
     let val = new Booking(vehicles.value[number - 101], new Date(s), new Date(s2), none, ["lhelbig", "jwilleke", "nsimon", "laußem"][number2 - 100]);
@@ -93,7 +92,6 @@
   //this is where we query the server for new information... IF WE HAD ANY
   //TODO remove the parameter once the REST Interface works
   function createVirtualBooking(booking: Booking): void {
-    console.log(booking)
     if (booking.status === "preview") previewMode = true;
     bookings.value.push(booking);
   }
