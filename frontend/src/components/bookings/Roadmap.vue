@@ -1,12 +1,10 @@
 <script setup lang="ts">
 import {computed, type CSSProperties, onMounted, type Ref, ref} from 'vue';
 import {type GanttBarObject, GGanttRow} from "@infectoone/vue-ganttastic";
-import {type UnwrapRefSimple} from "@vue/reactivity"
+import {RefSymbol, type UnwrapRefSimple} from "@vue/reactivity"
 import CreateBookingModal from "@/components/bookings/CreateBookingModal.vue";
 import {useModal} from "bootstrap-vue-next";
 import {Booking} from "@/main";
-
-const dayWidth = 1.5 * parseFloat(getComputedStyle(document.documentElement).fontSize);
 
 //Demodata
 let vehicles = ref(["STO-XY-01", "STO-XY-02", "STO-XY-03", "STO-XY-04", "STO-XY-31", "STO-XY-41", "STO-XY-59", "STO-XY-26",]);
@@ -45,6 +43,7 @@ let chartStart : Ref<Date> = ref(new Date().translateDays(25));
 let chartEnd = computed(() => {return chartStart.value.translateDays(31)})
 
 let previewMode = false;
+let previewElement : GanttBarObject | undefined = undefined;
 
 /// shifts the time/day on the component when the mouse scrolls
 /// any due to damn event browser support
@@ -83,6 +82,7 @@ const generatedBars = computed( () => {
           html: booking.html
       }
     }
+    if(booking.status === 'preview') previewElement = x;
     map.get(booking.car)?.push(x);
   })
   return map;
@@ -102,6 +102,10 @@ function refresh() {
 
 const {show, hide, modal} = useModal('creation-dialog')
 
+function createBookingRestCall(first: UnwrapRefSimple<Booking>) {
+  //TODO Rest that call man
+}
+
 function finishPreview(save : boolean) {
   previewMode = false;
   if(!save) {
@@ -109,9 +113,16 @@ function finishPreview(save : boolean) {
     bookings.value.splice(index, 1);
     return;
   }
+
   let first : UnwrapRefSimple<Booking> | undefined = bookings.value.find((x) => x.status == 'preview');
-  if(first != undefined) {
+  if(first != undefined && previewElement != undefined) {
+    const previewedStartDate = previewElement.myBeginDate;
+    const previewedEndDate = previewElement.myEndDate;
+    first.start = previewedStartDate;
+    first.end = previewedEndDate;
     first.status = 'booking'
+    createBookingRestCall(first)
+    previewElement = undefined;
   }
 }
 
@@ -123,10 +134,6 @@ function afterLoad() {
   }
 
   // $('#liveToast').toast('show')
-
-  for (let booking in bookings.value) {
-
-  }
 }
 
 onMounted(() => afterLoad());
@@ -143,9 +150,13 @@ onMounted(() => afterLoad());
         bar-start="myBeginDate"
         bar-end="myEndDate"
         :highlighted-units=[27,28,3,4,10,11]
-        color-scheme="default"> <!-- https://github.com/zunnzunn/vue-ganttastic/blob/master/docs/GGanttChart.md#color-schemes -->
+        color-scheme="default"
+        @drag-bar="() => {
+          chartStart = chartStart.translateDays(0);
+          //I need a better way to achieve this, but 🤷 - if you remove this, the view isn't updated when you drag bars around.
+        }">
       <div v-for="vehicle in vehicles"> <!-- create a row for each vehicle -->
-        <g-gantt-row  :label="vehicle" :bars="generatedBars.get(vehicle)"/>
+        <g-gantt-row  :label="vehicle" :bars="generatedBars.get(vehicle)" highlight-on-hover/>
       </div>
     </g-gantt-chart>
 
