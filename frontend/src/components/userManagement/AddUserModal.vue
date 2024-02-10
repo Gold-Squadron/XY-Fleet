@@ -65,7 +65,7 @@
       <BFormRow class="mt-3">
         <BCol class="col-5">
           <b-form-floating-label label-for="password">Password</b-form-floating-label>
-          <BFormInput id="password" placeholder="Password" required></BFormInput>
+          <BFormInput type="password" id="password" placeholder="Password" required></BFormInput>
         </BCol>
         <BCol>
           <b-form-floating-label label-for="role">Rolle</b-form-floating-label>

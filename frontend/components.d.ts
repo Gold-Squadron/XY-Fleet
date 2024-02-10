@@ -16,7 +16,6 @@ declare module 'vue' {
     BCol: typeof import('bootstrap-vue-next')['BCol']
     BForm: typeof import('bootstrap-vue-next')['BForm']
     BFormCheckbox: typeof import('bootstrap-vue-next')['BFormCheckbox']
-    BFormControl: typeof import('bootstrap-vue-next')['BFormControl']
     BFormFloatingLabel: typeof import('bootstrap-vue-next')['BFormFloatingLabel']
     BFormGroup: typeof import('bootstrap-vue-next')['BFormGroup']
     BFormInput: typeof import('bootstrap-vue-next')['BFormInput']

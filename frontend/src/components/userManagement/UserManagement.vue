@@ -8,9 +8,12 @@
   import EditUserModal from "@/components/userManagement/EditUserModal.vue";
 
   let editedUserId: Ref<string> = ref('')
+  let editedUser: Ref<User | null> = ref(null)
+
   function showModal(id: string, userId: string | null = null): void {
     if(userId){
       editedUserId.value = userId
+      editedUser.value = getUserById(userId)
     }
 
     const {show} = useModal(id)
@@ -147,7 +150,7 @@
     </b-table>
 
     <AddUserModal @createUser="addUser"></AddUserModal>
-    <EditUserModal @updateUser="editUser"></EditUserModal>
+    <EditUserModal @updateUser="editUser" :user="editedUser"></EditUserModal>
     <ConfirmRemovalModal @removeUser="removeUser"></ConfirmRemovalModal>
   </div>
 </template>

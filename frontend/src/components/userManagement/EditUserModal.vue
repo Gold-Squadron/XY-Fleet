@@ -1,6 +1,7 @@
 <script setup lang="ts">
   import {useModal} from "bootstrap-vue-next";
   import {Roles} from "@/main";
+  import {type Ref, ref, watch} from "vue";
 
   const {hide} = useModal('edit-dialog')
   const string_false = 'false'
@@ -9,28 +10,40 @@
     (event: 'updateUser', data: any) : void
   }>()
 
-  let inputName: string = ''
-  let inputEmail: string = ''
-  let inputPassword: string = ''
+  const props = defineProps({
+    user: null
+  })
 
-  // !TODO! Load original data
+  watch(() => props.user, () => {
+    insertUserData()
+  })
+
+  let inputName: Ref<string> = ref('')
+  let inputEmail: Ref<string> = ref('')
+  let inputPassword: Ref<string> = ref('')
 
   function updateUser() : void {
     // !TODO! Get data from selects
     let data = {
-      name: inputName,
+      name: inputName.value,
       email: inputEmail,
       password: inputPassword
     }
 
     emit('updateUser', data)
   }
+
+  function insertUserData() : void {
+    inputName.value = props.user.name
+    inputEmail.value = props.user.email
+    inputPassword.value = props.user.password
+  }
 </script>
 
 <template>
   <BModal v-if="true" id="edit-dialog" @on-cancel="hide()" size="lg" hide-header hide-footer>
     <div class="modal-header">
-      <h3>Benutzer bearbeiten {{inputName}}</h3>
+      <h3>Benutzer bearbeiten</h3>
     </div>
     <br>
     <BForm @submit="updateUser(); hide()">
