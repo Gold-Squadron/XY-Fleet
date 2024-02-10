@@ -22,6 +22,7 @@ declare module 'vue' {
     BModal: typeof import('bootstrap-vue-next')['BModal']
     BPopover: typeof import('bootstrap-vue-next')['BPopover']
     BTable: typeof import('bootstrap-vue-next')['BTable']
+    BToast: typeof import('bootstrap-vue-next')['BToast']
     BTooltip: typeof import('bootstrap-vue-next')['BTooltip']
     CreateBookingModal: typeof import('./src/components/bookings/CreateBookingModal.vue')['default']
     Header: typeof import('./src/components/Header.vue')['default']
