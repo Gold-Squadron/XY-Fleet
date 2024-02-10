@@ -57,8 +57,6 @@ function mouseWheelHandler(inp : any) : boolean {
   return false;
 }
 
-
-
 //transforms the raw data into the rendering format
 const generatedBars = computed( () => {
   let map = new Map<string, GanttBarObject[]>();
@@ -144,6 +142,7 @@ onMounted(() => afterLoad());
         :grid="true"
         bar-start="myBeginDate"
         bar-end="myEndDate"
+        :highlighted-units=[27,28,3,4,10,11]
         color-scheme="default"> <!-- https://github.com/zunnzunn/vue-ganttastic/blob/master/docs/GGanttChart.md#color-schemes -->
       <div v-for="vehicle in vehicles"> <!-- create a row for each vehicle -->
         <g-gantt-row  :label="vehicle" :bars="generatedBars.get(vehicle)"/>
