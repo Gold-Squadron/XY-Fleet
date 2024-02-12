@@ -103,15 +103,13 @@
   }
 
   function editUser(data: any) : void {
-    // !TODO! Update user in database
-
     const user = getUserById(editedUserId.value)
-
-    console.log(user)
 
     user.name = data.name
     user.email = data.email
     user.password = data.password
+    user.role = data.role
+    user.isDriver = data.isDriver
 
     usersCoverted.value = convertUserData()
   }
@@ -139,7 +137,7 @@
                          @change="selectRow(data.index)"></b-form-checkbox>
       </template>
       <template #cell(role)="data: any">
-        {{ Roles[data.item.role] }}
+        {{ selectRoles[data.item.role].text }}
       </template>
       <template #cell(isDriver)="data: any">
         {{ data.item['isDriver'] ? 'Ja' : 'Nein' }}
@@ -160,7 +158,7 @@
     width: fit-content;
   }
 
-  .bi-pencil:hover{
+  .bi-pencil:hover {
     cursor: pointer;
     opacity: 0.6;
   }
@@ -170,6 +168,11 @@
   export default {
     data() {
       return {
+        selectRoles: [
+          {value: Roles.ADMIN, text: 'Admin'},
+          {value: Roles.SECURITY, text: 'Security'},
+          {value: Roles.TRAVEL_OFFICE, text: 'Travel Office'}
+        ],
         fields: [
           {key: 'cb', thStyle: {width: '25px'}},
           {key: 'name', label: 'Name'},

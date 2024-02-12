@@ -4,7 +4,6 @@
   import {type Ref, ref, watch} from "vue";
 
   const {hide} = useModal('edit-dialog')
-  const string_false = 'false'
 
   const emit = defineEmits<{
     (event: 'updateUser', data: any) : void
@@ -21,13 +20,16 @@
   let inputName: Ref<string> = ref('')
   let inputEmail: Ref<string> = ref('')
   let inputPassword: Ref<string> = ref('')
+  let inputRole: Ref<Roles> = ref(Roles.TRAVEL_OFFICE)
+  let inputIsDriver: Ref<any> = ref(true)
 
   function updateUser() : void {
-    // !TODO! Get data from selects
     let data = {
       name: inputName.value,
-      email: inputEmail,
-      password: inputPassword
+      email: inputEmail.value,
+      password: inputPassword.value,
+      role: inputRole.value,
+      isDriver: inputIsDriver.value
     }
 
     emit('updateUser', data)
@@ -37,6 +39,8 @@
     inputName.value = props.user.name
     inputEmail.value = props.user.email
     inputPassword.value = props.user.password
+    inputRole.value = props.user.role
+    inputIsDriver.value = props.user.isDriver
   }
 </script>
 
@@ -64,11 +68,11 @@
         </BCol>
         <BCol>
           <b-form-floating-label label-for="role">Rolle</b-form-floating-label>
-          <b-form-select id="role" v-model="Roles.TRAVEL_OFFICE" :options="selectRoles" class="w-100 form-control"></b-form-select>
+          <b-form-select id="role" v-model="inputRole" :options="selectRoles" class="w-100 form-control"></b-form-select>
         </BCol>
         <BCol>
           <b-form-floating-label label-for="isDriver">Fahrer</b-form-floating-label>
-          <b-form-select id="isDriver" v-model="string_false" :options="selectDriver" class="w-100 form-control"></b-form-select>
+          <b-form-select id="isDriver" v-model="inputIsDriver" :options="selectDriver" class="w-100 form-control"></b-form-select>
         </BCol>
       </BFormRow>
       <b-row class="mt-4 text-right">
@@ -91,8 +95,8 @@
           {value: Roles.TRAVEL_OFFICE, text: 'Travel Office'}
         ],
         selectDriver: [
-          {value: 'true', text: 'Yes'},
-          {value: 'false', text: 'No'}
+          {value: true, text: 'Yes'},
+          {value: false, text: 'No'}
         ]
       }
     }
