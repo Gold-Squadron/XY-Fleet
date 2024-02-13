@@ -102,14 +102,15 @@
     row.style.backgroundColor = mark ? SELECTION_COLOR : ''
   }
 
-  function editUser(data: any) : void {
-    const user = getUserById(editedUserId.value)
+  function editUser(data: User) : void {
+    let user = getUserById(editedUserId.value)
 
-    user.name = data.name
-    user.email = data.email
-    user.password = data.password
-    user.role = data.role
-    user.isDriver = data.isDriver
+    if(user == undefined){
+      return
+    }
+
+    // !FIXME!
+    user = data
 
     usersCoverted.value = convertUserData()
   }
@@ -179,7 +180,7 @@
           {key: 'email',    label: 'E-Mail'},
           {key: 'role',     label: 'Rolle'},
           {key: 'isDriver', label: 'Darf fahren'},
-          {key: 'editRow',   thStyle: {width: '25px'}}
+          {key: 'editRow',  thStyle: {width: '25px'}}
         ]
       }
     }
