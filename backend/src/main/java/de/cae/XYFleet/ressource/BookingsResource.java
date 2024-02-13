@@ -21,7 +21,6 @@ import java.time.format.DateTimeParseException;
 public class BookingsResource extends XYServerResource {
     @Get()
     public String toString() {
-        System.out.println("Hier ist leider ohne ?");
         checkInRole(XYAuthorizer.ROLE_SECURITY);
 
         //SELECT * FROM bookings
@@ -31,7 +30,6 @@ public class BookingsResource extends XYServerResource {
     //TODO missing jUnit Tests for this method
     @Get("?")
     public String getFromTo(){
-        System.out.println("Hallo das ist ?");
         checkInRole(XYAuthorizer.ROLE_SECURITY);
         Form form = getQuery();
 

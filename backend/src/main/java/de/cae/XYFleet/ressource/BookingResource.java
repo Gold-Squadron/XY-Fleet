@@ -8,6 +8,7 @@ import java.util.Map;
 
 import static de.cae.XYFleet.authentication.XYAuthorizer.*;
 import static org.jooq.codegen.XYFleet.Tables.BOOKINGS;
+import org.restlet.data.Status;
 
 public class BookingResource extends EntryResource {
     @Override
@@ -28,7 +29,7 @@ public class BookingResource extends EntryResource {
 
 
         if (Integer.parseInt(getClientInfo().getUser().getIdentifier()) != identifier && !isInRole(ROLE_ADMIN))
-            throw new ResourceException(403);
+            throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
         //DELETE bookings where id = {Identifier}
         dslContext.delete(BOOKINGS).where(BOOKINGS.ID.eq(identifier)).execute();
         return result;
