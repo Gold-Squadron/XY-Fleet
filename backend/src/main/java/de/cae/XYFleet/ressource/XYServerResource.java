@@ -14,8 +14,8 @@ import org.restlet.resource.ServerResource;
 
 public abstract class XYServerResource extends ServerResource {
 
-    public static final JSONFormat jSONFormat = new JSONFormat().recordFormat(JSONFormat.RecordFormat.OBJECT);
-    protected DSLContext dslContext = Database.getDSLContext();;
+    public static final JSONFormat jSONFormat = new JSONFormat().recordFormat(JSONFormat.RecordFormat.OBJECT).header(false);
+    protected DSLContext dslContext = Database.getDSLContext();
 
     protected void checkInRole(String roleName) {
         if (!isInRole(roleName)) {

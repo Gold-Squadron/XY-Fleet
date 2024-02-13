@@ -4,7 +4,7 @@ import {type GanttBarObject, GGanttRow} from "@infectoone/vue-ganttastic";
 import {type UnwrapRefSimple} from "@vue/reactivity"
 import CreateBookingModal from "@/components/bookings/CreateBookingModal.vue";
 import {useModal} from "bootstrap-vue-next";
-import {Booking} from "@/main";
+import {Booking, getBookings} from "./RoadmapRestCalls";
 
 const dayWidth = 1.5 * parseFloat(getComputedStyle(document.documentElement).fontSize);
 
@@ -26,18 +26,6 @@ function pushAndGenerate(number: number, number2: number, s: string, s2: string,
 pushAndGenerate(101, 100, '2024-03-01', '2024-03-07', 'Betriebsausflug', 1000);
 pushAndGenerate(102, 100, '2024-03-14', '2024-03-15', 'none', 200);
 pushAndGenerate(101, 100, '2024-03-20', '2024-03-30', 'Betriebsreise', 2800);
-pushAndGenerate(103, 101, '2024-03-05', '2024-03-05', 'none', 100);
-pushAndGenerate(103, 101, '2024-03-12', '2024-03-12', 'none', 100);
-pushAndGenerate(103, 101, '2024-03-19', '2024-03-19', 'none', 100);
-pushAndGenerate(103, 101, '2024-03-26', '2024-03-26', 'none', 100);
-pushAndGenerate(102, 101, '2024-03-20', '2024-03-24', 'Betriebsausflug', 600);
-pushAndGenerate(102, 102, '2024-03-10', '2024-03-18', 'Deutschlandtour', 1000);
-pushAndGenerate(101, 103, '2024-03-11', '2024-03-13', 'none', 200);
-pushAndGenerate(102, 103, '2024-03-20', '2024-03-25', 'none', 300);
-pushAndGenerate(105, 104, '2024-03-11', '2024-03-13', 'none', 200);
-pushAndGenerate(107, 100, '2024-03-20', '2024-03-25', 'none', 300);
-pushAndGenerate(107, 100, '2024-03-2', '2024-03-2', 'none', 300);
-pushAndGenerate(107, 100, '2024-03-9', '2024-03-9', 'none', 300);
 pushAndGenerate(106, 103, '2024-03-5', '2024-04-5', 'Nicht Betriebsfähig', 300, "broken");
 pushAndGenerate(108, 103, '2024-03-5', '2024-03-8', 'Ausflug', 300, );
 
@@ -97,7 +85,10 @@ function createVirtualBooking(booking : Booking) : void {
 }
 
 function refresh() {
-  //I would put my REST-Call here... IF I HAD ANY
+  getBookings().then(ret => {
+    console.log(ret)
+    bookings.value = ret;
+  })
 }
 
 const {show, hide, modal} = useModal('creation-dialog')
@@ -124,9 +115,7 @@ function afterLoad() {
 
   // $('#liveToast').toast('show')
 
-  for (let booking in bookings.value) {
-
-  }
+  refresh();
 }
 
 onMounted(() => afterLoad());

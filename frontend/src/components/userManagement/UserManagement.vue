@@ -124,9 +124,12 @@
         <b-form-select v-model="data.item.role" :options="selectRoles"></b-form-select>
       </template>
       <template #cell(isDriver)="data: any">
-        <b-form-select v-model="data.item.isDriver" :options="selectDriver"></b-form-select>
+        <BFormSelect v-model="data.item.isDriver" :options="selectDriver"></BFormSelect>
       </template>
     </b-table>
+    <BFormGroup id="input-group-3" label="Food:" label-for="input-3">
+      <BFormSelect :plain=true id="input-3" v-model="form.food" :options="[{text: 'Select One', value: null}, 'Carrots', 'Beans', 'Tomatoes', 'Corn']" required />
+    </BFormGroup>
 
     <AddUserModal @createUser="addUser"></AddUserModal>
     <ConfirmRemovalModal @removeUser="removeUser"></ConfirmRemovalModal>
@@ -140,6 +143,15 @@
 </style>
 
 <script lang="ts">
+
+import {reactive} from "vue";
+
+const form = reactive({
+  email: '',
+  name: '',
+  food: null,
+  checked: [],
+})
   export default {
     data() {
       return {

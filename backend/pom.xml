@@ -7,18 +7,15 @@
     <artifactId>backend</artifactId>
     <version>1.0-SNAPSHOT</version>
 
-
     <repositories>
         <repository>
-            <id>maven-restlet</id>
-            <name>Restlet repository</name>
-            <url>https://maven.restlet.talend.com</url>
+            <id>jitpack.io</id>
+            <url>https://jitpack.io</url>
         </repository>
     </repositories>
 
     <properties>
         <maven.tests.skip>true</maven.tests.skip>
-        <restlet-version>2.4.3</restlet-version>
         <maven.compiler.source>17</maven.compiler.source>
         <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -26,14 +23,9 @@
 
     <dependencies>
         <dependency>
-            <groupId>org.restlet.jse</groupId>
-            <artifactId>org.restlet</artifactId>
-            <version>${restlet-version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.restlet.jse</groupId>
-            <artifactId>org.restlet.ext.jackson</artifactId>
-            <version>${restlet-version}</version>
+            <groupId>com.github.restlet</groupId>
+            <artifactId>restlet-framework-java</artifactId>
+            <version>spring_upgrade_5.1.2-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.mariadb.jdbc</groupId>

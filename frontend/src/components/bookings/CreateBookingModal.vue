@@ -1,7 +1,7 @@
 <script setup lang="ts">
   import {useModal} from "bootstrap-vue-next";
   import {computed, type Ref, ref} from "vue";
-  import {Booking} from "@/main";
+  import {Booking} from "./RoadmapRestCalls";
 
   defineProps<{
     cars?: string[]

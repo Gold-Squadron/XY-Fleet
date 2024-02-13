@@ -42,17 +42,15 @@ public class XYAuthorizer extends Application {
         router.attach("/insurance", InsurancesResource.class);
         router.attach("/pricing/{identifier}", PricingResource.class);
         router.attach("/pricing", PricingsResource.class);
+
         return router;
     }
 
     private ChallengeAuthenticator createAuthenticator() {
         ChallengeAuthenticator guard = new ChallengeAuthenticator(
-                getContext(),false,  ChallengeScheme.HTTP_BASIC, "realm");
+                getContext(),true,  ChallengeScheme.HTTP_BASIC, "realm");
 
-        //Attach enroler and verifier to determine roles
-        LDAPVerifier ldapVerifier = new LDAPVerifier();
-        guard.setVerifier(ldapVerifier);
-        guard.setEnroler(ldapVerifier);
+
 
         return guard;
     }
