@@ -25,6 +25,20 @@ function generateAvatarBasedOnInitials(driver: string) {
           </span>
 `;
 }
+export enum Roles{
+    ADMIN,
+    SECURITY,
+    TRAVEL_OFFICE
+}
+
+export class User {
+    constructor(private id: String = "", public name: String = "", public email: String = "" ,public password: String = "1234", public role: Roles = Roles.ADMIN, public isDriver: boolean = false) {
+    }
+
+    public getId(): String{
+        return this.id
+    }
+}
 
 export class Booking {
 
@@ -32,8 +46,8 @@ export class Booking {
     private refEnd : Ref<Date> | null = null;
 
     html : string = "";
-
     status: string = "";
+
     constructor(public car: string = "", public start: Date = new Date(), public end : Date = new Date(), public reason: string = "", public driver: string = "nsimon") {
         this.refStart = null;
         this.refEnd = null;

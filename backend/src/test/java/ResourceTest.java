@@ -20,6 +20,10 @@ public abstract class ResourceTest {
     protected static String uri;
     protected static Table<?> table;
     protected static Formattable testTable;
+    protected static final String BAD_REQUEST = "Bad Request (400) - The request could not be understood by the server due to malformed syntax";
+    protected static final String FORBIDDEN = "Forbidden (403) - The server understood the request, but is refusing to fulfill it";
+    protected static final String UNAUTHORIZED = "Unauthorized (401) - The request requires user authentication";
+    protected static final String METHOD_NOT_ALLOWED = "Method Not Allowed (405) - The method specified in the request is not allowed for the resource identified by the request URI";
     protected static int ADMIN_ID;
     protected static int USER_ID;
     protected static int SECURITY_ID;

@@ -148,7 +148,6 @@ onMounted(() => afterLoad());
         <g-gantt-row  :label="vehicle" :bars="generatedBars.get(vehicle)"/>
       </div>
     </g-gantt-chart>
-
     <div v-if="previewMode" class="float-right m-5">
       <b-button variant="secondary" size="lg" @click="finishPreview(false)"> Zurück </b-button>
       <b-button variant="primary" size="lg" @click="finishPreview(true)"> Speichern </b-button>
