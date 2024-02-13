@@ -45,7 +45,7 @@ public class BookingResource extends EntryResource {
     @Put()
     public String createEntity() {
         checkInRole(ROLE_USER);
-        return null;
+        return handlePut(getQuery().getValuesMap());
     }
 
     @Override
@@ -66,7 +66,8 @@ public class BookingResource extends EntryResource {
         //INSERT INTO insurances  VALUES ({query values})
         for (Field<?> field : fields) {
             String value = valuesMap.get(field.getUnqualifiedName().first());
-            if (!Objects.equals(field.getUnqualifiedName().first(), "id")) {
+            if (!Objects.equals(field.getUnqualifiedName().first(), "id") &&
+                    (!Objects.equals(field.getUnqualifiedName().first(), "status")||!Objects.equals(field.getUnqualifiedName().first(), "driver_id"))) {
                 if (value == null) throw new ResourceException(400, "Missing value for initialization.");
                 Field<String> myField = DSL.field(field.getName(), String.class);
                 booking.set(myField, value);
@@ -85,6 +86,9 @@ public class BookingResource extends EntryResource {
         if(valuesMap.get("status").isBlank()){
             if(dslContext.fetchExists(USERS, USERS.ID.eq(booking.getDriverId()).and(USERS.IS_DRIVER.eq((byte)1))))
                 throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, "driver id does not exist");
+        }else {
+            if(dslContext.fetchExists(USERS, USERS.ID.isNotNull()))
+                throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, "car can't be driven while in maintenance");
         }
 
         //merge into database
