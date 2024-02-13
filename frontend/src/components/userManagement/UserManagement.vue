@@ -59,7 +59,7 @@
     // !TODO! Remove user from database
 
     usersCoverted.value = []
-    users.value = users.value.filter(user => !selectedIds.value.includes(user.getId()))
+    users.value = users.value.filter(user => !selectedIds.value.includes(user.getUiId()))
     usersCoverted.value = convertUserData()
 
     selectedIds.value = []
@@ -68,7 +68,7 @@
   }
 
   function selectRow(index: number, forceDeselect: boolean = false): void {
-    let id: String = users.value[index].getId()
+    let id: String = users.value[index].getUiId()
     let idIndex: number = selectedIds.value.indexOf(id)
     let addHighlight: boolean = (idIndex == -1) && (!forceDeselect)
 
@@ -115,7 +115,7 @@
   }
 
   function getUserById(id: string) : any {
-    return users.value.find(user => user.getId() == id)
+    return users.value.find(user => user.getUiId() == id)
   }
 </script>
 
@@ -133,7 +133,7 @@
       </template>
       <template #head(editRow)=""></template>
       <template #cell(cb)="data:any">
-        <b-form-checkbox :id="`rowCheckbox-${data.index}`" :checked="selectedIds.includes(data.item.id)"
+        <b-form-checkbox :id="`rowCheckbox-${data.index}`" :checked="selectedIds.includes(data.item['uiId'])"
                          @change="selectRow(data.index)"></b-form-checkbox>
       </template>
       <template #cell(role)="data: any">
@@ -143,7 +143,7 @@
         {{ data.item['isDriver'] ? 'Ja' : 'Nein' }}
       </template>
       <template #cell(editRow)="data: any">
-        <i @click="showModal('edit-dialog', data.item.id)" class="bi bi-pencil mr-5"></i>
+        <i @click="showModal('edit-dialog', data.item['uiId'])" class="bi bi-pencil mr-5"></i>
       </template>
     </b-table>
 

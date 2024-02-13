@@ -22,7 +22,7 @@ function setCurrentView(to : Views) : void {
     <!-- Container for the different tabs -->
     <div class="w-100 overflow-y-scroll">
       <VehicleDashboard v-if="currentView == Views.VEHICLE_DASHBOARD"/>
-      <UserManagement v-else-if="currentView == Views.USER_MANAGEMENT"></UserManagement>
+      <UserManagement v-else-if="currentView == Views.USER_MANAGEMENT"/>
       <Roadmap v-else-if="currentView == Views.ROADMAP"/>
     </div>
   </div>
