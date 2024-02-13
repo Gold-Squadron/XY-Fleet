@@ -25,3 +25,8 @@ a,
     flex-direction: column;
   }
 }
+
+/*auto-assigned classes for the bars in the Roadmap component*/
+.bar-preview {
+  background: red;
+}
