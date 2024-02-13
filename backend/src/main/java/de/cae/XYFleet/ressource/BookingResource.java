@@ -31,7 +31,6 @@ public class BookingResource extends EntryResource {
 
         String result = this.toString();
 
-
         if (Integer.parseInt(getClientInfo().getUser().getIdentifier()) != identifier && !isInRole(ROLE_ADMIN))
             throw new ResourceException(403);
         //DELETE bookings where id = {Identifier}

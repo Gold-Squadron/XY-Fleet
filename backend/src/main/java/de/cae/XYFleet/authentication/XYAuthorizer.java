@@ -42,7 +42,6 @@ public class XYAuthorizer extends Application {
         router.attach("/insurance", InsurancesResource.class);
         router.attach("/pricing/{identifier}", PricingResource.class);
         router.attach("/pricing", PricingsResource.class);
-      
         return router;
     }
 

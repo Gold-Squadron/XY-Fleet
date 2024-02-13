@@ -7,6 +7,7 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
 import java.sql.Date;
+import java.time.LocalDate;
 
 import static de.cae.XYFleet.authentication.XYAuthorizer.*;
 import static de.cae.XYFleet.authentication.XYAuthorizer.ROLE_SECURITY;
@@ -19,16 +20,16 @@ public class BookingsResourceTest extends ResourceTest{
     @BeforeAll
     public static void initAll() {
         //Arrange
-        PricingRecord pricing = new PricingRecord(0, new Date(1, 1, 1).toLocalDate(), 3000, 5000);
+        PricingRecord pricing = new PricingRecord(0,  LocalDate.parse("2023-01-01"), 3000, 5000);
         pricing.setId(scenario.add(PRICING, pricing));
 
         InsurancesRecord insurances = new InsurancesRecord(0, 10, 10, 10);
         insurances.setId(scenario.add(INSURANCES, insurances));
 
-        VehiclesRecord vehicle = new VehiclesRecord(0, "STO-XY-123", "VW", "Käfer", "123", 2000, 4000, insurances.getId(), pricing.getId());
+        VehiclesRecord vehicle = new VehiclesRecord(0, "STO-XY-123", "VW", "Käfer", "123", 20000, 2000, 4000, insurances.getId(), "car",pricing.getId());
         vehicle.setId(scenario.add(VEHICLES, vehicle));
 
-        BookingsRecord booking = new BookingsRecord(0, ADMIN_ID, vehicle.getId(), new Date(1, 1, 1).toLocalDate(), new Date(1, 1, 2).toLocalDate(), "none");
+        BookingsRecord booking = new BookingsRecord(0, ADMIN_ID, vehicle.getId(),  LocalDate.parse("2023-01-01"),  LocalDate.parse("2023-01-02"), "none", 200, null);
         booking.setId(scenario.add(BOOKINGS, booking));
         uri = "/booking";
         testTable = Database.getDSLContext().select().from(BOOKINGS).fetch();
@@ -38,7 +39,7 @@ public class BookingsResourceTest extends ResourceTest{
     @Override
     @ParameterizedTest
     @CsvSource(value = {
-            "Unauthorized (401) - The request requires user authentication:abc"
+            UNAUTHORIZED+":abc"
     }, delimiter = ':')
     public void get_invalidCall_shouldThrowResourceException(String responseMessage, String role) {
         super.get_invalidCall_shouldThrowResourceException(responseMessage, role);
@@ -60,8 +61,8 @@ public class BookingsResourceTest extends ResourceTest{
     @Override
     @ParameterizedTest
     @CsvSource(value = {
-            "Method Not Allowed (405) - The method specified in the request is not allowed for the resource identified by the request URI:" + ROLE_USER,
-            "Unauthorized (401) - The request requires user authentication:abc",
+            METHOD_NOT_ALLOWED+":" + ROLE_USER,
+            UNAUTHORIZED+":abc",
     }, delimiter = ':')
     public void delete_invalidCall_shouldThrowResourceException(String responseMessage, String role) {
         super.delete_invalidCall_shouldThrowResourceException(responseMessage, role);

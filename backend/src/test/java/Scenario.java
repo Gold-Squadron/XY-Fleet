@@ -3,8 +3,6 @@ import org.jooq.DSLContext;
 import org.jooq.Table;
 import org.jooq.TableRecord;
 import org.jooq.impl.UpdatableRecordImpl;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
 import org.restlet.security.User;
 
 import java.util.HashMap;
