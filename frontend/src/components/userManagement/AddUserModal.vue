@@ -11,7 +11,7 @@
   let res = new User()
   function createUser(): User {
 
-    // This ID is used for reference in the table (not in the id)
+    // This ID is used for reference in the table (not in the db)
     // Generate id
     let id: String = ''
 
@@ -44,17 +44,17 @@
       <BFormRow>
         <BCol>
           <b-form-floating-label label-for="name">Name</b-form-floating-label>
-          <BFormInput v-model="res.name" id="name" placeholder="Name" required></BFormInput>
+          <BFormInput v-model="res.name" id="name" placeholder="mmustermann" required></BFormInput>
         </BCol>
         <BCol>
           <b-form-floating-label label-for="email">E-Mail Adresse</b-form-floating-label>
-          <BFormInput v-model="res.email" type="email" id="email" placeholder="E-Mail Address" required></BFormInput>
+          <BFormInput v-model="res.email" type="email" id="email" placeholder="example@domain.com" required></BFormInput>
         </BCol>
       </BFormRow>
       <BFormRow class="mt-3">
         <BCol>
           <b-form-floating-label label-for="password">Password</b-form-floating-label>
-          <BFormInput v-model="res.password" type="password" id="password" placeholder="Password" required></BFormInput>
+          <BFormInput v-model="res.password" type="password" id="password" required></BFormInput>
         </BCol>
         <BCol>
           <b-form-floating-label label-for="role">Rolle</b-form-floating-label>
@@ -68,7 +68,7 @@
       </BFormRow>
       <b-row class="mt-4 text-right">
         <b-col>
-          <b-button type="submit" variant="primary" class="mr-2">Benutzer Hinzufügen</b-button>
+          <b-button type="submit" variant="primary" class="mr-2">Benutzer hinzufügen</b-button>
           <b-button type="button" @click="hide()" variant="secondary">Abbrechen</b-button>
         </b-col>
       </b-row>
@@ -85,10 +85,6 @@
           {value: Roles.ADMIN, text: 'Admin'},
           {value: Roles.SECURITY, text: 'Security'},
           {value: Roles.TRAVEL_OFFICE, text: 'Travel Office'}
-        ],
-        selectDriver: [
-          {value: true, text: 'Yes'},
-          {value: false, text: 'No'}
         ]
       }
     }

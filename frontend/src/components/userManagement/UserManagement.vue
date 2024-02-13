@@ -121,9 +121,9 @@
 
 <template>
   <div class="pl-3">
-    <b-button variant="primary" size="md" @click="showModal('creation-dialog')" class="mt-4 mb-3">Add User</b-button>
+    <b-button variant="primary" size="md" @click="showModal('creation-dialog')" class="mt-4 mb-3">Benutzer hinzufügen</b-button>
     <b-button variant="primary" size="md" @click="showModal('confirmation-dialog')" :disabled="selectedIds.length == 0"
-              class="ml-3 mt-4 mb-3">Remove User
+              class="ml-3 mt-4 mb-3">Benutzer entfernen
     </b-button>
 
     <b-table id="userTable" :fields="fields" :items="usersCoverted">
@@ -174,12 +174,12 @@
           {value: Roles.TRAVEL_OFFICE, text: 'Travel Office'}
         ],
         fields: [
-          {key: 'cb', thStyle: {width: '25px'}},
-          {key: 'name', label: 'Name'},
-          {key: 'email', label: 'E-Mail'},
-          {key: 'role', label: 'Role'},
-          {key: 'isDriver', label: 'Is Driver'},
-          {key: 'editRow', thStyle: {width: '25px'}}
+          {key: 'cb',       thStyle: {width: '25px'}},
+          {key: 'name',     label: 'Name'},
+          {key: 'email',    label: 'E-Mail'},
+          {key: 'role',     label: 'Rolle'},
+          {key: 'isDriver', label: 'Darf fahren'},
+          {key: 'editRow',   thStyle: {width: '25px'}}
         ]
       }
     }
