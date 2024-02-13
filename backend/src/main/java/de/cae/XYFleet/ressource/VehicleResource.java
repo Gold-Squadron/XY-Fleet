@@ -52,12 +52,12 @@ public class VehicleResource extends EntryResource {
         //check insurance_id
         String insurance_id = VEHICLES.INSURANCE_ID.getUnqualifiedName().first();
         if(valuesMap.containsKey(insurance_id)
-                && dslContext.fetchOne(INSURANCES, INSURANCES.ID.eq(Integer.parseInt(valuesMap.get(insurance_id))))==null)
+                && dslContext.fetchExists(INSURANCES, INSURANCES.ID.eq(Integer.parseInt(valuesMap.get(insurance_id)))))
                 throw new ResourceException(400, "non existing Insurance_id given");
         //check pricing_id
         String pricing_id = VEHICLES.PRICING_ID.getUnqualifiedName().first();
         if(valuesMap.containsKey(pricing_id)
-                && dslContext.fetchOne(PRICING, PRICING.ID.eq(Integer.parseInt(valuesMap.get(pricing_id))))==null)
+                && dslContext.fetchExists(PRICING, PRICING.ID.eq(Integer.parseInt(valuesMap.get(pricing_id)))))
             throw new ResourceException(400, "non existing Insurance_id given");
 
         //UPDATE vehicles SET ({given values}) WHERE id = {Identifier}
