@@ -52,7 +52,7 @@
         </BCol>
       </BFormRow>
       <BFormRow class="mt-3">
-        <BCol class="col-5">
+        <BCol>
           <b-form-floating-label label-for="password">Password</b-form-floating-label>
           <BFormInput v-model="res.password" type="password" id="password" placeholder="Password" required></BFormInput>
         </BCol>
@@ -60,9 +60,10 @@
           <b-form-floating-label label-for="role">Rolle</b-form-floating-label>
           <b-form-select v-model="res.role" id="role" :options="selectRoles" class="w-100 form-control"></b-form-select>
         </BCol>
-        <BCol>
-          <b-form-floating-label label-for="isDriver">Fahrer</b-form-floating-label>
-          <b-form-select v-model="res.isDriver" id="isDriver" :options="selectDriver" class="w-100 form-control"></b-form-select>
+      </BFormRow>
+      <BFormRow class="mt-3">
+        <BCol class="ml-1">
+          <b-form-checkbox v-model="res.isDriver">Diese Person darf Fahrzeuge der Flotte fahren</b-form-checkbox>
         </BCol>
       </BFormRow>
       <b-row class="mt-4 text-right">

@@ -147,9 +147,9 @@
       </template>
     </b-table>
 
-    <AddUserModal @createUser="addUser"></AddUserModal>
-    <EditUserModal @updateUser="editUser" :user="editedUser"></EditUserModal>
-    <ConfirmRemovalModal @removeUser="removeUser"></ConfirmRemovalModal>
+    <AddUserModal @createUser="addUser"/>
+    <EditUserModal @updateUser="editUser" :user="editedUser"/>
+    <ConfirmRemovalModal @removeUser="removeUser"/>
   </div>
 </template>
 
