@@ -111,23 +111,23 @@ onMounted(() => afterLoad());
       <b-button variant="primary" size="lg" @click="finishPreview(true)"> Speichern </b-button>
     </div>
     <div v-else class="float-right m-5">
-    <div class="float-right m-5 d-flex justify-content-end">
-      <div class="btn-group">
-        <b-button variant="warning" size="lg">Defekt eintragen</b-button>
-        <b-button variant="warning" class="dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" size="lg">
-          <span class="sr-only">Toggle Dropdown for more event options</span>
-        </b-button>
-        <div class="dropdown-menu">
-          <a class="dropdown-item" href="#" v-for="ev in additionalEvents">{{ev}}</a>
-          <div class="dropdown-divider"></div>
-          <a class="dropdown-item" href="#">Add a new type</a>
+      <div class="float-right m-5 d-flex justify-content-end">
+        <div class="btn-group">
+          <b-button variant="warning" size="lg">Defekt eintragen</b-button>
+          <b-button variant="warning" class="dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" size="lg">
+            <span class="sr-only">Toggle Dropdown for more event options</span>
+          </b-button>
+          <div class="dropdown-menu">
+            <a class="dropdown-item" href="#" v-for="ev in additionalEvents">{{ev}}</a>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item" href="#">Add a new type</a>
+          </div>
         </div>
+        <b-button variant="primary" size="lg" @click="show"> Neue Fahrt eintragen </b-button>
       </div>
-      <b-button variant="primary" size="lg" @click="show"> Neue Fahrt eintragen </b-button>
+      <CreateBookingModal @refresh="refresh" @createVirtualBooking="createVirtualBooking" :cars="vehicles"/>
     </div>
-    <CreateBookingModal @refresh="refresh" @createVirtualBooking="createVirtualBooking" :cars="vehicles"/>
   </div>
-
 </template>
 
 <style scoped>
