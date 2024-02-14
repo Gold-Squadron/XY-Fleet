@@ -163,10 +163,10 @@ onMounted(() => afterLoad());
           <div class="dropdown-divider"></div>
           <a class="dropdown-item" href="#">Add a new type</a>
         </div>
+        <b-button variant="primary" size="lg" @click="show"> Neue Fahrt eintragen </b-button>
       </div>
-      <b-button variant="primary" size="lg" @click="show"> Neue Fahrt eintragen </b-button>
+      <CreateBookingModal @refresh="refresh" @createVirtualBooking="createVirtualBooking" :cars="vehicles"/>
     </div>
-    <CreateBookingModal @refresh="refresh" @createVirtualBooking="createVirtualBooking" :cars="vehicles"/>
   </div>
 
   <div>
