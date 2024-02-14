@@ -37,7 +37,8 @@ VALUES (100, 'STO-XY-1', 'CITROEN', 'C2', '1G1YY25R69570001', 30000, 34000, 5000
        (103, 'STO-XY-4', 'Mercedes', 'AMG-GT', '9H3BD76L3044292', 0, 500, 2000, 103, 'car', 103),
        (104, 'STO-XY-5', 'Toyota', 'Mustang', '3G2EE25I692877166', 4000, 5000, 3000, 104, 'car', 104),
        (105, 'STO-XY-6', 'Ford', 'Ranger', '5A5FF9918N99105', 150000, 155000, 10000, 105, 'car', 105),
-       (106, 'STO-XY-7', 'Tesla', 'Cybertruck', '2G2UU8271N7273', 2000, 8000, 12000, 106, 'car', 106);
+       (106, 'STO-XY-7', 'Tesla', 'Cybertruck', '2G2UU8271N7273', 2000, 8000, 12000, 106, 'car', 106),
+       (107, 'STO-XY-8', 'Tesla', 'Cybertruck', '2G2UU8271N7273', 2000, 8000, 12000, 106, 'car', 106);
 INSERT INTO bookings (driver_id, vehicle_id, leasing_start, leasing_end, reasoning, expected_travel_distance)
 VALUES (101, 100, '2024-03-01', '2024-03-07', 'Betriebsausflug', 1000),
        (102, 100, '2024-03-14', '2024-03-15', 'none', 200),
@@ -57,4 +58,4 @@ VALUES (101, 100, '2024-03-01', '2024-03-07', 'Betriebsausflug', 1000),
        (104, 105, '2024-03-08', '2024-03-12', 'none', 1000),
        (106, 106, '2024-02-20', '2024-03-12', 'Spritztour', 6000);
 INSERT INTO bookings(driver_id, vehicle_id, leasing_start, leasing_end, reasoning, expected_travel_distance, status)
-VALUES (null, 107, '2024-03-01', '2024-03-15', 'none', 200, 'maintanence');
+VALUES (null, 107, '2024-03-01', '2024-03-15', 'none', 200, 'maintenance');
