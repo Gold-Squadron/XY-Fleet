@@ -58,4 +58,4 @@ VALUES (101, 100, '2024-03-01', '2024-03-07', 'Betriebsausflug', 1000),
        (104, 105, '2024-03-08', '2024-03-12', 'none', 1000),
        (106, 106, '2024-02-20', '2024-03-12', 'Spritztour', 6000);
 INSERT INTO bookings(driver_id, vehicle_id, leasing_start, leasing_end, reasoning, expected_travel_distance, status)
-VALUES (null, 107, '2024-03-01', '2024-03-15', 'none', 200, 'maintanence');
+VALUES (null, 107, '2024-03-01', '2024-03-15', 'none', 200, 'maintenance');
