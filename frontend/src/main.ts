@@ -43,6 +43,18 @@ export class User {
     }
 }
 
+export class Vehicle {
+    constructor(private uiId: String = "", public licensePlate: string = "", public brand: string = "", public model: string = "", public chassisNumber: string = "", public mileage: number = 0, public annualPerformance: number = 0, public type: string = "") {
+    }
+
+    public getUiId(): String{
+        return this.uiId
+    }
+    public setUiId(id: String) : void {
+        this.uiId = id
+    }
+}
+
 export class Booking {
 
     private refStart : Ref<Date> | null = null;
