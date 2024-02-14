@@ -25,6 +25,7 @@
 
   // Convert the raw data into the rendering format
   let selectedIds: Ref<String[]> = ref([])
+
   let usersCoverted: Ref<TableItem[]> = ref([])
 
   function convertUserData(): TableItem[] {

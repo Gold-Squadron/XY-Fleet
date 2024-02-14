@@ -7,6 +7,7 @@ export {}
 
 declare module 'vue' {
   export interface GlobalComponents {
+    BAvatar: typeof import('bootstrap-vue-next')['BAvatar']
     AddUserModal: typeof import('./src/components/userManagement/AddUserModal.vue')['default']
     BButton: typeof import('bootstrap-vue-next')['BButton']
     BCard: typeof import('bootstrap-vue-next')['BCard']
@@ -26,6 +27,7 @@ declare module 'vue' {
     BPopover: typeof import('bootstrap-vue-next')['BPopover']
     BRow: typeof import('bootstrap-vue-next')['BRow']
     BTable: typeof import('bootstrap-vue-next')['BTable']
+    BToast: typeof import('bootstrap-vue-next')['BToast']
     BTooltip: typeof import('bootstrap-vue-next')['BTooltip']
     ConfirmRemovalModal: typeof import('./src/components/userManagement/ConfirmRemovalModal.vue')['default']
     CreateBookingModal: typeof import('./src/components/bookings/CreateBookingModal.vue')['default']

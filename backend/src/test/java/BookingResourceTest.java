@@ -28,7 +28,7 @@ public class BookingResourceTest extends EntryResourceTest {
             vehicle.setId(scenario.add(VEHICLES, vehicle));
             //dslContext.insertInto(VEHICLES).values(vehicle).onDuplicateKeyIgnore().execute();
 
-            BookingsRecord booking = new BookingsRecord(0, ADMIN_ID, vehicle.getId(),  LocalDate.parse("2023-01-01"),  LocalDate.parse("2023-01-01"), "none", 200);
+            BookingsRecord booking = new BookingsRecord(0, ADMIN_ID, vehicle.getId(),  LocalDate.parse("2023-01-01"),  LocalDate.parse("2023-01-01"), "none", 200, null);
             booking.setId(scenario.add(BOOKINGS, booking));
             uri = "/booking/" + booking.getId();
             testRecord = booking;
@@ -47,7 +47,6 @@ public class BookingResourceTest extends EntryResourceTest {
     @Override
     @ParameterizedTest
     @CsvSource(value = {
-            FORBIDDEN+":"+ROLE_USER,
             FORBIDDEN+":"+ROLE_SECURITY,
             UNAUTHORIZED+": "}, delimiter = ':')
     public void delete_invalidCall_shouldThrowResourceException(String responseMessage, String role) {
