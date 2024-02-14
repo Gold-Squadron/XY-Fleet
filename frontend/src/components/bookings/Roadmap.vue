@@ -4,30 +4,15 @@ import {type GanttBarObject, GGanttRow} from "@infectoone/vue-ganttastic";
 import {type UnwrapRefSimple} from "@vue/reactivity"
 import CreateBookingModal from "@/components/bookings/CreateBookingModal.vue";
 import {useModal} from "bootstrap-vue-next";
-import {Booking, getBookings} from "./RoadmapRestCalls";
+import {Booking, type RFlight, getFlights, getVehicles, type RXYWing} from "./RoadmapRestCalls";
 
 const dayWidth = 1.5 * parseFloat(getComputedStyle(document.documentElement).fontSize);
 
 //Demodata
 let vehicles = ref(["STO-XY-01", "STO-XY-02", "STO-XY-03", "STO-XY-04", "STO-XY-31", "STO-XY-41", "STO-XY-59", "STO-XY-26",]);
+let xywings = ref<RXYWing[]>([]);
 let bookings : Ref<Booking[]> = ref([])
 let additionalEvents = ["TÜV Termin", "Reparaturen" , "Bereitschaft", "Auto nicht fahrbereit"]
-
-
-bookings.value.push(new Booking("Green Smart", new Date("2024-02-2 10:00"), new Date("2024-02-3 24:00")));
-
-function pushAndGenerate(number: number, number2: number, s: string, s2: string, none: string, number3: number, status : string = "") {
-  let val = new Booking(vehicles.value[number - 101], new Date(s), new Date(s2), none, ["lhelbig", "jwilleke", "nsimon", "laußem"][number2 - 100]);
-  val.status = status;
-  console.log(val)
-  bookings.value.push(val)
-}
-
-pushAndGenerate(101, 100, '2024-03-01', '2024-03-07', 'Betriebsausflug', 1000);
-pushAndGenerate(102, 100, '2024-03-14', '2024-03-15', 'none', 200);
-pushAndGenerate(101, 100, '2024-03-20', '2024-03-30', 'Betriebsreise', 2800);
-pushAndGenerate(106, 103, '2024-03-5', '2024-04-5', 'Nicht Betriebsfähig', 300, "broken");
-pushAndGenerate(108, 103, '2024-03-5', '2024-03-8', 'Ausflug', 300, );
 
 let chartStart : Ref<Date> = ref(new Date().translateDays(25));
 let chartEnd = computed(() => {return chartStart.value.translateDays(31)})
@@ -45,10 +30,14 @@ function mouseWheelHandler(inp : any) : boolean {
   return false;
 }
 
+function getUserById(driverId: number) {
+  return "Dieter";
+}
+
 //transforms the raw data into the rendering format
 const generatedBars = computed( () => {
-  let map = new Map<string, GanttBarObject[]>();
-  vehicles.value.forEach(name => map.set(name, []))
+  let map = new Map<number, GanttBarObject[]>();
+  xywings.value.forEach(obj => map.set(obj.id, []))
   bookings.value.forEach( (booking) => {
     let stylingContent : CSSProperties = {
       borderRadius: "5px",
@@ -56,13 +45,13 @@ const generatedBars = computed( () => {
       color: "white"
     };
     if(booking.status == "broken") stylingContent.background =  "linear-gradient(117deg, rgba(217,3,3,1) 0%, rgba(124,29,0,1) 100%)";
-    let label = booking.reason != 'none' ? booking.reason : booking.driver;
+    let label : string = booking.reason != 'none' ? booking.reason : getUserById(booking.driverId);
     if(booking.html) label = "";
     let x : GanttBarObject = {
       myBeginDate: booking.getStartDateAsReference(),
       myEndDate: booking.getEndDateAsReference(),
       ganttBarConfig: {
-          id: booking.car + booking.start.getTime(), // ... and a unique "id" property
+          id: "" + booking.id, // ... and a unique "id" property
           label: label,
           hasHandles: booking.status === 'preview',
           immobile: booking.status !== 'preview',
@@ -71,7 +60,7 @@ const generatedBars = computed( () => {
           html: booking.html
       }
     }
-    map.get(booking.car)?.push(x);
+    map.get(booking.carId)?.push(x);
   })
   return map;
 })
@@ -79,16 +68,16 @@ const generatedBars = computed( () => {
 //this is where we query the server for new information... IF WE HAD ANY
 //TODO remove the parameter once the REST Interface works
 function createVirtualBooking(booking : Booking) : void {
-  console.log(booking)
   if(booking.status === "preview") previewMode = true;
   bookings.value.push(booking);
 }
 
-function refresh() {
-  getBookings().then(ret => {
-    console.log(ret)
-    bookings.value = ret;
-  })
+async function refresh() {
+  getVehicles().then()
+  let flights : RFlight[] = await getFlights();
+  xywings.value = await getVehicles();
+  bookings.value = flights.map(rFlight => Booking.from(rFlight));
+
 }
 
 const {show, hide, modal} = useModal('creation-dialog')
@@ -113,7 +102,6 @@ function afterLoad() {
     scrollable?.addEventListener("DOMMouseScroll", mouseWheelHandler, false);
   }
 
-  // $('#liveToast').toast('show')
 
   refresh();
 }
@@ -133,8 +121,8 @@ onMounted(() => afterLoad());
         bar-end="myEndDate"
         :highlight-sundays="true"
         color-scheme="default"> <!-- https://github.com/zunnzunn/vue-ganttastic/blob/master/docs/GGanttChart.md#color-schemes -->
-      <div v-for="vehicle in vehicles"> <!-- create a row for each vehicle -->
-        <g-gantt-row  :label="vehicle" :bars="generatedBars.get(vehicle)"/>
+      <div v-for="vehicle in xywings"> <!-- create a row for each vehicle -->
+        <g-gantt-row  :label="vehicle.license_plate" :bars="generatedBars.get(vehicle.id)"/>
       </div>
     </g-gantt-chart>
     <div v-if="previewMode" class="float-right m-5">

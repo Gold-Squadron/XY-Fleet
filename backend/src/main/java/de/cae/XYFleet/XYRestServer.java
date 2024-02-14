@@ -3,7 +3,9 @@ package de.cae.XYFleet;
 import de.cae.XYFleet.authentication.LDAPAuthenticator;
 import de.cae.XYFleet.authentication.XYAuthorizer;
 import org.restlet.*;
+import org.restlet.data.Method;
 import org.restlet.data.Protocol;
+import org.restlet.data.Status;
 import org.restlet.service.CorsService;
 import org.restlet.service.Service;
 
@@ -21,19 +23,20 @@ public class XYRestServer {
                     System.out.println("Before: " + response.getAccessControlAllowOrigin());
                     response.setAccessControlAllowOrigin("*");
                     response.setAccessControlAllowCredentials(true);
+                    response.getAccessControlAllowMethods().add(Method.GET);
+                    response.getAccessControlAllowMethods().add(Method.OPTIONS);
+                    response.getAccessControlAllowHeaders().add("Content-Type");
+                    response.getAccessControlAllowHeaders().add("Origin");
+                    response.getAccessControlAllowHeaders().add("X-Auth-Token");
+                    response.getAccessControlAllowHeaders().add("authorization");
+                    System.out.println(response.getAccessControlAllowHeaders());
                     System.out.println(response.toString());
                     System.out.println(response.getAccessControlAllowOrigin());
+                    response.setStatus(Status.SUCCESS_OK);
                 }
             };
             Server server = component.getServers().add(Protocol.HTTP, 8080);
 
-            CorsService corsService = new CorsService();
-            corsService.getAllowedOrigins().add("localhost:5173");
-            corsService.getAllowedOrigins().add("*");
-            corsService.setAllowedCredentials(true);
-
-            component.getServices().add(corsService);
-            System.out.println(corsService.getAllowedOrigins());
 
             component.getDefaultHost().attach("/ldapauthenticator", LDAPAuthenticator.class);
             component.getDefaultHost().attach("/test", test.class);

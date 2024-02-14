@@ -50,7 +50,10 @@ public class XYAuthorizer extends Application {
         ChallengeAuthenticator guard = new ChallengeAuthenticator(
                 getContext(),true,  ChallengeScheme.HTTP_BASIC, "realm");
 
-
+        //Attach enroler and verifier to determine roles
+        LDAPVerifier ldapVerifier = new LDAPVerifier();
+        guard.setVerifier(ldapVerifier);
+        guard.setEnroler(ldapVerifier);
 
         return guard;
     }
