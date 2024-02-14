@@ -9,6 +9,7 @@ import org.restlet.resource.*;
 
 
 import java.time.LocalDate;
+import java.util.Arrays;
 import java.util.Map;
 import java.util.Objects;
 
@@ -65,29 +66,36 @@ public class BookingResource extends EntryResource {
         BookingsRecord booking = dslContext.newRecord(BOOKINGS);
         //INSERT INTO insurances  VALUES ({query values})
         for (Field<?> field : fields) {
-            String value = valuesMap.get(field.getUnqualifiedName().first());
-            if (!Objects.equals(field.getUnqualifiedName().first(), "id") &&
-                    (!Objects.equals(field.getUnqualifiedName().first(), "status")||!Objects.equals(field.getUnqualifiedName().first(), "driver_id"))) {
-                if (value == null) throw new ResourceException(400, "Missing value for initialization.");
-                Field<String> myField = DSL.field(field.getName(), String.class);
-                booking.set(myField, value);
-            }
+            String key = field.getUnqualifiedName().first();
+            String value = valuesMap.get(key);
+            if (Objects.equals(key, "id")) continue;
+
+            if (value == null && !(key.equals("status") || key.equals("driver_id")))
+                throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, key + " cant be null");
+
+            Field<String> myField = DSL.field(field.getName(), String.class);
+            booking.set(myField, value);
+
         }
         booking.setId(null);
 
         //check correctness of values
-        if(dslContext.fetchExists(VEHICLES, VEHICLES.ID.eq(booking.getVehicleId())))
+
+        if (booking.getStatus() == null && booking.getDriverId() == null)
+            throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, "status and driver_id cant both be null");
+
+        if (dslContext.fetchExists(VEHICLES, VEHICLES.ID.eq(booking.getVehicleId())))
             throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, "vehicle id does not exist");
-        if(dslContext.fetch(BOOKINGS, BOOKINGS.VEHICLE_ID.eq(booking.getVehicleId())
+        if (dslContext.fetch(BOOKINGS, BOOKINGS.VEHICLE_ID.eq(booking.getVehicleId())
                 .and(BOOKINGS.LEASING_START.greaterThan(booking.getLeasingEnd()))
-                .and(BOOKINGS.LEASING_END.lessThan(booking.getLeasingStart()))).isNotEmpty()){
+                .and(BOOKINGS.LEASING_END.lessThan(booking.getLeasingStart()))).isNotEmpty()) {
             throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, "booking date conflict");
         }
-        if(valuesMap.get("status").isBlank()){
-            if(dslContext.fetchExists(USERS, USERS.ID.eq(booking.getDriverId()).and(USERS.IS_DRIVER.eq((byte)1))))
+        if (valuesMap.get("status").isBlank()) {
+            if (dslContext.fetchExists(USERS, USERS.ID.eq(booking.getDriverId()).and(USERS.IS_DRIVER.eq((byte) 1))))
                 throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, "driver id does not exist");
-        }else {
-            if(dslContext.fetchExists(USERS, USERS.ID.isNotNull()))
+        } else {
+            if (dslContext.fetchExists(USERS, USERS.ID.isNotNull()))
                 throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, "car can't be driven while in maintenance");
         }
 
