@@ -1,5 +1,10 @@
 import type {Ref} from "vue";
 import {ref} from "vue";
+import type {User} from "@/main";
+
+const headers: Headers = new Headers()
+
+
 
 //region Types
 export class Booking {
@@ -13,6 +18,20 @@ export class Booking {
     constructor(public carId: number = -1, public start: Date = new Date(), public end: Date = new Date(), public reason: string = "", public driverId: number = -1, public id = -1) {
         this.refStart = null;
         this.refEnd = null;
+        this.start.setHours(1)
+        this.end.setHours(23)
+    }
+
+    public hasHtml() : boolean {
+        return this.end.getTime() - this.start.getTime() < 1000 * 60 * 60 * 47;
+    }
+
+    public generateAvatarBasedOnInitials(driver: string): string {
+        return `<span data-v-da537051="" class="b-avatar bg-secondary rounded-circle" style="width: 1.6rem; height: 1.6rem">
+                    <span class="b-avatar-text">
+                        ${driver.substring(0, 2)}
+                    </span>
+                </span>`;
     }
 
     //make your own function supporting, ref-less (aka. back to *null*) deep copy
@@ -23,6 +42,7 @@ export class Booking {
     isWithin(day: number): Boolean {
         return true; //his.start <= day && this.end >= day;
     }
+
 
     getStartDateAsReference(): Ref<Date> {
         if (this.refStart == null) {
@@ -57,32 +77,6 @@ export interface RFlight {
     reasoning: string,
     expected_travel_distance: number
 }
-
-export async function getFlights(): Promise<RFlight[]> {
-
-    const headers: Headers = new Headers()
-
-    headers.set('Content-Type', 'application/json')
-    headers.set('Accept', 'application/json')
-
-    let username = 'nsimon';
-    let password = '123';
-    let auth = btoa(`${username}:${password}`);
-
-    headers.set('Authorization', `Basic ${auth}`);
-
-    const request: RequestInfo = new Request('http://127.0.0.1:8080/booking?user=nsimon&secret=123', {
-        method: 'GET',
-        headers: headers,
-    })
-    console.log("hi");
-
-    let res1 = await fetch(request);
-    let res2: any = await res1.json();
-    console.table(res2)
-    return res2 as RFlight[]
-}
-
 export interface RXYWing {
     id: number,
     license_plate: string,
@@ -97,9 +91,27 @@ export interface RXYWing {
     pricing_id: number
 }
 
-export async function getVehicles(): Promise<RXYWing[]> {
+//Pilot and administrative staff
+export interface RPilot {
+    id: number,
+    name: string
+//    role  varchar(8) check( role in ('admin', 'user', 'security')),
+//    is_driver tinyint(1) not null
+}
 
-    const headers: Headers = new Headers()
+export async function getFlights(): Promise<RFlight[]> {
+    return await getAsJson('booking') as RFlight[]
+}
+
+export async function getVehicles(): Promise<RXYWing[]> {
+    return await getAsJson('xywing') as RXYWing[];
+}
+
+export async function getPilots(): Promise<RPilot[]> {
+    return await getAsJson('user') as RPilot[];
+}
+
+export async function getAsJson(url : string): Promise<any[]> {
 
     headers.set('Content-Type', 'application/json')
     headers.set('Accept', 'application/json')
@@ -110,7 +122,7 @@ export async function getVehicles(): Promise<RXYWing[]> {
 
     headers.set('Authorization', `Basic ${auth}`);
 
-    const request: RequestInfo = new Request('http://127.0.0.1:8080/xywing?user=nsimon&secret=123', {
+    const request: RequestInfo = new Request(`http://127.0.0.1:8080/${url}?user=nsimon&secret=123`, {
         method: 'GET',
         headers: headers,
     })
@@ -121,5 +133,6 @@ export async function getVehicles(): Promise<RXYWing[]> {
     if(jsonResponse.code !== undefined && jsonResponse !== 200) {
         console.error(jsonResponse)
     }
-    return jsonResponse as RXYWing[];
+    return jsonResponse;
 }
+

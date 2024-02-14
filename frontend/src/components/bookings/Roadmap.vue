@@ -4,13 +4,13 @@ import {type GanttBarObject, GGanttRow} from "@infectoone/vue-ganttastic";
 import {type UnwrapRefSimple} from "@vue/reactivity"
 import CreateBookingModal from "@/components/bookings/CreateBookingModal.vue";
 import {useModal} from "bootstrap-vue-next";
-import {Booking, type RFlight, getFlights, getVehicles, type RXYWing} from "./RoadmapRestCalls";
+import {Booking, type RFlight, getFlights, getVehicles, type RXYWing, type RPilot, getPilots} from "./RoadmapRestCalls";
 
 const dayWidth = 1.5 * parseFloat(getComputedStyle(document.documentElement).fontSize);
 
 //Demodata
-let vehicles = ref(["STO-XY-01", "STO-XY-02", "STO-XY-03", "STO-XY-04", "STO-XY-31", "STO-XY-41", "STO-XY-59", "STO-XY-26",]);
 let xywings = ref<RXYWing[]>([]);
+let pilots = ref<RPilot[]>([]);
 let bookings : Ref<Booking[]> = ref([])
 let additionalEvents = ["TÜV Termin", "Reparaturen" , "Bereitschaft", "Auto nicht fahrbereit"]
 
@@ -30,8 +30,8 @@ function mouseWheelHandler(inp : any) : boolean {
   return false;
 }
 
-function getUserById(driverId: number) {
-  return "Dieter";
+function getUserById(driverId: number) : string {
+  return pilots.value.find(pilot => pilot.id == driverId)?.name as string;
 }
 
 //transforms the raw data into the rendering format
@@ -46,7 +46,7 @@ const generatedBars = computed( () => {
     };
     if(booking.status == "broken") stylingContent.background =  "linear-gradient(117deg, rgba(217,3,3,1) 0%, rgba(124,29,0,1) 100%)";
     let label : string = booking.reason != 'none' ? booking.reason : getUserById(booking.driverId);
-    if(booking.html) label = "";
+    if(booking.hasHtml()) label = "";
     let x : GanttBarObject = {
       myBeginDate: booking.getStartDateAsReference(),
       myEndDate: booking.getEndDateAsReference(),
@@ -57,7 +57,7 @@ const generatedBars = computed( () => {
           immobile: booking.status !== 'preview',
           style: stylingContent,
           class: `bar-${booking.status}`,
-          html: booking.html
+          html: booking.hasHtml() ? booking.generateAvatarBasedOnInitials("Dieter") : ""
       }
     }
     map.get(booking.carId)?.push(x);
@@ -77,7 +77,7 @@ async function refresh() {
   let flights : RFlight[] = await getFlights();
   xywings.value = await getVehicles();
   bookings.value = flights.map(rFlight => Booking.from(rFlight));
-
+  pilots.value = await getPilots();
 }
 
 const {show, hide, modal} = useModal('creation-dialog')
@@ -110,7 +110,7 @@ onMounted(() => afterLoad());
 </script>
 
 <template>
-  <p class="d-none" v-for="vehicle in vehicles">{{ generatedBars.get(vehicle) }}</p> <!-- Debug -->
+  <p class="d-none" v-for="vehicle in xywings">{{ generatedBars.get(vehicle.id) }}</p> <!-- Debug -->
   <div style="">
     <g-gantt-chart id="roadmap"
         :chart-start="chartStart"
