@@ -44,6 +44,9 @@ export class User {
 }
 
 export class Vehicle {
+    public gasCard: GasCard | null = null
+    public insurance: Insurance | null = null
+    public prcing: Pricing | null = null
     constructor(private uiId: String = "", public licensePlate: string = "", public brand: string = "", public model: string = "", public chassisNumber: string = "", public mileage: number = 0, public annualPerformance: number = 0, public type: string = "") {
     }
 
@@ -52,6 +55,21 @@ export class Vehicle {
     }
     public setUiId(id: String) : void {
         this.uiId = id
+    }
+}
+
+export class GasCard {
+    constructor(public holder: string = "", public numberAral: any = null, public numberShell: any = null, public pin: any = null) {
+    }
+}
+
+export class Insurance {
+    constructor(public number: any = null, public registrationDate: any = null, public expiration: number | null = null) {
+    }
+}
+
+export class Pricing {
+    constructor(public purchaseData: any = null, public listPriceGross: any = null, public leasingCostNet : any = null) {
     }
 }
 
