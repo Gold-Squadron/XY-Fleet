@@ -19,13 +19,17 @@ import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 
 public class BookingsResource extends XYServerResource {
+    @Override
+    protected void doInit() throws ResourceException {
+        super.doInit();
+        table = BOOKINGS;
+    }
+
     @Get()
     public String toString() {
         checkInRole(XYAuthorizer.ROLE_SECURITY);
 
-        //SELECT * FROM bookings
-        Result<Record> result = dslContext.select().from(BOOKINGS).fetch();
-        return result.formatJSON(jSONFormat);
+       return super.toString();
     }
     //TODO missing jUnit Tests for this method
     @Get("?")
@@ -56,6 +60,6 @@ public class BookingsResource extends XYServerResource {
     @Put
     public String createEntity(){
         checkInRole(XYAuthorizer.ROLE_ADMIN);
-        return null;
+        return new BookingResource().handlePut(getQuery().getValuesMap());
     }
 }
