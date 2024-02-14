@@ -1,10 +1,10 @@
 <script setup lang="ts">
   import {useModal} from "bootstrap-vue-next";
   import {computed, type Ref, ref} from "vue";
-  import {Booking} from "./RoadmapRestCalls";
+  import {Booking, getPilots, type RXYWing} from "./RoadmapRestCalls";
 
   defineProps<{
-    cars?: string[]
+    cars?: RXYWing[]
   }>()
 
 
@@ -39,7 +39,7 @@
 
   const {show, hide, modal} = useModal('creation-dialog')
 
-  let drivers = ref(["nsimon", "lhelbig", "laußem"])
+  let drivers = await getPilots();
 
   function reset() {
     res.value = new Booking();
@@ -63,7 +63,7 @@
 
 <template>
   <!-- TODO validation and proper autocomplete -->
-  <BModal v-if="true" id="creation-dialog" @on-cancel="hide()" size="lg" hide-header hide-footer>
+  <BModal id="creation-dialog" @on-cancel="hide()" size="lg" hide-header hide-footer>
     <div class="modal-header">
       <h3>Neue Fahrt eintragen</h3>
     </div>
@@ -72,19 +72,19 @@
       <BFormRow>
         <BCol>
           <b-input-group prepend="@">
-            <BFormInput id="driver" list="input-list" placeholder="Fahrer" v-model="res.driver"></BFormInput>
+            <BFormInput id="driver" list="input-list" placeholder="Fahrer" v-model="res.driverId"></BFormInput>
             <b-tooltip target="driver" triggers="hover">
               Use their normal <b>black</b> name, e.g. mmustermann!
             </b-tooltip>
             <datalist id="input-list">
-              <option v-for="el in drivers" :value="el"/>
+              <option v-for="el in drivers" :value="el.name"/>
             </datalist>
           </b-input-group>
         </BCol>
         <BCol>
-          <BFormInput id="input-with-list" list="car-datalist" placeholder="Fahrzeug" v-model="res.car"> </BFormInput>
+          <BFormInput id="input-with-list" list="car-datalist" placeholder="Fahrzeug" v-model="res.carId"> </BFormInput>
           <datalist id="car-datalist">
-            <option v-for="el in cars" :value="el"/>
+            <option v-for="el in cars" :value="el.id" :label="el.license_plate"/>
           </datalist>
         </BCol>
       </BFormRow>

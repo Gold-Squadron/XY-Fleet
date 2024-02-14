@@ -47,7 +47,6 @@ export class Booking {
     getStartDateAsReference(): Ref<Date> {
         if (this.refStart == null) {
             this.refStart = ref(this.start);
-            console.log("initialising refStart for " + this.carId + " - " + this.driverId)
         }
         return this.refStart;
     }
@@ -55,7 +54,6 @@ export class Booking {
     getEndDateAsReference(): Ref<Date> {
         if (this.refEnd == null) {
             this.refEnd = ref(this.end);
-            console.log("initialising refEnd for " + this.carId + " - " + this.driverId)
         }
         return this.refEnd;
     }
@@ -94,7 +92,8 @@ export interface RXYWing {
 //Pilot and administrative staff
 export interface RPilot {
     id: number,
-    name: string
+    name: string,
+    is_driver : boolean
 //    role  varchar(8) check( role in ('admin', 'user', 'security')),
 //    is_driver tinyint(1) not null
 }
@@ -107,8 +106,11 @@ export async function getVehicles(): Promise<RXYWing[]> {
     return await getAsJson('xywing') as RXYWing[];
 }
 
+/**
+ * @returns all pilots actually allowed to drive
+ */
 export async function getPilots(): Promise<RPilot[]> {
-    return await getAsJson('user') as RPilot[];
+    return (await getAsJson('user') as RPilot[]).filter(pilot => pilot.is_driver);
 }
 
 export async function getAsJson(url : string): Promise<any[]> {
@@ -126,7 +128,6 @@ export async function getAsJson(url : string): Promise<any[]> {
         method: 'GET',
         headers: headers,
     })
-    console.log("hi");
 
     let response = await fetch(request);
     let jsonResponse: any = await response.json();

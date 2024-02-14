@@ -31,6 +31,7 @@ function mouseWheelHandler(inp : any) : boolean {
 }
 
 function getUserById(driverId: number) : string {
+  if (isNaN(driverId)) return "If you see this, you f up"
   return pilots.value.find(pilot => pilot.id == driverId)?.name as string;
 }
 
@@ -52,12 +53,12 @@ const generatedBars = computed( () => {
       myEndDate: booking.getEndDateAsReference(),
       ganttBarConfig: {
           id: "" + booking.id, // ... and a unique "id" property
-          label: label,
+          label: booking.hasHtml() ? "" : label,
           hasHandles: booking.status === 'preview',
           immobile: booking.status !== 'preview',
           style: stylingContent,
           class: `bar-${booking.status}`,
-          html: booking.hasHtml() ? booking.generateAvatarBasedOnInitials("Dieter") : ""
+          html: (booking.hasHtml() ? booking.generateAvatarBasedOnInitials(getUserById(booking.driverId)) : "")
       }
     }
     map.get(booking.carId)?.push(x);
@@ -143,27 +144,7 @@ onMounted(() => afterLoad());
       </div>
       <b-button variant="primary" size="lg" @click="show"> Neue Fahrt eintragen </b-button>
     </div>
-    <CreateBookingModal @refresh="refresh" @createVirtualBooking="createVirtualBooking" :cars="vehicles"/>
-  </div>
-
-  <div>
-
-    <div class="position-fixed bottom-0 right-0 p-3" style="z-index: 5; right: 0; bottom: 0;">
-      <div id="liveToast" class="toast hide" role="alert" aria-live="assertive" aria-atomic="true" data-delay="2000">
-        <div class="toast-header">
-          <img src="..." class="rounded mr-2" alt="...">
-          <strong class="mr-auto">Bootstrap</strong>
-          <small>11 mins ago</small>
-          <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="toast-body">
-          Hello, world! This is a toast message.
-        </div>
-      </div>
-    </div>
-
+    <CreateBookingModal @refresh="refresh" @createVirtualBooking="createVirtualBooking" :cars="xywings"/>
   </div>
 </template>
 
