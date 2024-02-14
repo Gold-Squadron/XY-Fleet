@@ -11,6 +11,7 @@
   let bookings: Ref<Booking[]> = ref([])
   let additionalEvents = ["TÜV Termin", "Reparaturen", "Bereitschaft", "Auto nicht fahrbereit"]
 
+
 bookings.value.push(new Booking("Green Smart", new Date("2024-02-2 10:00"), new Date("2024-02-3 24:00")));
 
   function pushAndGenerate(number: number, number2: number, s: string, s2: string, none: string, number3: number, status: string = "") {
@@ -139,7 +140,12 @@ bookings.value.push(new Booking("Green Smart", new Date("2024-02-2 10:00"), new 
       scrollable?.addEventListener("DOMMouseScroll", mouseWheelHandler, false);
     }
 
+  // $('#liveToast').toast('show')
+
+  for (let booking in bookings.value) {
+
   }
+}
 
   onMounted(() => afterLoad());
 </script>
@@ -154,7 +160,7 @@ bookings.value.push(new Booking("Green Smart", new Date("2024-02-2 10:00"), new 
                  :grid="true"
                  bar-start="myBeginDate"
                  bar-end="myEndDate"
-                 :highlighted-units=[27,28,3,4,10,11]
+                 :highlight-sundays="true"
                  color-scheme="default"
                  @drag-bar="() => {
           chartStart = chartStart.translateDays(0);
@@ -180,13 +186,34 @@ bookings.value.push(new Booking("Green Smart", new Date("2024-02-2 10:00"), new 
         <a class="dropdown-item" href="#" v-for="ev in additionalEvents">{{ ev }}</a>
         <div class="dropdown-divider"></div>
         <a class="dropdown-item" href="#">Add a new type</a>
-      </div>
+
     </div>
     <b-button variant="primary" size="lg" @click="show"> Neue Fahrt eintragen</b-button>
   </div>
   <CreateBookingModal @refresh="refresh" @createVirtualBooking="createVirtualBooking" :cars="vehicles"/>
 </div>
+</div>
 
+  <div>
+    <button type="button" class="btn btn-primary" id="liveToastBtn">Show live toast</button>
+
+    <div class="position-fixed bottom-0 right-0 p-3" style="z-index: 5; right: 0; bottom: 0;">
+      <div id="liveToast" class="toast hide" role="alert" aria-live="assertive" aria-atomic="true" data-delay="2000">
+        <div class="toast-header">
+          <img src="..." class="rounded mr-2" alt="...">
+          <strong class="mr-auto">Bootstrap</strong>
+          <small>11 mins ago</small>
+          <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="toast-body">
+          Hello, world! This is a toast message.
+        </div>
+      </div>
+    </div>
+
+  </div>
 </template>
 
 <style scoped>

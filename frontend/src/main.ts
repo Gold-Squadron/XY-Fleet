@@ -2,7 +2,6 @@ import './assets/main.css'
 
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue-next/dist/bootstrap-vue-next.css'
-
 import ganttastic from '@infectoone/vue-ganttastic'
 
 import {computed, createApp, ref} from 'vue'
@@ -26,7 +25,6 @@ function generateAvatarBasedOnInitials(driver: string) {
           </span>
 `;
 }
-
 export enum Roles{
     ADMIN,
     SECURITY,
@@ -34,11 +32,14 @@ export enum Roles{
 }
 
 export class User {
-    constructor(private id: String = "", public name: String = "", public email: String = "" ,public password: String = "1234", public role: Roles = Roles.ADMIN, public isDriver: boolean = false) {
+    constructor(private uiId: String = "", public name: string = "", public email: string = "" ,public password: string = "", public role: Roles = Roles.ADMIN, public isDriver: any = false) {
     }
 
-    public getId(): String{
-        return this.id
+    public getUiId(): String{
+        return this.uiId
+    }
+    public setUiId(id: String) : void {
+        this.uiId = id
     }
 }
 
@@ -48,8 +49,8 @@ export class Booking {
     private refEnd : Ref<Date> | null = null;
 
     html : string = "";
-
     status: string = "";
+
     constructor(public car: string = "", public start: Date = new Date(), public end : Date = new Date(), public reason: string = "", public driver: string = "nsimon") {
         this.refStart = null;
         this.refEnd = null;
