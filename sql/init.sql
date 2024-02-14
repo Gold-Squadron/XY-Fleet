@@ -1,10 +1,22 @@
+DROP SCHEMA if exists SWT;
+
 create schema if not exists SWT;
+
+create table if not exists SWT.users
+(
+    id        int auto_increment
+        primary key,
+    name      varchar(255) not null unique,
+    password varchar(255) not null,
+    role  varchar(255) not null,
+    is_driver tinyint(1) not null
+);
 
 create table if not exists SWT.insurances
 (
     id                          int auto_increment
         primary key,
-    insurance_number            int not null,
+    insurance_number            int not null unique,
     registration_date           int not null,
     insurance_number_expiration int null
 );
@@ -23,8 +35,8 @@ create table if not exists SWT.users
     id        int auto_increment
         primary key,
     name      varchar(255) not null unique,
-    passwort varchar(255) not null,
-    role  varchar(255) not null,
+    password varchar(255) not null,
+    role  varchar(8) check( role in ('admin', 'user', 'security')),
     is_driver tinyint(1) not null
 );
 
@@ -47,8 +59,10 @@ create table if not exists SWT.vehicles
     model              varchar(255) not null,
     chassis_number     varchar(17)  not null,
     mileage            int          not null,
+    expected_mileage   int          not null,
     annual_performance int          not null,
     insurance_id       int          not null,
+    type               varchar(255) not null,
     pricing_id         int          null,
     constraint vehicles_insurance_fk
         foreign key (insurance_id) references insurances (id),
@@ -60,11 +74,13 @@ create table if not exists SWT.bookings
 (
     id            int auto_increment
         primary key,
-    driver_id     int          not null,
+    driver_id     int          check((status IS NULL and driver_id IS NOT NULL) or (status IS NOT NULL and driver_id IS NULL)),
     vehicle_id    int          not null,
     leasing_start date         not null,
     leasing_end   date         not null,
     reasoning     varchar(255) not null,
+    expected_travel_distance int not null check(expected_travel_distance>0),
+    status varchar(11)  check(status in('maintenance', 'defective', 'repair', 'other', null)),
     constraint bookings_driver_fk
         foreign key (driver_id) references users (id),
     constraint bookings_vehicle_fk

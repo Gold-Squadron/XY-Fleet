@@ -1,5 +1,9 @@
 @import './base.css';
 
+.g-gantt-row-label {
+  z-index: 0 !important;
+}
+
 a,
 .green {
   text-decoration: none;
@@ -20,4 +24,9 @@ a,
     display: flex;
     flex-direction: column;
   }
+}
+
+/*auto-assigned classes for the bars in the Roadmap component*/
+.bar-preview {
+  background: red;
 }
