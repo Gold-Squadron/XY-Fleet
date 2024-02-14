@@ -14,7 +14,7 @@ public class MaintenancesResource extends XYServerResource{
     @Put
     public String createEntity() throws ResourceException {
         checkInRole(XYAuthorizer.ROLE_ADMIN);
-        return new InsuranceResource().handlePut(getQuery().getValuesMap());
+        return new MaintenanceResource().handlePut(getQuery().getValuesMap());
     }
 
     @Override

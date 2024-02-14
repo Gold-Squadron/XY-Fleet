@@ -3,7 +3,7 @@ package de.cae.XYFleet;
 import org.restlet.resource.Get;
 import org.restlet.resource.ServerResource;
 
-public class test extends ServerResource {
+public class TestResource extends ServerResource {
     @Get("txt")
     public String toString() {
         // Print the requested URI path
