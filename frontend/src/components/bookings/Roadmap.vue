@@ -25,7 +25,7 @@ function mouseWheelHandler(inp : any) : boolean {
   const e = window.event || inp; // old IE support
   const delta = Math.max(-1, Math.min(1, (e.wheelDelta || -e.detail)));
 
-  chartStart.value = chartStart.value.translateDays(delta * 1/4)
+  chartStart.value = chartStart.value.translateDays(delta/4)
 
   return false;
 }
@@ -44,7 +44,7 @@ const generatedBars = computed( () => {
       background: "linear-gradient(117deg, rgba(97,217,3,1) 0%, rgba(21,124,0,1) 100%)",
       color: "white"
     };
-    if(booking.status == "broken") stylingContent.background =  "linear-gradient(117deg, rgba(217,3,3,1) 0%, rgba(124,29,0,1) 100%)";
+    if(booking.status == "maintenance") stylingContent.background =  "linear-gradient(117deg, rgba(217,3,3,1) 0%, rgba(124,29,0,1) 100%)";
     let label : string = booking.reason != 'none' ? booking.reason : getUserById(booking.driverId);
     if(booking.hasHtml()) label = "";
     let x : GanttBarObject = {
@@ -122,7 +122,7 @@ onMounted(() => afterLoad());
         :highlight-sundays="true"
         color-scheme="default"> <!-- https://github.com/zunnzunn/vue-ganttastic/blob/master/docs/GGanttChart.md#color-schemes -->
       <div v-for="vehicle in xywings"> <!-- create a row for each vehicle -->
-        <g-gantt-row  :label="vehicle.license_plate" :bars="generatedBars.get(vehicle.id)"/>
+        <g-gantt-row  :label="vehicle.license_plate" :bars="generatedBars.get(vehicle.id) as GanttBarObject[]"/>
       </div>
     </g-gantt-chart>
     <div v-if="previewMode" class="float-right m-5">
