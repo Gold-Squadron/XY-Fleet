@@ -15,6 +15,9 @@ import java.util.Objects;
 
 import static de.cae.XYFleet.authentication.XYAuthorizer.*;
 import static org.jooq.codegen.XYFleet.Tables.BOOKINGS;
+import static org.jooq.codegen.XYFleet.tables.Users.USERS;
+import static org.jooq.codegen.XYFleet.tables.Vehicles.VEHICLES;
+
 import org.restlet.data.Status;
 
 public class BookingResource extends EntryResource {
