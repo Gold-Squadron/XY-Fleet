@@ -1,15 +1,15 @@
-package de.cae.XYFleet.ressource;
+package de.cae.XYFleet.ressource.Table;
 
-import org.jooq.Record;
+import de.cae.XYFleet.ressource.Entry.UserResource;
+import de.cae.XYFleet.ressource.XYServerResource;
 import org.jooq.Record4;
 import org.jooq.Result;
-import org.restlet.data.Status;
 import org.restlet.resource.*;
-import org.restlet.data.Reference;
+
 import static de.cae.XYFleet.authentication.XYAuthorizer.ROLE_ADMIN;
 import static org.jooq.codegen.XYFleet.tables.Users.USERS;
 
-public class UsersResource extends XYServerResource{
+public class UsersResource extends XYServerResource {
 
     @Override
     @Get

@@ -1,16 +1,15 @@
-package de.cae.XYFleet.ressource;
+package de.cae.XYFleet.ressource.Table;
 
 import de.cae.XYFleet.authentication.XYAuthorizer;
-import org.jooq.Record;
-import org.jooq.Result;
+import de.cae.XYFleet.ressource.Entry.InsuranceResource;
+import de.cae.XYFleet.ressource.XYServerResource;
 import org.restlet.resource.Get;
 import org.restlet.resource.Put;
 import org.restlet.resource.ResourceException;
 
-import static org.jooq.codegen.XYFleet.Tables.BOOKINGS;
 import static org.jooq.codegen.XYFleet.Tables.INSURANCES;
 
-public class InsurancesResource extends XYServerResource{
+public class InsurancesResource extends XYServerResource {
     @Override
     protected void doInit() throws ResourceException {
         super.doInit();

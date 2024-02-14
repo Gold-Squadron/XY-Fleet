@@ -1,5 +1,6 @@
-package de.cae.XYFleet.ressource;
+package de.cae.XYFleet.ressource.Entry;
 
+import de.cae.XYFleet.ressource.EntryResource;
 import org.jooq.codegen.XYFleet.tables.records.BookingsRecord;
 import org.jooq.impl.UpdatableRecordImpl;
 import org.restlet.resource.*;
