@@ -17,10 +17,7 @@ public class LDAPVerifier extends SecretVerifier implements Enroler {
     private UsersRecord record;
 
     @Override
-    public int verify(String identifier, char[] secret)
-            throws ResourceException {
-        //TODO check whether null is a default value, that should be allowed or not
-        //if(identifier == null) throw new ResourceException(400, "username cannot be null");
+    public int verify(String identifier, char[] secret) throws ResourceException {
         //SELECT * FROM USERS WHERE USERS.NAME = identifier
         record = Database.getDSLContext().fetchOne(USERS, USERS.NAME.eq(identifier));
 
