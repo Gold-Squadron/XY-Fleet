@@ -20,8 +20,8 @@ public class Database {
     private static final String url = "jdbc:mariadb://localhost:3308";
 
     public static DSLContext getDSLContext() {
-        //create and return connection with Database
-        try (Connection conn = DriverManager.getConnection(url, userName, password)){
+        try {
+            Connection conn = DriverManager.getConnection(url, userName, password);
             return DSL.using(conn, SQLDialect.MARIADB);
         } catch (SQLException e) {
             e.printStackTrace();

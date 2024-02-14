@@ -1,6 +1,7 @@
 package de.cae.XYFleet.authentication;
 
 import de.cae.XYFleet.Database;
+import org.jooq.DSLContext;
 import org.jooq.codegen.XYFleet.tables.records.UsersRecord;
 import org.restlet.Request;
 import org.restlet.data.ClientInfo;
@@ -19,7 +20,8 @@ public class LDAPVerifier extends SecretVerifier implements Enroler {
     @Override
     public int verify(String identifier, char[] secret) throws ResourceException {
         //SELECT * FROM USERS WHERE USERS.NAME = identifier
-        record = Database.getDSLContext().fetchOne(USERS, USERS.NAME.eq(identifier));
+        DSLContext dslContext = Database.getDSLContext();
+        record = dslContext.fetchOne(USERS, USERS.NAME.eq(identifier));
 
         return (record != null && compare(record.getPassword().toCharArray(), secret))? SecretVerifier.RESULT_VALID : SecretVerifier.RESULT_INVALID;
     }
