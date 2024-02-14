@@ -2,7 +2,6 @@ import './assets/main.css'
 
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue-next/dist/bootstrap-vue-next.css'
-
 import ganttastic from '@infectoone/vue-ganttastic'
 
 import {computed, createApp, ref} from 'vue'
@@ -18,15 +17,45 @@ export enum Views {
     USER_MANAGEMENT
 }
 
+function generateAvatarBasedOnInitials(driver: string) {
+    return `<span data-v-da537051="" class="b-avatar bg-secondary rounded-circle" style="width: 1.6rem; height: 1.6rem">
+            <span class="b-avatar-text">
+                ${driver.substring(0, 2)}
+            </span>
+          </span>
+`;
+}
+export enum Roles{
+    ADMIN,
+    SECURITY,
+    TRAVEL_OFFICE
+}
+
+export class User {
+    constructor(private id: String = "", public name: String = "", public email: String = "" ,public password: String = "1234", public role: Roles = Roles.ADMIN, public isDriver: boolean = false) {
+    }
+
+    public getId(): String{
+        return this.id
+    }
+}
+
 export class Booking {
 
     private refStart : Ref<Date> | null = null;
     private refEnd : Ref<Date> | null = null;
 
+    html : string = "";
     status: string = "";
+
     constructor(public car: string = "", public start: Date = new Date(), public end : Date = new Date(), public reason: string = "", public driver: string = "nsimon") {
         this.refStart = null;
         this.refEnd = null;
+        this.start.setHours(1)
+        this.end.setHours(23)
+        if(this.end.getTime() - this.start.getTime() < 1000 * 60 * 60 * 47) {
+            this.html = generateAvatarBasedOnInitials(driver)
+        }
     }
 
     //make your own function supporting, ref-less (aka. back to *null*) deep copy
