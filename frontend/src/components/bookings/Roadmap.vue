@@ -147,7 +147,6 @@ onMounted(() => afterLoad());
   </div>
 
   <div>
-    <button type="button" class="btn btn-primary" id="liveToastBtn">Show live toast</button>
 
     <div class="position-fixed bottom-0 right-0 p-3" style="z-index: 5; right: 0; bottom: 0;">
       <div id="liveToast" class="toast hide" role="alert" aria-live="assertive" aria-atomic="true" data-delay="2000">
