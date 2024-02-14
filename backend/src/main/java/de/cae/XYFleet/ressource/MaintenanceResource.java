@@ -15,6 +15,12 @@ import static org.jooq.codegen.XYFleet.Tables.BOOKINGS;
 
 public class MaintenanceResource extends EntryResource {
     @Override
+    protected void doInit() throws ResourceException {
+        super.doInit();
+        table = BOOKINGS;
+    }
+
+    @Override
     @Delete
     public String deleteEntry() throws ResourceException {
         checkInRole(ROLE_ADMIN);
@@ -93,9 +99,9 @@ public class MaintenanceResource extends EntryResource {
             String name = field.getUnqualifiedName().first();
             String value = valuesMap.get(name);
             if (!Objects.equals(name, "id") && !Objects.equals(name, "driver_id")) {
-                if (value == null) throw new ResourceException(400, "Missing value for initialization.");
+                if (value == null) throw new ResourceException(400, "Missing value for initialization: "+name);
+                setFieldValueHelper(booking, field, value);
             }
-            setFieldValueHelper(booking, field, value);
         }
         booking.setId(null);
         //check correctness of values
