@@ -59,6 +59,7 @@ public abstract class EntryResource extends XYServerResource {
             //checking whether amendments have been requested or not. Setting all types to String type safty in tests
             String name = field.getUnqualifiedName().first();
             String value = valuesMap.get(field.getUnqualifiedName().first());
+            System.out.println("name = " + name);
             if(value != null){
                 setFieldValueHelper(updatableRecord, field, value);
             }
@@ -86,8 +87,8 @@ public abstract class EntryResource extends XYServerResource {
             String value = valuesMap.get(name);
             if (isNotRequiredNull(name)) {
                 if (value == null) throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, "Missing value for initialization: " + name);
-                setFieldValueHelper(updatableRecord, field, value);
             }
+            setFieldValueHelper(updatableRecord, field, value);
         }
         updatableRecord.set(BOOKINGS.ID, null);
         //check correctness of values
@@ -104,7 +105,7 @@ public abstract class EntryResource extends XYServerResource {
 
     //cast queue input according to the fields Datatype
     protected void setFieldValueHelper(UpdatableRecordImpl record, Field<?> field, String value) {
-        if (value.isEmpty())
+        if (value == null)
             return;
         if (field.getType() == Integer.class) {
             try {
