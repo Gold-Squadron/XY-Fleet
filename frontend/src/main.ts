@@ -38,8 +38,9 @@ export class User {
     public getUiId(): String{
         return this.uiId
     }
-    public setUiId(id: String) : void{
+    public setUiId(id: String) : void {
         this.uiId = id
+    }
 }
 
 export class Booking {
