@@ -9,6 +9,7 @@ declare module 'vue' {
   export interface GlobalComponents {
     BAvatar: typeof import('bootstrap-vue-next')['BAvatar']
     AddUserModal: typeof import('./src/components/userManagement/AddUserModal.vue')['default']
+    BAvatar: typeof import('bootstrap-vue-next')['BAvatar']
     BButton: typeof import('bootstrap-vue-next')['BButton']
     BCard: typeof import('bootstrap-vue-next')['BCard']
     BCardBody: typeof import('bootstrap-vue-next')['BCardBody']
