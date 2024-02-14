@@ -45,6 +45,7 @@
 </script>
 
 <template>
+  <!-- !TODO! Only allow numbers in certain input fields -->
   <BModal v-if="true" id="creation-dialog" @on-cancel="hide(); page = 0" size="lg" hide-header hide-footer>
     <div class="modal-header">
       <h3>Fahrzeug hinzufügen</h3>
@@ -69,11 +70,11 @@
         <BFormRow class="mt-3">
           <BCol>
             <b-form-floating-label label-for="password">Momentane Jahresleistung (in km)*</b-form-floating-label>
-            <BFormInput v-model="res.mileage" id="mileage" required></BFormInput> <!-- !TODO! Only allow numbers -->
+            <BFormInput v-model="res.mileage" id="mileage" required></BFormInput>
           </BCol>
           <BCol>
             <b-form-floating-label label-for="annualPerformance">Erwartete Jahresleitstung (in km)*</b-form-floating-label>
-            <BFormInput v-model="res.annualPerformance" id="annualPerformance" required></BFormInput> <!-- !TODO! Only allow numbers -->
+            <BFormInput v-model="res.annualPerformance" id="annualPerformance" required></BFormInput>
           </BCol>
         </BFormRow>
         <BFormRow class="mt-3">
@@ -107,7 +108,7 @@
           </BCol>
           <BCol>
             <b-form-floating-label label-for="expirationDate">Ablaufdatum (Registrierung)</b-form-floating-label>
-            <BFormInput v-model="resInsurance.registrationDate" type="date" id="expirationDate"></BFormInput>
+            <BFormInput v-model="resInsurance.expiration" type="date" id="expirationDate"></BFormInput>
           </BCol>
         </BFormRow>
         <b-row class="mt-4 text-right">
@@ -149,7 +150,7 @@
         <BFormRow>
           <BCol>
             <b-form-floating-label label-for="purchaseDate">Kaufdatum</b-form-floating-label>
-            <BFormInput v-model="resPricing.purchaseData" type="date" id="purchaseDate"></BFormInput>
+            <BFormInput v-model="resPricing.purchaseDate" type="date" id="purchaseDate"></BFormInput>
           </BCol>
           <BCol>
             <b-form-floating-label label-for="listPriceGross">Listenpreis (Brutto)</b-form-floating-label>

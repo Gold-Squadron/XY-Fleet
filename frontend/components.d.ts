@@ -41,5 +41,6 @@ declare module 'vue' {
     SideBar: typeof import('./src/components/SideBar.vue')['default']
     UserManagement: typeof import('./src/components/userManagement/UserManagement.vue')['default']
     VehicleDashboard: typeof import('./src/components/vehicleDashboard/VehicleDashboard.vue')['default']
+    VehicleDetailsModal: typeof import('./src/components/vehicleDashboard/VehicleDetailsModal.vue')['default']
   }
 }

@@ -6,6 +6,7 @@
   import AddVehicleModal from "@/components/vehicleDashboard/AddVehicleModal.vue";
   import ConfirmRemovalModal from "@/components/vehicleDashboard/ConfirmRemovalModal.vue";
   import EditVehicleModal from "@/components/vehicleDashboard/EditVehicleModal.vue";
+  import VehicleDetailsModal from "@/components/vehicleDashboard/VehicleDetailsModal.vue";
 
   let editeVehicleId: Ref<string> = ref('')
   let editedVehicle: Ref<Vehicle | null> = ref(null)
@@ -136,12 +137,16 @@
                          id="selectAllCheckbox"></b-form-checkbox>
       </template>
       <template #head(editRow)=""></template>
+      <template #head(showDetails)=""></template>
       <template #cell(cb)="data:any">
         <b-form-checkbox :id="`rowCheckbox-${data.index}`" :checked="selectedIds.includes(data.item['uiId'])"
                          @change="selectRow(data.index)"></b-form-checkbox>
       </template>
       <template #cell(editRow)="data: any">
-        <i @click="showModal('edit-dialog', data.item['uiId'])" class="bi bi-pencil mr-5"></i>
+        <i @click="showModal('edit-dialog', data.item['uiId'])" class="bi bi-pencil mr-2"></i>
+      </template>
+      <template #cell(showDetails)="data: any">
+        <i @click="showModal('details-dialog', data.item['uiId'])" class="bi bi-info-circle mr-5"></i>
       </template>
     </b-table>
   </div>
@@ -149,10 +154,12 @@
   <AddVehicleModal @createVehicle="addVehicle"/>
   <ConfirmRemovalModal @removeVehicle="removeVehicle"/>
   <EditVehicleModal @updateVehicle="editVehicle" :vehicle="editedVehicle"/>
+  <VehicleDetailsModal :vehicle="editedVehicle"/>
+
 </template>
 
 <style scoped>
-  .bi-pencil:hover {
+  .bi-pencil:hover, .bi-info-circle:hover {
     cursor: pointer;
     opacity: 0.6;
   }
@@ -170,7 +177,8 @@
           {key: 'mileage',           label: 'Momentane Leitstung (km)'},
           {key: 'annualPerformance', label: 'Jährliche Leistung (km)'},
           {key: 'chassisNumber',     label: 'Identifikationsnummer'},
-          {key: 'editRow',           thStyle: {width: '25px'}}
+          {key: 'editRow',           thStyle: {width: '25px'}},
+          {key: 'showDetails',       thStyle: {width: '25px'}}
         ]
       }
     }
