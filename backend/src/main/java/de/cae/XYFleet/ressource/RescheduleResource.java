@@ -1,6 +1,7 @@
 package de.cae.XYFleet.ressource;
 
 import org.jooq.Result;
+import org.jooq.impl.UpdatableRecordImpl;
 import org.restlet.data.Status;
 import org.restlet.resource.*;
 
@@ -47,7 +48,17 @@ public class RescheduleResource extends EntryResource{
     }
 
     @Override
-    public String handlePut(Map<String, String> values) throws ResourceException {
+    public String handlePut(Map<String, String> valuesMap) throws ResourceException {
         return null;
+    }
+
+    @Override
+    public boolean isNotRequiredNull(String name) {
+        return false;
+    }
+
+    @Override
+    public void validatePutCall(UpdatableRecordImpl record) {
+
     }
 }

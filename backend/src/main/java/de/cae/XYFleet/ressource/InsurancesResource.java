@@ -11,11 +11,16 @@ import static org.jooq.codegen.XYFleet.Tables.BOOKINGS;
 import static org.jooq.codegen.XYFleet.Tables.INSURANCES;
 
 public class InsurancesResource extends XYServerResource{
+    @Override
+    protected void doInit() throws ResourceException {
+        super.doInit();
+        table = INSURANCES;
+    }
+
     @Get
     public String toString() {
         checkInRole(XYAuthorizer.ROLE_SECURITY);
-        Result<Record> result = dslContext.select().from(INSURANCES).fetch();
-        return result.formatJSON(jSONFormat);
+        return super.toString();
     }
     @Put
     public String createEntity(){

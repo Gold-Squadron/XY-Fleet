@@ -22,45 +22,37 @@ import org.restlet.data.Status;
 
 public class BookingResource extends EntryResource {
     @Override
-    @Get("txt")
+    @Get()
     public String toString() throws ResourceException {
         checkInRole(ROLE_SECURITY);
-        //SELECT * FROM bookings where id = {Identifier}
-        BookingsRecord result = dslContext.fetchOne(BOOKINGS, BOOKINGS.ID.eq(identifier));
-        if (result == null) throw new ResourceException(Status.CLIENT_ERROR_NOT_FOUND, "not found");
-        return result.formatJSON(jSONFormat);
+        return super.toString();
     }
 
     @Override
     @Delete()
     public String deleteEntry() throws ResourceException {
         checkInRole(ROLE_USER);
-
-        String result = this.toString();
-
-
-        if (Integer.parseInt(getClientInfo().getUser().getIdentifier()) != identifier && !isInRole(ROLE_ADMIN))
-            throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST);
-        //DELETE bookings where id = {Identifier}
-        dslContext.delete(BOOKINGS).where(BOOKINGS.ID.eq(identifier)).execute();
-        return result;
+        return super.deleteEntry();
     }
 
     @Override
     @Put()
     public String createEntity() {
         checkInRole(ROLE_USER);
-        return handlePut(getQuery().getValuesMap());
+        return super.createEntity();
     }
 
     @Override
     @Post()
     public String editEntry() {
         checkInRole(ROLE_USER);
-        return null;
+        return editEntry();
     }
 
     @Override
+    public String handlePut(Map<String, String> valuesMap) throws ResourceException {
+        //TODO must be implemented for create Booking
+        return null;
     public String handlePut(Map<String, String> valuesMap) throws ResourceException {
 
         Field<?>[] fields = BOOKINGS.fields();
@@ -108,6 +100,16 @@ public class BookingResource extends EntryResource {
 
         //CREATE vehicles VALUES ({given values})
         return booking.formatJSON(jSONFormat);
+    }
+
+    @Override
+    public boolean isNotRequiredNull(String name) {
+        return false;
+    }
+
+    @Override
+    public void validatePutCall(UpdatableRecordImpl record) {
+
     }
 
 }
