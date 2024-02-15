@@ -27,6 +27,7 @@ export class Booking {
     }
 
     public generateAvatarBasedOnInitials(driver: string): string {
+        if(driver == undefined) return "damn"
         return `<span data-v-da537051="" class="b-avatar bg-secondary rounded-circle" style="width: 1.6rem; height: 1.6rem">
                     <span class="b-avatar-text">
                         ${driver.substring(0, 2)}

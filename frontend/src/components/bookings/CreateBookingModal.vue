@@ -63,7 +63,7 @@
 
 <template>
   <!-- TODO validation and proper autocomplete -->
-  <BModal id="creation-dialog" @on-cancel="hide()" size="lg" hide-header hide-footer>
+  <BModal v-if="true" id="creation-dialog" @on-cancel="hide()" size="lg" hide-header hide-footer>
     <div class="modal-header">
       <h3>Neue Fahrt eintragen</h3>
     </div>
@@ -77,7 +77,9 @@
               Use their normal <b>black</b> name, e.g. mmustermann!
             </b-tooltip>
             <datalist id="input-list">
-              <option v-for="el in drivers" :value="el.name"/>
+              <option v-for="el in drivers" :value="el.id">
+                {{el.name}}
+              </option>
             </datalist>
           </b-input-group>
         </BCol>

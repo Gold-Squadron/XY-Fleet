@@ -6,8 +6,6 @@ import CreateBookingModal from "@/components/bookings/CreateBookingModal.vue";
 import {useModal} from "bootstrap-vue-next";
 import {Booking, type RFlight, getFlights, getVehicles, type RXYWing, type RPilot, getPilots} from "./RoadmapRestCalls";
 
-const dayWidth = 1.5 * parseFloat(getComputedStyle(document.documentElement).fontSize);
-
 //Demodata
 let xywings = ref<RXYWing[]>([]);
 let pilots = ref<RPilot[]>([]);
@@ -74,11 +72,15 @@ function createVirtualBooking(booking : Booking) : void {
 }
 
 async function refresh() {
-  getVehicles().then()
+  console.log("gfb")
   let flights : RFlight[] = await getFlights();
-  xywings.value = await getVehicles();
+  let updatedXywings = await getVehicles();
+  let updatedPilots = await getPilots();
+
+  xywings.value = updatedXywings;
+  pilots.value = updatedPilots;
+
   bookings.value = flights.map(rFlight => Booking.from(rFlight));
-  pilots.value = await getPilots();
 }
 
 const {show, hide, modal} = useModal('creation-dialog')
@@ -144,8 +146,10 @@ onMounted(() => afterLoad());
       </div>
       <b-button variant="primary" size="lg" @click="show"> Neue Fahrt eintragen </b-button>
     </div>
-    <CreateBookingModal @refresh="refresh" @createVirtualBooking="createVirtualBooking" :cars="xywings"/>
   </div>
+  <Suspense>
+    <CreateBookingModal @refresh="refresh" @createVirtualBooking="createVirtualBooking" :cars="xywings"/>
+  </Suspense>
 </template>
 
 <style scoped>
