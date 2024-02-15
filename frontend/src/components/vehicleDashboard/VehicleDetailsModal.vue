@@ -13,7 +13,11 @@
     vehicle.value = props.vehicle
   })
 
+  const hidingPin: string = '*******'
   let vehicle = ref(new Vehicle())
+
+  // only temporarily
+  let canSeePin: boolean = true
 
   // !TODO! Only show pin to users with enough rights
 </script>
@@ -74,7 +78,7 @@
             <p>{{ vehicle.gasCard.numberAral }}</p>
             <p>{{ vehicle.gasCard.numberShell }}</p>
             <p>{{ vehicle.gasCard.holder }}</p>
-            <p>{{ vehicle.gasCard.pin }}</p>
+            <p>{{ canSeePin ? vehicle.gasCard.pin : hidingPin }}</p>
           </b-col>
         </b-row>
       </b-col>
@@ -107,6 +111,7 @@
     margin-bottom: 5px;
     font-size: 92.5%;
     opacity: 0.8;
+    min-height: 22px;
   }
 
   h6 {
