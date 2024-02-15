@@ -1,5 +1,4 @@
 [client]
-host=jdbc:mariadb://localhost:3308
-port=3008
+port=3308
 user=root
 password=u2SG7FdmzNE4vZU3kVALCQhPYywfBH5X9raxWJ6T

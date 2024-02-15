@@ -28,17 +28,19 @@ function generateAvatarBasedOnInitials(driver: string) {
 export enum Roles{
     ADMIN,
     SECURITY,
-    TRAVEL_OFFICE
+    TRAVEL_OFFICE,
+    USER,
+    NONE
 }
 
 export class User {
-    constructor(private uiId: String = "", public name: string = "", public email: string = "" ,public password: string = "", public role: Roles = Roles.ADMIN, public isDriver: any = false) {
+    constructor(private uiId: String = "", public name: string = "", public password: string = "", public role: Roles = Roles.ADMIN, public isDriver: boolean = false) {
     }
 
     public getUiId(): String{
         return this.uiId
     }
-    public setUiId(id: String) : void {
+    public setUiId(id: string): void {
         this.uiId = id
     }
 }
