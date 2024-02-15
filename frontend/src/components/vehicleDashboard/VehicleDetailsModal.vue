@@ -18,8 +18,6 @@
 
   // only temporarily
   let canSeePin: boolean = true
-
-  // !TODO! Only show pin to users with enough rights
 </script>
 
 <template>
