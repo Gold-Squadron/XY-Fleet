@@ -21,7 +21,8 @@ export enum Views {
 export enum Roles{
     ADMIN,
     SECURITY,
-    TRAVEL_OFFICE
+    TRAVEL_OFFICE,
+    USER
 }
 
 export class User {

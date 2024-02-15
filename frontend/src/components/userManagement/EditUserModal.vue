@@ -59,8 +59,9 @@
       return {
         selectRoles: [
           {value: Roles.ADMIN, text: 'Admin'},
+          {value: Roles.USER, text: 'Benutzer'},
           {value: Roles.SECURITY, text: 'Security'},
-          {value: Roles.TRAVEL_OFFICE, text: 'Travel Office'}
+          {value: Roles.TRAVEL_OFFICE, text: 'Travel Office'},
         ]
       }
     }

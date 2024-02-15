@@ -26,10 +26,14 @@ function showModal(id: string, userId: string | null = null): void {
 let users: Ref<User[]> = ref([])
 
 // Load data from database
-getAllPilots().then(res => {
-  res.forEach(pilot => { loadPilot(pilot) })
-  usersCoverted.value = convertUserData()}
-)
+function loadAllPilots() : void{
+  users.value = []
+  getAllPilots().then(res => {
+    res.forEach(pilot => { loadPilot(pilot) })
+    usersCoverted.value = convertUserData()}
+  )
+}
+loadAllPilots()
 
 function loadPilot(p: any) : void{
   let role: Roles = Roles.TRAVEL_OFFICE
@@ -72,13 +76,9 @@ function convertUserData(): TableItem[] {
 usersCoverted.value = convertUserData()
 
 function addUser(user: User): void {
-  // Add user to database
-  addPilot(user)
-
-  // Update UI
-  usersCoverted.value = []
-  users.value.push(user)
-  usersCoverted.value = convertUserData()
+  addPilot(user).then(() => {
+    loadAllPilots()
+  })
 }
 
 function removeUser(): void {
@@ -199,8 +199,9 @@ export default {
     return {
       selectRoles: [
         {value: Roles.ADMIN, text: 'Admin'},
+        {value: Roles.USER, text: 'Benutzer'},
         {value: Roles.SECURITY, text: 'Security'},
-        {value: Roles.TRAVEL_OFFICE, text: 'Travel Office'}
+        {value: Roles.TRAVEL_OFFICE, text: 'Travel Office'},
       ],
       fields: [
         {key: 'cb',       thStyle: {width: '25px'}},

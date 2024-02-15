@@ -1,37 +1,14 @@
 <script setup lang="ts">
-import {useModal} from "bootstrap-vue-next";
-import {User} from "@/main";
+  import {useModal} from "bootstrap-vue-next";
+  import {User} from "@/main";
 
-const {hide} = useModal('creation-dialog')
+  const {hide} = useModal('creation-dialog')
 
-defineEmits<{
-  (event: "createUser", newUser: User): void
-}>()
+  defineEmits<{
+    (event: "createUser", newUser: User): void
+  }>()
 
-let res = new User()
-function createUser(): User {
-
-  // This ID is used for reference in the table (not in the db)
-  // Generate id
-  let id: string = ''
-
-  while (true) {
-    id = Math.random().toString(16)
-    id = id.substring(id.length - 9)
-
-    if (checkId(id)) {
-      break
-    }
-  }
-
-  res.setUiId(id)
-  return res
-}
-
-function checkId(id: String): boolean {
-  // !Todo! Check if id is in use
-  return true
-}
+  let res = new User()
 </script>
 
 <template>
@@ -40,7 +17,7 @@ function checkId(id: String): boolean {
       <h3>Benutzer hinzufügen</h3>
     </div>
     <br>
-    <BForm @submit="$emit.call(null, 'createUser', createUser()); hide()">
+    <BForm @submit="$emit.call(null, 'createUser', res); hide()">
       <BFormRow>
         <BCol>
           <b-form-floating-label label-for="name">Name</b-form-floating-label>
@@ -73,17 +50,18 @@ function checkId(id: String): boolean {
 </template>
 
 <script lang="ts">
-import {Roles} from "@/main";
+  import {Roles} from "@/main";
 
-export default {
-  data() {
-    return {
-      selectRoles: [
-        {value: Roles.ADMIN, text: 'Admin'},
-        {value: Roles.SECURITY, text: 'Security'},
-        {value: Roles.TRAVEL_OFFICE, text: 'Travel Office'}
-      ]
+  export default {
+    data() {
+      return {
+        selectRoles: [
+          {value: Roles.ADMIN, text: 'Admin'},
+          {value: Roles.USER, text: 'Benutzer'},
+          {value: Roles.SECURITY, text: 'Security'},
+          {value: Roles.TRAVEL_OFFICE, text: 'Travel Office'},
+        ]
+      }
     }
   }
-}
 </script>
