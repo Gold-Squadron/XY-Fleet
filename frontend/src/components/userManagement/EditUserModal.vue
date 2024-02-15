@@ -1,60 +1,46 @@
 <script setup lang="ts">
 import {useModal} from "bootstrap-vue-next";
 import {User} from "@/main";
+import {ref, watch} from "vue";
 
-const {hide} = useModal('creation-dialog')
+const {hide} = useModal('edit-dialog')
 
-defineEmits<{
-  (event: "createUser", newUser: User): void
+const emit = defineEmits<{
+  (event: 'updateUser', data: any) : void
 }>()
 
-let res = new User()
-function createUser(): User {
+const props = defineProps({
+  user: null
+})
 
-  // This ID is used for reference in the table (not in the db)
-  // Generate id
-  let id: string = ''
+watch(() => props.user, () => {
+  res.value = props.user
+})
 
-  while (true) {
-    id = Math.random().toString(16)
-    id = id.substring(id.length - 9)
-
-    if (checkId(id)) {
-      break
-    }
-  }
-
-  res.setUiId(id)
-  return res
-}
-
-function checkId(id: String): boolean {
-  // !Todo! Check if id is in use
-  return true
-}
+let res = ref(new User())
 </script>
 
 <template>
-  <BModal v-if="true" id="creation-dialog" @on-cancel="hide()" size="lg" hide-header hide-footer>
+  <BModal v-if="true" id="edit-dialog" @on-cancel="hide()" size="lg" hide-header hide-footer>
     <div class="modal-header">
-      <h3>Benutzer hinzufügen</h3>
+      <h3>Benutzer bearbeiten</h3>
     </div>
     <br>
-    <BForm @submit="$emit.call(null, 'createUser', createUser()); hide()">
+    <BForm @submit="emit('updateUser', res); hide()">
       <BFormRow>
         <BCol>
           <b-form-floating-label label-for="name">Name</b-form-floating-label>
-          <BFormInput v-model="res.name" id="name" placeholder="mmustermann" required></BFormInput>
+          <BFormInput id="name" v-model="res.name" placeholder="mmustermann" required></BFormInput>
         </BCol>
       </BFormRow>
       <BFormRow class="mt-3">
         <BCol>
           <b-form-floating-label label-for="password">Password</b-form-floating-label>
-          <BFormInput v-model="res.password" type="password" id="password" required></BFormInput>
+          <BFormInput id="password" v-model="res.password" type="password" required></BFormInput>
         </BCol>
         <BCol>
           <b-form-floating-label label-for="role">Rolle</b-form-floating-label>
-          <b-form-select v-model="res.role" id="role" :options="selectRoles" class="w-100 form-control"></b-form-select>
+          <b-form-select id="role" v-model="res.role" :options="selectRoles" class="w-100 form-control"></b-form-select>
         </BCol>
       </BFormRow>
       <BFormRow class="mt-3">
@@ -64,7 +50,7 @@ function checkId(id: String): boolean {
       </BFormRow>
       <b-row class="mt-4 text-right">
         <b-col>
-          <b-button type="submit" variant="primary" class="mr-2">Benutzer hinzufügen</b-button>
+          <b-button type="submit" variant="primary" class="mr-2">Änderungen speichern</b-button>
           <b-button type="button" @click="hide()" variant="secondary">Abbrechen</b-button>
         </b-col>
       </b-row>
@@ -74,7 +60,6 @@ function checkId(id: String): boolean {
 
 <script lang="ts">
 import {Roles} from "@/main";
-
 export default {
   data() {
     return {
