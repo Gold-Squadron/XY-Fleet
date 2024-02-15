@@ -127,8 +127,8 @@ public class BookingResource extends EntryResource {
         if (dslContext.fetchOne(VEHICLES, VEHICLES.ID.equal(booking.getVehicleId()))==null)
             throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, "vehicle id does not exist");
         if (dslContext.fetch(BOOKINGS, BOOKINGS.VEHICLE_ID.eq(booking.getVehicleId())
-                .and(BOOKINGS.LEASING_START.greaterThan(booking.getLeasingEnd()))
-                .and(BOOKINGS.LEASING_END.lessThan(booking.getLeasingStart()))).isNotEmpty()) {
+                .and(BOOKINGS.LEASING_START.lessOrEqual(booking.getLeasingEnd()))
+                .and(BOOKINGS.LEASING_END.greaterOrEqual(booking.getLeasingStart()))).isNotEmpty()) {
             throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, "booking date conflict");
         }
         if (booking.getStatus()==null) {
