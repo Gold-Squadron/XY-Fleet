@@ -2,7 +2,7 @@
 import Header from "@/components/Header.vue";
 import SideBar from "@/components/SideBar.vue";
 import Roadmap from "@/components/bookings/Roadmap.vue";
-import VehicleDashboard from "@/components/VehicleDashboard.vue";
+import VehicleDashboard from "@/components/vehicleDashboard/VehicleDashboard.vue";
 import UserManagement from "@/components/userManagement/UserManagement.vue";
 import { ref } from "vue"
 import { Views } from "@/main"
