@@ -15,8 +15,15 @@ export async function getAllPilots(): Promise<RPilot[]> {
     return await getAsJson('user') as RPilot[]
 }
 
-// !TODO!
 export async function removePilot(id: number): Promise<void> {
+    const url: string = `user/${id}`
+
+    const request: Request = new Request(`http://127.0.0.1:8080/${url}?user=nsimon&secret=123`, {
+        method: 'DELETE',
+        headers: headers,
+    })
+
+    let response = await fetch(request)
 }
 
 // !TODO!
