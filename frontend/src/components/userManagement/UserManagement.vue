@@ -6,7 +6,7 @@ import AddUserModal from "@/components/userManagement/AddUserModal.vue";
 import ConfirmRemovalModal from "@/components/userManagement/ConfirmRemovalModal.vue";
 import {Roles, User} from "@/main";
 import EditUserModal from "@/components/userManagement/EditUserModal.vue";
-import { getAllPilots } from "@/components/userManagement/UsermanagementRestCalls";
+import { getAllPilots, removePilot } from "@/components/userManagement/UsermanagementRestCalls";
 
 let editedUserId: Ref<string> = ref('')
 let editedUser: Ref<User | null> = ref(null)
@@ -77,8 +77,12 @@ function addUser(user: User): void {
 }
 
 function removeUser(): void {
-  // !TODO! Remove user from database
+  //Remove user from database
+  selectedIds.value.forEach(id => {
+    removePilot(Number(id))
+  })
 
+  // Update UI
   usersCoverted.value = []
   users.value = users.value.filter(user => !selectedIds.value.includes(user.getUiId()))
   usersCoverted.value = convertUserData()
