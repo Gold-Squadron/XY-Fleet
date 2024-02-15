@@ -129,7 +129,10 @@ public class BookingResource extends EntryResource {
         if (dslContext.fetch(BOOKINGS, BOOKINGS.VEHICLE_ID.eq(booking.getVehicleId())
                 .and(BOOKINGS.LEASING_START.lessOrEqual(booking.getLeasingEnd()))
                 .and(BOOKINGS.LEASING_END.greaterOrEqual(booking.getLeasingStart()))).isNotEmpty()) {
-            throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, "booking date conflict");
+            throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, "car is already booked in this timeframe");
+        }
+        if(booking.getLeasingStart().isAfter(booking.getLeasingEnd())){
+            throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST,"leasing cant end before it starts");
         }
         if (booking.getStatus()==null) {
             //InsurancesRecord temp = dslContext.fetchOne(INSURANCES, INSURANCES.INSURANCE_NUMBER.eq(insurancesRecord.getInsuranceNumber()));
