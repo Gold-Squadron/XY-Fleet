@@ -6,15 +6,17 @@ import AddUserModal from "@/components/userManagement/AddUserModal.vue";
 import ConfirmRemovalModal from "@/components/userManagement/ConfirmRemovalModal.vue";
 import {Roles, User} from "@/main";
 import EditUserModal from "@/components/userManagement/EditUserModal.vue";
-import { getAllPilots, addPilot, removePilot } from "@/components/userManagement/UsermanagementRestCalls";
+import { getAllPilots, addPilot, removePilot, editPilot } from "@/components/userManagement/UsermanagementRestCalls";
 
 let editedUserId: Ref<string> = ref('')
 let editedUser: Ref<User | null> = ref(null)
+let editedUserName: string = ''
 
 function showModal(id: string, userId: string | null = null): void {
   if(userId){
     editedUserId.value = userId
     editedUser.value = getUserById(userId)
+    editedUserName = editedUser.value ? editedUser.value?.name : ''
   }
 
   const {show} = useModal(id)
@@ -130,15 +132,9 @@ function highlightRow(index: number, mark: boolean = true): void {
   row.style.backgroundColor = mark ? SELECTION_COLOR : ''
 }
 
-function editUser(data: User) : void {
-  let user = getUserById(editedUserId.value)
-
-  if(user == undefined){
-    return
-  }
-
-  // !FIXME!
-  user = data
+// !TODO! Warning if name already exists
+function editUser(user: User) : void {
+  editPilot(user, user.name == editedUserName)
 
   usersCoverted.value = convertUserData()
 }

@@ -40,6 +40,19 @@ export async function addPilot(user: User): Promise<void> {
     await fetch(request)
 }
 
+export async function editPilot(user: User, sameName: boolean): Promise<void> {
+    const nameParam: string = sameName ? '' : `name=${user.name}`
+    const url: string = `user/${user.getUiId()}`
+    const dataQuery: string = `${nameParam}&is_driver=${Number(user.isDriver)}&role=${user.role}`
+
+    const request: Request = new Request(`http://127.0.0.1:8080/${url}?${dataQuery}`, {
+        method: 'POST',
+        headers: headers,
+    })
+
+    await fetch(request)
+}
+
 export async function getAsJson(url: string): Promise<any[] | any> {
 
     headers.set('Content-Type', 'application/json')
