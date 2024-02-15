@@ -6,7 +6,13 @@
   import ConfirmRemovalModal from "@/components/userManagement/ConfirmRemovalModal.vue";
   import {Roles, User} from "@/main";
   import EditUserModal from "@/components/userManagement/EditUserModal.vue";
-  import {getAllPilots, addPilot, removePilot, editPilot} from "@/components/userManagement/UsermanagementRestCalls";
+  import {
+    getAllPilots,
+    addPilot,
+    removePilot,
+    editPilot,
+    getAllBookings, removeBooking
+  } from "@/components/userManagement/UsermanagementRestCalls";
 
   let selectedIds: Ref<String[]> = ref([])
   let editedUserId: Ref<string> = ref('')
@@ -87,9 +93,9 @@
   }
 
   function removeUser(): void {
-    //Remove user from database
+    // Remove user from database
     selectedIds.value.forEach(id => {
-      removePilot(Number(id))
+      removeSingleUser(Number(id))
     })
 
     // Update UI
@@ -100,6 +106,18 @@
     selectedIds.value = []
 
     changeAll(true)
+  }
+
+  function removeSingleUser(id: number): void{
+    // Remove bookings from the user
+    getAllBookings().then(res => {
+      let bookingsDelete = res.filter(r => r.driver_id == Number(id))
+
+      bookingsDelete.forEach(booking => {
+        removeBooking(booking.id)
+      })
+      removePilot(Number(id))
+    })
   }
 
   function selectRow(index: number, forceDeselect: boolean = false): void {

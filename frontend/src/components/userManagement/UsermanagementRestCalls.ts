@@ -13,8 +13,20 @@ export interface RPilot {
 //    is_driver tinyint(1) not null
 }
 
+export interface RBooking {
+    id: number,
+    driver_id: number
+//    role  varchar(8) check( role in ('admin', 'user', 'security')),
+//    is_driver tinyint(1) not null
+}
+
+
 export async function getAllPilots(): Promise<RPilot[]> {
     return await getAsJson('user') as RPilot[]
+}
+
+export async function getAllBookings(): Promise<RBooking[]> {
+    return await getAsJson('booking') as RBooking[]
 }
 
 export async function removePilot(id: number): Promise<void> {
@@ -75,4 +87,15 @@ export async function getAsJson(url: string): Promise<any[] | any> {
         console.error(jsonResponse)
     }
     return jsonResponse
+}
+
+export async function removeBooking(id: number): Promise<void> {
+    const url: string = `booking/${id}`
+
+    const request: Request = new Request(`http://127.0.0.1:8080/${url}?user=nsimon&secret=123`, {
+        method: 'DELETE',
+        headers: headers,
+    })
+
+    await fetch(request)
 }
