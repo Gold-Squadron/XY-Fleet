@@ -137,7 +137,7 @@ public class BookingResource extends EntryResource {
             if (temp==null || temp.getIsDriver()!=(byte) 1)
                 throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, "driver id does not exist");
         } else {
-            if (dslContext.fetchExists(USERS, USERS.ID.isNotNull()))
+            if (booking.getDriverId()!=null)
                 throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, "car can't be driven while in maintenance");
         }
     }
