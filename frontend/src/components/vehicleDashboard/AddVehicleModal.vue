@@ -45,7 +45,6 @@
 </script>
 
 <template>
-  <!-- !TODO! Only allow numbers in certain input fields -->
   <BModal v-if="true" id="creation-dialog" @on-cancel="hide(); page = 0" size="lg" hide-header hide-footer>
     <div class="modal-header">
       <h3>Fahrzeug hinzufügen</h3>
@@ -70,11 +69,11 @@
         <BFormRow class="mt-3">
           <BCol>
             <b-form-floating-label label-for="password">Momentane Jahresleistung (in km)*</b-form-floating-label>
-            <BFormInput v-model="res.mileage" id="mileage" required></BFormInput>
+            <BFormInput v-model="res.mileage" id="mileage" required></BFormInput> <!-- !TODO! Only allow numbers -->
           </BCol>
           <BCol>
             <b-form-floating-label label-for="annualPerformance">Erwartete Jahresleitstung (in km)*</b-form-floating-label>
-            <BFormInput v-model="res.annualPerformance" id="annualPerformance" required></BFormInput>
+            <BFormInput v-model="res.annualPerformance" id="annualPerformance" required></BFormInput> <!-- !TODO! Only allow numbers -->
           </BCol>
         </BFormRow>
         <BFormRow class="mt-3">
@@ -87,12 +86,6 @@
             <BFormInput v-model="res.chassisNumber" id="chassisNumber" placeholder="WOL000036"></BFormInput>
           </BCol>
         </BFormRow>
-        <b-row class="mt-4 text-right">
-          <b-col>
-            <b-button type="button" @click="page++" variant="primary" class="mr-2">Weiter</b-button>
-            <b-button type="button" @click="hide(); page = 0" variant="secondary">Abbrechen</b-button>
-          </b-col>
-        </b-row>
       </div>
       <div :class="page == 1 ? 'd-block' : 'd-none'">
         <BFormRow>
@@ -111,12 +104,6 @@
             <BFormInput v-model="resInsurance.expiration" type="date" id="expirationDate"></BFormInput>
           </BCol>
         </BFormRow>
-        <b-row class="mt-4 text-right">
-          <b-col>
-            <b-button type="button" @click="page++" variant="primary" class="mr-2">Weiter</b-button>
-            <b-button type="button" @click="hide(); page = 0" variant="secondary">Abbrechen</b-button>
-          </b-col>
-        </b-row>
       </div>
       <div :class="page == 2 ? 'd-block' : 'd-none'">
         <BFormRow>
@@ -139,12 +126,6 @@
             <BFormInput v-model="resGasCard.pin" type="password" id="pin"></BFormInput>
           </BCol>
         </BFormRow>
-        <b-row class="mt-4 text-right">
-          <b-col>
-            <b-button type="button" @click="page++" variant="primary" class="mr-2">Weiter</b-button>
-            <b-button type="button" @click="hide(); page = 0" variant="secondary">Abbrechen</b-button>
-          </b-col>
-        </b-row>
       </div>
       <div :class="page == 3 ? 'd-block' : 'd-none'">
         <BFormRow>
@@ -163,13 +144,17 @@
             <BFormInput v-model="resPricing.leasingCostNet" id="leasingCostNet" placeholder="150"></BFormInput>
           </BCol>
         </BFormRow>
-        <b-row class="mt-4 text-right">
-          <b-col>
-            <b-button type="submit" variant="primary" class="mr-2">Fahrzeug hinzufügen</b-button>
-            <b-button type="button" @click="hide(); page = 0" variant="secondary">Abbrechen</b-button>
-          </b-col>
-        </b-row>
       </div>
+      <b-row class="mt-4">
+        <b-col>
+          <b-button type="button" @click="page--" variant="primary" class="mr-2" :disabled="page == 0">Zurück</b-button>
+          <b-button type="button" @click="page++" variant="primary" class="mr-2" :disabled="page == 3">Weiter</b-button>
+        </b-col>
+        <b-col class="text-right">
+          <b-button type="submit" variant="primary" class="mr-2">Fahrzeug hinzufügen</b-button>
+          <b-button type="button" @click="hide(); page = 0" variant="secondary">Abbrechen</b-button>
+        </b-col>
+      </b-row>
     </BForm>
   </BModal>
 </template>
