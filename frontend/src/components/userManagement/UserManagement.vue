@@ -6,7 +6,7 @@ import AddUserModal from "@/components/userManagement/AddUserModal.vue";
 import ConfirmRemovalModal from "@/components/userManagement/ConfirmRemovalModal.vue";
 import {Roles, User} from "@/main";
 import EditUserModal from "@/components/userManagement/EditUserModal.vue";
-import { getAllPilots, removePilot } from "@/components/userManagement/UsermanagementRestCalls";
+import { getAllPilots, addPilot, removePilot } from "@/components/userManagement/UsermanagementRestCalls";
 
 let editedUserId: Ref<string> = ref('')
 let editedUser: Ref<User | null> = ref(null)
@@ -32,6 +32,7 @@ getAllPilots().then(res => {
 function loadPilot(p: any) : void{
   let role: Roles = Roles.TRAVEL_OFFICE
 
+  // !TODO!
   if(p.role == 'security'){
     role = Roles.SECURITY
   } else if(p.role == 'admin'){
@@ -69,8 +70,10 @@ function convertUserData(): TableItem[] {
 usersCoverted.value = convertUserData()
 
 function addUser(user: User): void {
-  // !TODO! Add user to database
+  // Add user to database
+  addPilot(user)
 
+  // Update UI
   usersCoverted.value = []
   users.value.push(user)
   usersCoverted.value = convertUserData()

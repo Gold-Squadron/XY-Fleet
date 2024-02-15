@@ -25,6 +25,7 @@ public class XYRestServer {
                     response.setAccessControlAllowCredentials(true);
                     response.getAccessControlAllowMethods().add(Method.GET);
                     response.getAccessControlAllowMethods().add(Method.DELETE);
+                    response.getAccessControlAllowMethods().add(Method.PUT);
                     response.getAccessControlAllowMethods().add(Method.OPTIONS);
                     response.getAccessControlAllowHeaders().add("Content-Type");
                     response.getAccessControlAllowHeaders().add("Origin");

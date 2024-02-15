@@ -1,3 +1,5 @@
+import type {User} from "@/main";
+
 const headers: Headers = new Headers()
 
 //endregion Types
@@ -23,11 +25,19 @@ export async function removePilot(id: number): Promise<void> {
         headers: headers,
     })
 
-    let response = await fetch(request)
+    await fetch(request)
 }
 
-// !TODO!
-export async function addPilot(data: object): Promise<void> {
+export async function addPilot(user: User): Promise<void> {
+    const url: string = 'user'
+    const dataQuery: string = `name=${user.name}&password=${user.password}&is_driver=${Number(user.isDriver)}&role=${user.role}`
+
+    const request: Request = new Request(`http://127.0.0.1:8080/${url}?user=nsimon&secret=123&${dataQuery}`, {
+        method: 'PUT',
+        headers: headers,
+    })
+
+    await fetch(request)
 }
 
 export async function getAsJson(url: string): Promise<any[] | any> {
