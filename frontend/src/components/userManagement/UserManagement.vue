@@ -1,18 +1,38 @@
 <!--suppress VueUnrecognizedSlot -->
 <script setup lang="ts">
-  import {type Ref, ref, toRaw} from 'vue';
-  import {type TableItem, useModal} from "bootstrap-vue-next";
-  import AddUserModal from "@/components/userManagement/AddUserModal.vue";
-  import ConfirmRemovalModal from "@/components/userManagement/ConfirmRemovalModal.vue";
-  import {Roles, User} from "@/main";
+import {type Ref, ref, toRaw} from 'vue';
+import {type TableItem, useModal} from "bootstrap-vue-next";
+import AddUserModal from "@/components/userManagement/AddUserModal.vue";
+import ConfirmRemovalModal from "@/components/userManagement/ConfirmRemovalModal.vue";
+import {Roles, User} from "@/main";
+import {getAllPilots, addPilot, removePilot} from "@/components/userManagement/UsermanagementRestCalls";
 
-  function showModal(id: string): void {
+function showModal(id: string): void {
     const {show} = useModal(id)
     show()
   }
 
-  // Demodata
-  let users = ref([new User('22323fcvd', 'Luca Außem', 'luca-aussem@t-online.de', '1234', Roles.ADMIN, true), new User('c84nfakhf', 'Noah Simon', 'snoah@gmail.com', '4321')]);
+  let users: Ref<User[]> = ref([])
+
+  // Load data from database
+  getAllPilots().then(res => {
+    res.forEach(pilot => { loadPilot(pilot) })
+    usersCoverted.value = convertUserData()
+  })
+
+  function loadPilot(p: any) : void{
+    let role: Roles = Roles.TRAVEL_OFFICE
+
+    if(p.role == 'security'){
+      role = Roles.SECURITY
+    }else if(p.role == 'admin'){
+      role = Roles.ADMIN
+    }
+
+    let user: User  = new User(p.id, p.name, 'new-mail', '', role, !!p.is_driver)
+
+    users.value.push(user)
+  }
 
   // Convert the raw data into the rendering format
   let usersCoverted: Ref<TableItem[]> = ref([])
@@ -35,19 +55,22 @@
     return dataConverted
   }
 
-  usersCoverted.value = convertUserData()
-
   function addUser(user: User): void {
     // !TODO! Add user to database
 
+    // Update ui
     usersCoverted.value = []
     users.value.push(user)
     usersCoverted.value = convertUserData()
   }
 
   function removeUser(): void {
-    // !TODO! Remove user from database
+    // Remove user from database
+    selectedIds.value.forEach(id => {
+      removePilot(Number(id))
+    })
 
+    // Update ui
     usersCoverted.value = []
     users.value = users.value.filter(user => !selectedIds.value.includes(user.getId()))
     usersCoverted.value = convertUserData()
@@ -127,9 +150,6 @@
         <BFormSelect v-model="data.item.isDriver" :options="selectDriver"></BFormSelect>
       </template>
     </b-table>
-    <BFormGroup id="input-group-3" label="Food:" label-for="input-3">
-      <BFormSelect :plain=true id="input-3" v-model="form.food" :options="[{text: 'Select One', value: null}, 'Carrots', 'Beans', 'Tomatoes', 'Corn']" required />
-    </BFormGroup>
 
     <AddUserModal @createUser="addUser"></AddUserModal>
     <ConfirmRemovalModal @removeUser="removeUser"></ConfirmRemovalModal>
@@ -139,6 +159,13 @@
 <style scoped>
   select {
     width: fit-content;
+  }
+
+  *{
+    color: white;
+  }
+  select{
+    color:black;
   }
 </style>
 
