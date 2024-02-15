@@ -55,12 +55,13 @@
   export default {
     data() {
       return {
-        selectRoles: [
-          {value: Roles.ADMIN, text: 'Admin'},
-          {value: Roles.USER, text: 'Benutzer'},
-          {value: Roles.SECURITY, text: 'Security'},
-          {value: Roles.TRAVEL_OFFICE, text: 'Travel Office'},
-        ]
+        selectRoles: {
+          [Roles.ADMIN]         : 'Admin',
+          [Roles.TRAVEL_OFFICE] : 'Travel Office',
+          [Roles.SECURITY]      : 'Security',
+          [Roles.USER]          : 'Benutzer',
+          [Roles.NONE]          : '-'
+        }
       }
     }
   }

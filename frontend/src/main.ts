@@ -22,7 +22,8 @@ export enum Roles{
     ADMIN,
     SECURITY,
     TRAVEL_OFFICE,
-    USER
+    USER,
+    NONE
 }
 
 export class User {

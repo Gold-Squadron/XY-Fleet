@@ -8,9 +8,18 @@ import {Roles, User} from "@/main";
 import EditUserModal from "@/components/userManagement/EditUserModal.vue";
 import { getAllPilots, addPilot, removePilot, editPilot } from "@/components/userManagement/UsermanagementRestCalls";
 
+let selectedIds: Ref<String[]> = ref([])
 let editedUserId: Ref<string> = ref('')
 let editedUser: Ref<User | null> = ref(null)
 let editedUserName: string = ''
+
+const roleConversion: any = {
+  'admin' : Roles.ADMIN,
+  'security' : Roles.SECURITY,
+  'user' : Roles.USER,
+  'travel_office' : Roles.TRAVEL_OFFICE,
+  'none' : Roles.NONE
+}
 
 function showModal(id: string, userId: string | null = null): void {
   if(userId){
@@ -36,23 +45,13 @@ function loadAllPilots() : void{
 loadAllPilots()
 
 function loadPilot(p: any) : void{
-  let role: Roles = Roles.TRAVEL_OFFICE
-
-  // !TODO!
-  if(p.role == 'security'){
-    role = Roles.SECURITY
-  } else if(p.role == 'admin'){
-    role = Roles.ADMIN
-  }
-
+  let role = roleConversion[p.role]
   let user: User  = new User(p.id, p.name, '', role, !!p.is_driver)
 
   users.value.push(user)
 }
 
 // Convert the raw data into the rendering format
-let selectedIds: Ref<String[]> = ref([])
-
 let usersCoverted: Ref<TableItem[]> = ref([])
 
 function convertUserData(): TableItem[] {
@@ -76,7 +75,9 @@ function convertUserData(): TableItem[] {
 usersCoverted.value = convertUserData()
 
 function addUser(user: User): void {
-  addPilot(user).then(() => {
+  const roleConverted = Object.keys(roleConversion).find(key => roleConversion[key] == user.role)
+
+  addPilot(user, roleConverted).then(() => {
     loadAllPilots()
   })
 }
@@ -134,7 +135,9 @@ function highlightRow(index: number, mark: boolean = true): void {
 
 // !TODO! Warning if name already exists
 function editUser(user: User) : void {
-  editPilot(user, user.name == editedUserName)
+  const roleConverted = Object.keys(roleConversion).find(key => roleConversion[key] == user.role)
+
+  editPilot(user, user.name == editedUserName, roleConverted)
 
   usersCoverted.value = convertUserData()
 }
@@ -162,7 +165,7 @@ function getUserById(id: string) : any {
                          @change="selectRow(data.index)"></b-form-checkbox>
       </template>
       <template #cell(role)="data: any">
-        {{ selectRoles[data.item.role].text }}
+        {{ selectRoles[data.item.role] }} <!-- !FIXME! -->
       </template>
       <template #cell(isDriver)="data: any">
         {{ data.item['isDriver'] ? 'Ja' : 'Nein' }}
@@ -179,38 +182,39 @@ function getUserById(id: string) : any {
 </template>
 
 <style scoped>
-select {
-  width: fit-content;
-}
+  select {
+    width: fit-content;
+  }
 
-.bi-pencil:hover {
-  cursor: pointer;
-  opacity: 0.6;
-}
+  .bi-pencil:hover {
+    cursor: pointer;
+    opacity: 0.6;
+  }
 
-*{
-  color:white
-}
+  *{
+    color:white
+  }
 </style>
 
 <script lang="ts">
-export default {
-  data() {
-    return {
-      selectRoles: [
-        {value: Roles.ADMIN, text: 'Admin'},
-        {value: Roles.USER, text: 'Benutzer'},
-        {value: Roles.SECURITY, text: 'Security'},
-        {value: Roles.TRAVEL_OFFICE, text: 'Travel Office'},
-      ],
-      fields: [
-        {key: 'cb',       thStyle: {width: '25px'}},
-        {key: 'name',     label: 'Name'},
-        {key: 'role',     label: 'Rolle'},
-        {key: 'isDriver', label: 'Darf fahren'},
-        {key: 'editRow',  thStyle: {width: '25px'}}
-      ]
+  export default {
+    data() {
+      return {
+        selectRoles: {
+          [Roles.ADMIN]         : 'Admin',
+          [Roles.TRAVEL_OFFICE] : 'Travel Office',
+          [Roles.SECURITY]      : 'Security',
+          [Roles.USER]          : 'Benutzer',
+          [Roles.NONE]          : '-'
+        },
+        fields: [
+          {key: 'cb',       thStyle: {width: '25px'}},
+          {key: 'name',     label: 'Name'},
+          {key: 'role',     label: 'Rolle'},
+          {key: 'isDriver', label: 'Darf fahren'},
+          {key: 'editRow',  thStyle: {width: '25px'}}
+        ]
+      }
     }
   }
-}
 </script>
