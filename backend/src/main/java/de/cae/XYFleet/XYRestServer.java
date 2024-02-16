@@ -1,4 +1,5 @@
 package de.cae.XYFleet;
+
 import org.restlet.Server;
 import de.cae.XYFleet.authentication.LDAPAuthenticator;
 import de.cae.XYFleet.authentication.XYAuthorizer;
@@ -6,8 +7,6 @@ import org.restlet.*;
 import org.restlet.data.Method;
 import org.restlet.data.Protocol;
 import org.restlet.data.Status;
-import org.restlet.service.CorsService;
-import org.restlet.service.Service;
 
 
 public class XYRestServer {
@@ -27,6 +26,7 @@ public class XYRestServer {
                     response.getAccessControlAllowMethods().add(Method.DELETE);
                     response.getAccessControlAllowMethods().add(Method.PUT);
                     response.getAccessControlAllowMethods().add(Method.POST);
+                    response.getAccessControlAllowMethods().add(Method.PUT);
                     response.getAccessControlAllowMethods().add(Method.OPTIONS);
                     response.getAccessControlAllowHeaders().add("Content-Type");
                     response.getAccessControlAllowHeaders().add("Origin");

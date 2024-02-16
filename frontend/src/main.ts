@@ -17,14 +17,7 @@ export enum Views {
     USER_MANAGEMENT
 }
 
-function generateAvatarBasedOnInitials(driver: string) {
-    return `<span data-v-da537051="" class="b-avatar bg-secondary rounded-circle" style="width: 1.6rem; height: 1.6rem">
-            <span class="b-avatar-text">
-                ${driver.substring(0, 2)}
-            </span>
-          </span>
-`;
-}
+
 export enum Roles{
     ADMIN,
     SECURITY,
@@ -34,14 +27,31 @@ export enum Roles{
 }
 
 export class User {
-    constructor(private uiId: String = "", public name: string = "", public password: string = "", public role: Roles = Roles.ADMIN, public isDriver: boolean = false) {
-    }
+    constructor(private uiId: String = "", public name: string = "", public email: string = "", public password: string = "", public role: Roles = Roles.ADMIN, public isDriver: any = false) {
+        constructor(private
+        uiId: String = "", public
+        name: string = "", public
+        password: string = "", public
+        role: Roles = Roles.ADMIN, public
+        isDriver: boolean = false
+    )
+        {
+        }
 
-    public getUiId(): String{
-        return this.uiId
-    }
-    public setUiId(id: string): void {
-        this.uiId = id
+    public
+        getUiId()
+    :
+        String
+        {
+            return this.uiId
+        }
+    public
+        setUiId(id
+    :
+        string
+    ):
+        void {
+            this.uiId = id
     }
 }
 
@@ -68,13 +78,18 @@ export class GasCard {
 export class Insurance {
     constructor(public number: any = null, public registrationDate: any = null, public expiration: any = null) {
     }
-}
 
-export class Pricing {
-    constructor(public purchaseDate: any = null, public listPriceGross: any = null, public leasingCostNet : any = null) {
+    public getUiId(): String{
+        return this.uiId
     }
+    public setUiId(id: String) : void {
+        this.uiId = id
 }
-
+}
+export class Pricing {
+            constructor(public purchaseDate: any = null, public listPriceGross: any = null, public leasingCostNet : any = null) {
+            }
+            }
 export class Booking {
 
     private refStart : Ref<Date> | null = null;

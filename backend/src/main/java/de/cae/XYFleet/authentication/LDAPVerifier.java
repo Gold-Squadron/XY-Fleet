@@ -23,6 +23,8 @@ public class LDAPVerifier extends SecretVerifier implements Enroler {
         //SELECT * FROM USERS WHERE USERS.NAME = identifier
         DSLContext dslContext = Main.getDSLContext();
         record = dslContext.fetchOne(USERS, USERS.NAME.eq(identifier));
+        DSLContext dslContext = Database.getDSLContext();
+        record = dslContext.fetchOne(USERS, USERS.NAME.eq(identifier));
 
         return (record != null && compare(record.getPassword().toCharArray(), secret))? SecretVerifier.RESULT_VALID : SecretVerifier.RESULT_INVALID;
     }

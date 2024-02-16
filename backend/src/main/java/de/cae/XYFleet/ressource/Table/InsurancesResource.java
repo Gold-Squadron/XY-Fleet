@@ -15,7 +15,6 @@ public class InsurancesResource extends XYServerResource {
         super.doInit();
         table = INSURANCES;
     }
-
     @Get
     public String toString() {
         checkInRole(XYAuthorizer.ROLE_SECURITY);
