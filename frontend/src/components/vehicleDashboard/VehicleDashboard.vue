@@ -12,10 +12,14 @@
     getInsurance,
     getPricing,
     addWing,
+    editWing,
+    editInsurance,
+    editPricing,
     getAllInsurances,
     getAllPricings,
     removeInsurance,
-    removeWing, removePricing
+    removeWing,
+    removePricing
   } from "@/components/vehicleDashboard/VehicleDashboardRestCalls";
   import {getAllBookings, removeBooking} from "@/components/userManagement/UsermanagementRestCalls";
 
@@ -186,14 +190,13 @@
   }
 
   function editVehicle(data: Vehicle): void {
-    let vehicle = getVehicleById(editeVehicleId.value)
+    editWing(data).then(res => {
+      const pricingId = res.pricing_id
+      const insuranceId = res.insurance_id
 
-    if (vehicle == undefined) {
-      return
-    }
-
-    // !FIXME!
-    vehicle = data
+      editPricing(data, pricingId)
+      editInsurance(data, insuranceId)
+    })
 
     vehiclesConverted.value = convertVehicleData()
   }

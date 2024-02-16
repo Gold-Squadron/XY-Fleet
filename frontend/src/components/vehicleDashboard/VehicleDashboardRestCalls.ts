@@ -1,4 +1,3 @@
-import type {User} from "@/main";
 import {Vehicle} from "@/main";
 
 const headers: Headers = new Headers()
@@ -88,7 +87,6 @@ export async function removePricing(id: number): Promise<void> {
 }
 
 export async function addWing(w: Vehicle): Promise<void> {
-
     const url: string = 'xywing'
     const dataQuery: string = `license_plate=${w.licensePlate}&brand=${w.brand}&model=${w.model}&chassis_number=${w.chassisNumber}&mileage=${w.mileage}&expected_mileage=${w.annualPerformance}&annual_performance=${w.annualPerformance}&insurance_id=100&type=${w.type}&pricing_id=100`
     const request: Request = new Request(`http://127.0.0.1:8080/${url}?${dataQuery}`, {
@@ -99,17 +97,47 @@ export async function addWing(w: Vehicle): Promise<void> {
     await fetch(request)
 }
 
-export async function editPilot(user: User, sameName: boolean, role: any): Promise<void> {
-    const nameParam: string = sameName ? '' : `name=${user.name}`
-    const url: string = `user/${user.getUiId()}`
-    const dataQuery: string = `${nameParam}&is_driver=${Number(user.isDriver)}&role=${role}`
+export async function editWing(w: Vehicle): Promise<any> {
+    headers.set('Content-Type', 'application/json')
+    headers.set('Accept', 'application/json')
 
-    const request: Request = new Request(`http://127.0.0.1:8080/${url}?${dataQuery}`, {
+    const url: string = `xywing/${w.getUiId()}`
+    const dataQuery: string = `license_plate=${w.licensePlate}&brand=${w.brand}&model=${w.model}&chassis_number=${w.chassisNumber}&mileage=${w.mileage}&expected_mileage=${w.annualPerformance}&annual_performance=${w.annualPerformance}&type=${w.type}`
+
+    // Edit wing
+    const wingRequest = new Request(`http://127.0.0.1:8080/${url}?${dataQuery}`, {
         method: 'POST',
         headers: headers,
     })
 
-    await fetch(request)
+    let response = await fetch(wingRequest)
+    let jsonResponse: any = await response.json()
+    if (jsonResponse.code !== undefined && jsonResponse !== 200) {
+        console.error(jsonResponse)
+    }
+    return jsonResponse
+}
+
+export async function editPricing(w: Vehicle, id: number): Promise<void> {
+    const url = `pricing/${id}`
+    const dataQuery: string = `purchase_date=${w.pricing.purchaseDate}&list_price_gross=${w.pricing.listPriceGross}&leasing_installment_net=${w.pricing.leasingCostNet}`
+    const pricingRequest = new Request(`http://127.0.0.1:8080/${url}?${dataQuery}`, {
+        method: 'POST',
+        headers: headers,
+    })
+
+    let response = await fetch(pricingRequest)
+}
+
+export async function editInsurance(w: Vehicle, id: number): Promise<void> {
+    const url = `insurance/${id}`
+    const dataQuery: string = `insurance_number=${w.insurance.number}&registration_date=${w.insurance.registrationDate}&insurance_number_expiration=${w.insurance.expiration}`
+    const insuranceRequest = new Request(`http://127.0.0.1:8080/${url}?${dataQuery}`, {
+        method: 'POST',
+        headers: headers,
+    })
+
+    let response = await fetch(insuranceRequest)
 }
 
 export async function getAsJson(url: string): Promise<any[] | any> {
