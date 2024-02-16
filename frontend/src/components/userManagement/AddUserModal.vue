@@ -9,29 +9,6 @@
   }>()
 
   let res = new User()
-  function createUser(): User {
-
-    // This ID is used for reference in the table (not in the db)
-    // Generate id
-    let id: String = ''
-
-    while (true) {
-      id = Math.random().toString(16)
-      id = id.substring(id.length - 9)
-
-      if (checkId(id)) {
-        break
-      }
-    }
-
-    res.setUiId(id)
-    return res
-  }
-
-  function checkId(id: String): boolean {
-    // !Todo! Check if id is in use
-    return true
-  }
 </script>
 
 <template>
@@ -40,15 +17,11 @@
       <h3>Benutzer hinzufügen</h3>
     </div>
     <br>
-    <BForm @submit="$emit.call(null, 'createUser', createUser()); hide()">
+    <BForm @submit="$emit.call(null, 'createUser', res); hide()">
       <BFormRow>
         <BCol>
           <b-form-floating-label label-for="name">Name</b-form-floating-label>
           <BFormInput v-model="res.name" id="name" placeholder="mmustermann" required></BFormInput>
-        </BCol>
-        <BCol>
-          <b-form-floating-label label-for="email">E-Mail Adresse</b-form-floating-label>
-          <BFormInput v-model="res.email" type="email" id="email" placeholder="example@domain.com" required></BFormInput>
         </BCol>
       </BFormRow>
       <BFormRow class="mt-3">
@@ -78,15 +51,17 @@
 
 <script lang="ts">
   import {Roles} from "@/main";
-  
+
   export default {
     data() {
       return {
-        selectRoles: [
-          {value: Roles.ADMIN, text: 'Admin'},
-          {value: Roles.SECURITY, text: 'Security'},
-          {value: Roles.TRAVEL_OFFICE, text: 'Travel Office'}
-        ]
+        selectRoles: {
+          [Roles.ADMIN]         : 'Admin',
+          [Roles.TRAVEL_OFFICE] : 'Travel Office',
+          [Roles.SECURITY]      : 'Security',
+          [Roles.USER]          : 'Benutzer',
+          [Roles.NONE]          : '-'
+        }
       }
     }
   }

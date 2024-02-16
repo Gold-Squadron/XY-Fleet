@@ -4,7 +4,7 @@
   const {hide} = useModal('confirmation-dialog')
 
   defineEmits<{
-    (event: "removeUser"): void
+    (event: "removeVehicle"): void
   }>()
 </script>
 
@@ -17,7 +17,7 @@
     </b-row>
     <b-row>
       <b-col>
-        <b-button class="mt-3" size="sm" variant="danger" block @click="$emit.call(null, 'removeUser'); hide()">Ja
+        <b-button class="mt-3" size="sm" variant="danger" block @click="$emit.call(null, 'removeVehicle'); hide()">Ja
         </b-button>
       </b-col>
       <b-col>
@@ -26,3 +26,6 @@
     </b-row>
   </BModal>
 </template>
+
+<script lang="ts">
+</script>
