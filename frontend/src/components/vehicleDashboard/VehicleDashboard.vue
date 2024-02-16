@@ -2,11 +2,12 @@
 <script setup lang="ts">
   import {type Ref, ref, toRaw} from 'vue';
   import {type TableItem, useModal} from "bootstrap-vue-next";
-  import {Vehicle} from "@/main";
+  import {GasCard, Insurance, Pricing, User, Vehicle} from "@/main";
   import AddVehicleModal from "@/components/vehicleDashboard/AddVehicleModal.vue";
   import ConfirmRemovalModal from "@/components/vehicleDashboard/ConfirmRemovalModal.vue";
   import EditVehicleModal from "@/components/vehicleDashboard/EditVehicleModal.vue";
   import VehicleDetailsModal from "@/components/vehicleDashboard/VehicleDetailsModal.vue";
+  import{getAllXYWings, getInsurance, getPricing} from "@/components/vehicleDashboard/VehicleDashboardRestCalls";
 
   let editeVehicleId: Ref<string> = ref('')
   let editedVehicle: Ref<Vehicle | null> = ref(null)
@@ -21,12 +22,40 @@
     show()
   }
 
-  // Demodata
-  let vehicles = ref([new Vehicle('22323fcvd', 'DN-LA186', 'Opel', 'Corsa E', '123456789', 30000, 35000, 'Kleinwagen')])
-
-  // Convert the raw data into the rendering format
+  let vehicles: Ref<Vehicle[]> = ref([])
   let selectedIds: Ref<String[]> = ref([])
 
+  // Load data from database
+  function loadAllWings(): void {
+    vehicles.value = []
+    getAllXYWings().then(res => {
+          res.forEach(wing => {
+            loadWing(wing)
+          })
+          vehiclesConverted.value = convertVehicleData()
+        }
+    )
+  }
+
+  function loadWing(w: any): void {
+    let wing = new Vehicle(w.id, w.license_plate, w.brand, w.model, w.chassis_number, w.mileage, w.annual_performance, w.type)
+
+    // Load rest of data
+    getInsurance(w.insurance_id).then(i => {
+      // !TODO! Change from number to date
+      wing.insurance = new Insurance(i.insurance_number, i.registration_date, i.insurance_number_expiration)
+    })
+    getPricing(w.pricing_id).then(p => {
+      wing.prcing = new Pricing(p.purchase_date, p.list_price_gross, p.leasing_installment_net)
+    })
+
+    vehicles.value.push(wing)
+  }
+
+  loadAllWings()
+
+
+  // Convert the raw data into the rendering format
   let vehiclesConverted: Ref<TableItem[]> = ref([])
 
   function convertVehicleData(): TableItem[] {
@@ -162,6 +191,10 @@
   .bi-pencil:hover, .bi-info-circle:hover {
     cursor: pointer;
     opacity: 0.6;
+  }
+
+  *{
+    color: white
   }
 </style>
 
