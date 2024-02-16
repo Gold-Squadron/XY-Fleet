@@ -9,7 +9,6 @@ declare module 'vue' {
   export interface GlobalComponents {
     AddUserModal: typeof import('./src/components/userManagement/AddUserModal.vue')['default']
     AddVehicleModal: typeof import('./src/components/vehicleDashboard/AddVehicleModal.vue')['default']
-    AddVehicleModal: typeof import('./src/components/vehicleDashboard/AddVehicleModal.vue')['default']
     BAvatar: typeof import('bootstrap-vue-next')['BAvatar']
     BButton: typeof import('bootstrap-vue-next')['BButton']
     BCard: typeof import('bootstrap-vue-next')['BCard']
@@ -43,8 +42,5 @@ declare module 'vue' {
     UserManagement: typeof import('./src/components/userManagement/UserManagement.vue')['default']
     VehicleDashboard: typeof import('./src/components/vehicleDashboard/VehicleDashboard.vue')['default']
     VehicleDetailsModal: typeof import('./src/components/vehicleDashboard/VehicleDetailsModal.vue')['default']
-    BFormFloatingLabel: typeof import('bootstrap-vue-next')['BFormFloatingLabel']
-    EditUserModal: typeof import('./src/components/userManagement/EditUserModal.vue')['default']
-    EditVehicleModal: typeof import('./src/components/vehicleDashboard/EditVehicleModal.vue')['default']
   }
 }

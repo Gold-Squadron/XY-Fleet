@@ -27,15 +27,31 @@ export enum Roles{
 }
 
 export class User {
-    constructor(private uiId: String = "", public name: string = "", public email: string = "" ,public password: string = "", public role: Roles = Roles.ADMIN, public isDriver: any = false) {
-    constructor(private uiId: String = "", public name: string = "", public password: string = "", public role: Roles = Roles.ADMIN, public isDriver: boolean = false) {
-    }
+    constructor(private uiId: String = "", public name: string = "", public email: string = "", public password: string = "", public role: Roles = Roles.ADMIN, public isDriver: any = false) {
+        constructor(private
+        uiId: String = "", public
+        name: string = "", public
+        password: string = "", public
+        role: Roles = Roles.ADMIN, public
+        isDriver: boolean = false
+    )
+        {
+        }
 
-    public getUiId(): String{
-        return this.uiId
-    }
-    public setUiId(id: string): void {
-        this.uiId = id
+    public
+        getUiId()
+    :
+        String
+        {
+            return this.uiId
+        }
+    public
+        setUiId(id
+    :
+        string
+    ):
+        void {
+            this.uiId = id
     }
 }
 
