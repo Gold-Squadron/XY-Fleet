@@ -1,5 +1,5 @@
 package de.cae.XYFleet;
-
+import org.restlet.Server;
 import de.cae.XYFleet.authentication.LDAPAuthenticator;
 import de.cae.XYFleet.authentication.XYAuthorizer;
 import org.restlet.*;
@@ -42,7 +42,7 @@ public class XYRestServer {
 
 
             component.getDefaultHost().attach("/ldapauthenticator", LDAPAuthenticator.class);
-            component.getDefaultHost().attach("/test", test.class);
+            component.getDefaultHost().attach("/test", TestResource.class);
 
             component.getDefaultHost().attachDefault(new XYAuthorizer());
             component.start();
