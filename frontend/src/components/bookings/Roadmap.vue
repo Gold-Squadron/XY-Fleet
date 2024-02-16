@@ -172,7 +172,7 @@ function afterLoad() {
     </div>
   </div>
   <Suspense>
-    <CreateBookingModal @refresh="refresh" @createVirtualBooking="createVirtualBooking" :cars="xywings" :pilots="pilots"/>
+    <CreateBookingModal @refresh="refresh" @createVirtualBooking="createVirtualBooking" :cars="xywings" :pilots="pilots" :type="'booking'"/>
   </Suspense>
 </div>
 </template>

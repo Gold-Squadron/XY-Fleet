@@ -133,7 +133,7 @@
             </datalist>
           </b-input-group>
           <b-input-group v-else>
-            <BFormInput id="driver" list="input-list" placeholder="Typ" v-model="type"></BFormInput>
+            <BFormInput id="driver" list="input-list" placeholder="Typ"></BFormInput>
             <b-tooltip target="driver" triggers="hover">
               Code monkey needs coffee
             </b-tooltip>
