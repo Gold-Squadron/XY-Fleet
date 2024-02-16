@@ -10,8 +10,6 @@ import org.restlet.security.Enroler;
 import org.restlet.security.Role;
 import org.restlet.security.SecretVerifier;
 
-import java.util.Arrays;
-
 import static de.cae.XYFleet.authentication.XYAuthorizer.*;
 import static org.jooq.codegen.XYFleet.Tables.USERS;
 import static org.restlet.Application.getCurrent;
@@ -22,10 +20,8 @@ public class LDAPVerifier extends SecretVerifier implements Enroler {
     @Override
     public int verify(String identifier, char[] secret) throws ResourceException {
         //SELECT * FROM USERS WHERE USERS.NAME = identifier
-
-        System.out.println("identifier = " + identifier + ", secret = " + Arrays.toString(secret));
-
-        record = Database.getDSLContext().fetchOne(USERS, USERS.NAME.eq(identifier));
+        DSLContext dslContext = Database.getDSLContext();
+        record = dslContext.fetchOne(USERS, USERS.NAME.eq(identifier));
         DSLContext dslContext = Database.getDSLContext();
         record = dslContext.fetchOne(USERS, USERS.NAME.eq(identifier));
 

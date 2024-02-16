@@ -33,16 +33,6 @@
           <BFormInput id="name" v-model="res.name" placeholder="mmustermann" required></BFormInput>
         </BCol>
         <BCol>
-          <b-form-floating-label label-for="email">E-Mail Adresse</b-form-floating-label>
-          <BFormInput type="email" id="email" v-model="res.email" placeholder="example@domain.com" required></BFormInput>
-        </BCol>
-      </BFormRow>
-      <BFormRow class="mt-3">
-        <BCol>
-          <b-form-floating-label label-for="password">Password</b-form-floating-label>
-          <BFormInput id="password" v-model="res.password" type="password" required></BFormInput>
-        </BCol>
-        <BCol>
           <b-form-floating-label label-for="role">Rolle</b-form-floating-label>
           <b-form-select id="role" v-model="res.role" :options="selectRoles" class="w-100 form-control"></b-form-select>
         </BCol>
@@ -67,11 +57,13 @@
   export default {
     data() {
       return {
-        selectRoles: [
-          {value: Roles.ADMIN, text: 'Admin'},
-          {value: Roles.SECURITY, text: 'Security'},
-          {value: Roles.TRAVEL_OFFICE, text: 'Travel Office'}
-        ]
+        selectRoles: {
+          [Roles.ADMIN]         : 'Admin',
+          [Roles.TRAVEL_OFFICE] : 'Travel Office',
+          [Roles.SECURITY]      : 'Security',
+          [Roles.USER]          : 'Benutzer',
+          [Roles.NONE]          : '-'
+        }
       }
     }
   }

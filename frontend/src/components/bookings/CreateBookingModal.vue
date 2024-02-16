@@ -3,8 +3,8 @@
   import {computed, type ComputedRef, type Ref, ref, type WritableComputedRef} from "vue";
   import {addFlight, Booking, getPilots, getVehicles, type RPilot, type RXYWing} from "./RoadmapRestCalls";
 
-  defineProps<{
-    cars?: RXYWing[],
+defineProps<{
+  cars?: string[],
     type: string
   }>()
 
@@ -37,7 +37,7 @@
     let car = vehicles.find(c => c.id == id)?.license_plate;
     return car ? car : "";
   }
-  
+
   let res = ref(new Booking())
   let comp =
       {
@@ -61,7 +61,7 @@
         })
       }
 
-  let driverName : WritableComputedRef<any> = computed({
+let driverName : WritableComputedRef<any> = computed({
     get() : string {
       if(res.value.driverId === -1) return "";
       return getUserById(res.value.driverId)
@@ -94,10 +94,10 @@
     hide(); // minimize the dialog temporarily
   }
 
-  function addBooking() {
-    //emit('createVirtualBooking', res.value.clone()) // DEBUG
-    // [REST-Call] FINAL
-    addFlight(res.value.asFlight()).then(x => {
+function addBooking() {
+  //emit('createVirtualBooking', res.value.clone()) // DEBUG
+  // [REST-Call] FINAL
+  addFlight(res.value.asFlight()).then(x => {
       console.table(x)
       if(x.code && x.code != 200) {
         alert(x)
@@ -138,7 +138,7 @@
               Code monkey needs coffee
             </b-tooltip>
             <datalist id="input-list">
-              <option v-for="el in pilots" :value="el.name">
+              <option v-for="el in pilots" :value="el">
                 {{el.name}}
               </option>
             </datalist>
@@ -154,7 +154,7 @@
       <BFormRow>
         <BCol>
           <BFormGroup label="Start Date" for="start-date">
-              <b-form-input id="start-date" type="date" v-model="comp.startDate.value"/>
+            <b-form-input id="start-date" type="date" v-model="comp.startDate.value"/>
           </BFormGroup>
         </BCol>
         <BCol>

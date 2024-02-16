@@ -12,56 +12,66 @@ let pilots = ref<RPilot[]>([]);
 let bookings : Ref<Booking[]> = ref([])
 let additionalEvents = ["TÜV Termin", "Reparaturen" , "Bereitschaft", "Auto nicht fahrbereit"]
 
-let chartStart : Ref<Date> = ref(new Date().translateDays(25));
-let chartEnd = computed(() => {return chartStart.value.translateDays(31)})
+
+bookings.value.push(new Booking("Green Smart", new Date("2024-02-2 10:00"), new Date("2024-02-3 24:00")));
+
+  function pushAndGenerate(number: number, number2: number, s: string, s2: string, none: string, number3: number, status: string = "") {
+    let val = new Booking(vehicles.value[number - 101], new Date(s), new Date(s2), none, ["lhelbig", "jwilleke", "nsimon", "laußem"][number2 - 100]);
+    val.status = status;
+    console.log(val)
+    bookings.value.push(val)
+  }
+
+  let chartStart: Ref<Date> = ref(new Date().translateDays(25));
+  let chartEnd = computed(() => {
+    return chartStart.value.translateDays(31)
+  })
 
 let previewMode = false;
 let previewElement: GanttBarObject | undefined = undefined;
 
-/// shifts the time/day on the component when the mouse scrolls
-/// any due to damn event browser support
-function mouseWheelHandler(inp : any) : boolean {
-  const e = window.event || inp; // old IE support
-  const delta = Math.max(-1, Math.min(1, (e.wheelDelta || -e.detail)));
+  /// shifts the time/day on the component when the mouse scrolls
+  /// any due to damn event browser support
+  function mouseWheelHandler(inp: any): boolean {
+    const e = window.event || inp; // old IE support
+    const delta = Math.max(-1, Math.min(1, (e.wheelDelta || -e.detail)));
 
-  chartStart.value = chartStart.value.translateDays(delta/4)
+    chartStart.value = chartStart.value.translateDays(delta * 1 / 4)
 
-  return false;
-}
+    return false;
+  }
 
-  function getUserById(driverId: number) : string {
-  if (isNaN(driverId)) return "If you see this, you f up"
-  return pilots.value.find(pilot => pilot.id == driverId)?.name as string;
-}
+
 
   //transforms the raw data into the rendering format
   const generatedBars = computed( () => {
-  let map = new Map<number, GanttBarObject[]>();
-    xywings.value.forEach(obj => map.set(obj.id, []))
+  let map = new Map<string, GanttBarObject[]>();
+    vehicles.value.forEach(name => map.set(name, []))
     bookings.value.forEach((booking) => {
       let stylingContent: CSSProperties = {
         borderRadius: "5px",
         background: "linear-gradient(117deg, rgba(97,217,3,1) 0%, rgba(21,124,0,1) 100%)",
         color: "white"
       };
-      if (booking.status == "maintenance") stylingContent.background = "linear-gradient(117deg, rgba(217,3,3,1) 0%, rgba(124,29,0,1) 100%)";
-      let label : string = (booking.reason != 'none' && booking.reason != '') ? booking.reason : getUserById(booking.driverId);
-      if (booking.hasHtml()) label = "";
+      if (booking.status == "broken") stylingContent.background = "linear-gradient(117deg, rgba(217,3,3,1) 0%, rgba(124,29,0,1) 100%)";
+      let label = (booking.reason != 'none' && booking.reason != '') ? booking.reason : booking.driver;
+      if (booking.html) label = "";
       let x: GanttBarObject = {
         myBeginDate: booking.getStartDateAsReference(),
         myEndDate: booking.getEndDateAsReference(),
         ganttBarConfig: {
-          id: "" + booking.id, // ... and a unique "id" property
-          label: booking.hasHtml() ? "" : label,
+          id: booking.car + booking.start.getTime(), // ... and a unique "id" property
+          label: label,
           hasHandles: booking.status === 'preview',
           immobile: booking.status !== 'preview',
           style: stylingContent,
           class: `bar-${booking.status}`,
-          html: (booking.hasHtml() ? booking.generateAvatarBasedOnInitials(getUserById(booking.driverId)) : "")
+          html: booking.html
         }
-      }
+        }
       if (booking.status === 'preview') previewElement = x;
-      map.get(booking.carId)?.push(x);
+      if (booking.status === 'preview') previewElement = x;
+      map.get(booking.car)?.push(x);
     })
     return map;
   })
@@ -69,9 +79,9 @@ function mouseWheelHandler(inp : any) : boolean {
   //this is where we query the server for new information... IF WE HAD ANY
   //TODO remove the parameter once the REST Interface works
   function createVirtualBooking(booking: Booking): void {
-    if(booking.status === "preview") previewMode = true;
-  bookings.value.push(booking);
-}
+    if (booking.status === "preview") previewMode = true;
+    bookings.value.push(booking);
+  }
 
   async function refresh() {
     console.log("gfb")
@@ -109,7 +119,6 @@ function mouseWheelHandler(inp : any) : boolean {
       show();
       return;
     }
-
     first.status = 'booking'
 
     //createBookingRestCall(first)
@@ -117,15 +126,18 @@ function mouseWheelHandler(inp : any) : boolean {
 
   }
 
-function afterLoad() {
-  let scrollable = document.getElementById("roadmap");
-  if (typeof scrollable != null) { // For different browsers - I regret using HTML already
-    scrollable?.addEventListener("mousewheel", mouseWheelHandler, false);
-    scrollable?.addEventListener("DOMMouseScroll", mouseWheelHandler, false);
+  function afterLoad() {
+    let scrollable = document.getElementById("roadmap");
+    if (typeof scrollable != null) { // For different browsers - I regret using HTML already
+      scrollable?.addEventListener("mousewheel", mouseWheelHandler, false);
+      scrollable?.addEventListener("DOMMouseScroll", mouseWheelHandler, false);
+    }
+
+  // $('#liveToast').toast('show')
+
+  for (let booking in bookings.value) {
+
   }
-
-
-  refresh();
 }
 
   onMounted(() => afterLoad());
