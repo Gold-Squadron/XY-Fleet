@@ -89,9 +89,9 @@
             <p>Mietkosten</p>
           </b-col>
           <b-col>
-            <p>{{ vehicle.prcing.purchaseDate }}</p>
-            <p>{{ vehicle.prcing.listPriceGross }}</p>
-            <p>{{ vehicle.prcing.leasingCostNet }}</p>
+            <p>{{ vehicle.pricing.purchaseDate }}</p>
+            <p>{{ vehicle.pricing.listPriceGross }}</p>
+            <p>{{ vehicle.pricing.leasingCostNet }}</p>
           </b-col>
         </b-row>
       </b-col>

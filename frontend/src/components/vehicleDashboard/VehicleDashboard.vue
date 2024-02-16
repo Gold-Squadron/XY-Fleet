@@ -2,12 +2,22 @@
 <script setup lang="ts">
   import {type Ref, ref, toRaw} from 'vue';
   import {type TableItem, useModal} from "bootstrap-vue-next";
-  import {GasCard, Insurance, Pricing, User, Vehicle} from "@/main";
+  import { Insurance, Pricing, Vehicle} from "@/main";
   import AddVehicleModal from "@/components/vehicleDashboard/AddVehicleModal.vue";
   import ConfirmRemovalModal from "@/components/vehicleDashboard/ConfirmRemovalModal.vue";
   import EditVehicleModal from "@/components/vehicleDashboard/EditVehicleModal.vue";
   import VehicleDetailsModal from "@/components/vehicleDashboard/VehicleDetailsModal.vue";
-  import{getAllXYWings, getInsurance, getPricing} from "@/components/vehicleDashboard/VehicleDashboardRestCalls";
+  import {
+    getAllXYWings,
+    getInsurance,
+    getPricing,
+    addWing,
+    getAllInsurances,
+    getAllPricings,
+    removeInsurance,
+    removeWing, removePricing
+  } from "@/components/vehicleDashboard/VehicleDashboardRestCalls";
+  import {getAllBookings, removeBooking} from "@/components/userManagement/UsermanagementRestCalls";
 
   let editeVehicleId: Ref<string> = ref('')
   let editedVehicle: Ref<Vehicle | null> = ref(null)
@@ -46,7 +56,7 @@
       wing.insurance = new Insurance(i.insurance_number, i.registration_date, i.insurance_number_expiration)
     })
     getPricing(w.pricing_id).then(p => {
-      wing.prcing = new Pricing(p.purchase_date, p.list_price_gross, p.leasing_installment_net)
+      wing.pricing = new Pricing(p.purchase_date, p.list_price_gross, p.leasing_installment_net)
     })
 
     vehicles.value.push(wing)
@@ -79,16 +89,27 @@
   vehiclesConverted.value = convertVehicleData()
 
   function addVehicle(vehicle: Vehicle): void {
-    // !TODO! Add vehicle to database
+    // !TODO! Add Insurance and Pricing
 
+    // Add vehicle do database
+    addWing(vehicle).then(() => {
+      loadAllWings()
+    })
+
+    // Update UI
     vehiclesConverted.value = []
     vehicles.value.push(vehicle)
     vehiclesConverted.value = convertVehicleData()
   }
 
   function removeVehicle(): void {
-    // !TODO! Remove vehicle from database
+    // Remove vehicle from database
+    selectedIds.value.forEach(id => {
+      let wing = getVehicleById("" + id)
+      removeSingleWing(Number(id), wing.insurance.id, wing.pricing.id)
+    })
 
+    // Update UI
     vehiclesConverted.value = []
     vehicles.value = vehicles.value.filter(vehicle => !selectedIds.value.includes(vehicle.getUiId()))
     vehiclesConverted.value = convertVehicleData()
@@ -96,6 +117,37 @@
     selectedIds.value = []
 
     changeAll(true)
+  }
+
+  function removeSingleWing(wingId: number, insuranceId: number, pricingId: number): void{
+    // !TODO! Yes, this is currently a mess. But it works (for now). Will be fixed after the presentation
+    // !FIXME! Insurance and pricing wont be deleted from the db (see TODO in addVehicle())
+
+    // Remove insurance, pricing and bookings from the vehicle
+    getAllBookings().then(res => {
+      let bookingsDelete = res.filter(r => r.vehicle_id == Number(wingId))
+
+      bookingsDelete.forEach(booking => {
+        removeBooking(booking.id)
+      })
+
+      getAllInsurances().then(res => {
+        let insurancesDelete = res.filter(r => r.id == Number(insuranceId))
+
+        insurancesDelete.forEach(insurance => {
+          removeInsurance(insurance.id)
+        })
+        getAllPricings().then(res => {
+          let pricingsDelete = res.filter(r2 => r2.id == Number(pricingId))
+
+          pricingsDelete.forEach(pricing => {
+            removePricing(pricing.id)
+          })
+
+          removeWing(Number(wingId))
+        })
+      })
+    })
   }
 
   function selectRow(index: number, forceDeselect: boolean = false): void {

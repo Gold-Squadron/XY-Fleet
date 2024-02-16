@@ -31,7 +31,7 @@
     res.setUiId(id)
     res.gasCard = resGasCard
     res.insurance = resInsurance
-    res.prcing = resPricing
+    res.pricing = resPricing
 
     return res
   }

@@ -108,17 +108,17 @@
         <BFormRow>
           <BCol>
             <b-form-floating-label label-for="purchaseDate">Kaufdatum</b-form-floating-label>
-            <BFormInput v-model="res.prcing.purchaseDate" type="date" id="purchaseDate"></BFormInput>
+            <BFormInput v-model="res.pricing.purchaseDate" type="date" id="purchaseDate"></BFormInput>
           </BCol>
           <BCol>
             <b-form-floating-label label-for="listPriceGross">Listenpreis (Brutto)</b-form-floating-label>
-            <BFormInput v-model="res.prcing.listPriceGross" id="listPriceGross" placeholder="30000"></BFormInput>
+            <BFormInput v-model="res.pricing.listPriceGross" id="listPriceGross" placeholder="30000"></BFormInput>
           </BCol>
         </BFormRow>
         <BFormRow class="mt-3">
           <BCol class="col-6">
             <b-form-floating-label label-for="leasingCostNet">Mietkosten (Netto)</b-form-floating-label>
-            <BFormInput v-model="res.prcing.leasingCostNet" id="leasingCostNet" placeholder="150"></BFormInput>
+            <BFormInput v-model="res.pricing.leasingCostNet" id="leasingCostNet" placeholder="150"></BFormInput>
           </BCol>
         </BFormRow>
       </div>

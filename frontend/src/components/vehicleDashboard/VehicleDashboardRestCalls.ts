@@ -1,4 +1,5 @@
 import type {User} from "@/main";
+import {Vehicle} from "@/main";
 
 const headers: Headers = new Headers()
 
@@ -33,9 +34,16 @@ export interface RPricing {
     leasing_installment_net: number
 }
 
-
 export async function getAllXYWings(): Promise<RXYWing[]> {
     return await getAsJson('xywing') as RXYWing[]
+}
+
+export async function getAllInsurances(): Promise<RInsurance[]> {
+    return await getAsJson('insurance') as RInsurance[]
+}
+
+export async function getAllPricings(): Promise<RPricing[]> {
+    return await getAsJson('pricing') as RPricing[]
 }
 
 export async function getInsurance(id: number): Promise<RInsurance> {
@@ -46,8 +54,8 @@ export async function getPricing(id: number): Promise<RPricing> {
     return await getAsJson(`pricing/${id}`) as RPricing
 }
 
-export async function removePilot(id: number): Promise<void> {
-    const url: string = `user/${id}`
+export async function removeWing(id: number): Promise<void> {
+    const url: string = `xywing/${id}`
 
     const request: Request = new Request(`http://127.0.0.1:8080/${url}?user=nsimon&secret=123`, {
         method: 'DELETE',
@@ -57,11 +65,33 @@ export async function removePilot(id: number): Promise<void> {
     await fetch(request)
 }
 
-export async function addPilot(user: User, role: any): Promise<void> {
-    const url: string = 'user'
-    const dataQuery: string = `name=${user.name}&password=${user.password}&is_driver=${Number(user.isDriver)}&role=${role}`
+export async function removeInsurance(id: number): Promise<void> {
+    const url: string = `insurance/${id}`
 
-    const request: Request = new Request(`http://127.0.0.1:8080/${url}?user=nsimon&secret=123&${dataQuery}`, {
+    const request: Request = new Request(`http://127.0.0.1:8080/${url}?user=nsimon&secret=123`, {
+        method: 'DELETE',
+        headers: headers,
+    })
+
+    await fetch(request)
+}
+
+export async function removePricing(id: number): Promise<void> {
+    const url: string = `pricing/${id}`
+
+    const request: Request = new Request(`http://127.0.0.1:8080/${url}?user=nsimon&secret=123`, {
+        method: 'DELETE',
+        headers: headers,
+    })
+
+    await fetch(request)
+}
+
+export async function addWing(w: Vehicle): Promise<void> {
+
+    const url: string = 'xywing'
+    const dataQuery: string = `license_plate=${w.licensePlate}&brand=${w.brand}&model=${w.model}&chassis_number=${w.chassisNumber}&mileage=${w.mileage}&expected_mileage=${w.annualPerformance}&annual_performance=${w.annualPerformance}&insurance_id=100&type=${w.type}&pricing_id=100`
+    const request: Request = new Request(`http://127.0.0.1:8080/${url}?${dataQuery}`, {
         method: 'PUT',
         headers: headers,
     })
@@ -104,15 +134,4 @@ export async function getAsJson(url: string): Promise<any[] | any> {
         console.error(jsonResponse)
     }
     return jsonResponse
-}
-
-export async function removeBooking(id: number): Promise<void> {
-    const url: string = `booking/${id}`
-
-    const request: Request = new Request(`http://127.0.0.1:8080/${url}?user=nsimon&secret=123`, {
-        method: 'DELETE',
-        headers: headers,
-    })
-
-    await fetch(request)
 }
