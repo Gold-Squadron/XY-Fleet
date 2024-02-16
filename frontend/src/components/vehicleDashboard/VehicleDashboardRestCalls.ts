@@ -1,4 +1,4 @@
-import {Vehicle} from "@/main";
+import {Insurance, Pricing, Vehicle} from "@/main";
 
 const headers: Headers = new Headers()
 
@@ -53,7 +53,10 @@ export async function getPricing(id: number): Promise<RPricing> {
     return await getAsJson(`pricing/${id}`) as RPricing
 }
 
-export async function removeWing(id: number): Promise<void> {
+export async function removeWing(id: number): Promise<any> {
+    headers.set('Content-Type', 'application/json')
+    headers.set('Accept', 'application/json')
+
     const url: string = `xywing/${id}`
 
     const request: Request = new Request(`http://127.0.0.1:8080/${url}?user=nsimon&secret=123`, {
@@ -61,7 +64,13 @@ export async function removeWing(id: number): Promise<void> {
         headers: headers,
     })
 
-    await fetch(request)
+    let response = await fetch(request)
+    let jsonResponse: any = await response.json()
+    if (jsonResponse.code !== undefined && jsonResponse !== 200) {
+        console.error(jsonResponse)
+    }
+
+    return jsonResponse
 }
 
 export async function removeInsurance(id: number): Promise<void> {
@@ -86,15 +95,55 @@ export async function removePricing(id: number): Promise<void> {
     await fetch(request)
 }
 
-export async function addWing(w: Vehicle): Promise<void> {
+export async function addWing(w: Vehicle, pricingId: number, insuranceId: number): Promise<void> {
     const url: string = 'xywing'
-    const dataQuery: string = `license_plate=${w.licensePlate}&brand=${w.brand}&model=${w.model}&chassis_number=${w.chassisNumber}&mileage=${w.mileage}&expected_mileage=${w.annualPerformance}&annual_performance=${w.annualPerformance}&insurance_id=100&type=${w.type}&pricing_id=100`
+    const dataQuery: string = `license_plate=${w.licensePlate}&brand=${w.brand}&model=${w.model}&chassis_number=${w.chassisNumber}&mileage=${w.mileage}&expected_mileage=${w.annualPerformance}&annual_performance=${w.annualPerformance}&insurance_id=${insuranceId}&type=${w.type}&pricing_id=${pricingId}`
     const request: Request = new Request(`http://127.0.0.1:8080/${url}?${dataQuery}`, {
         method: 'PUT',
         headers: headers,
     })
 
-    await fetch(request)
+    let response = await fetch(request)
+}
+
+export async function addPricing(p: Pricing): Promise<any> {
+    headers.set('Content-Type', 'application/json')
+    headers.set('Accept', 'application/json')
+
+    const url = `pricing`
+    const dataQuery: string = `purchase_date=${p.purchaseDate}&list_price_gross=${p.listPriceGross}&leasing_installment_net=${p.leasingCostNet}`
+    const request = new Request(`http://127.0.0.1:8080/${url}?${dataQuery}`, {
+        method: 'PUT',
+        headers: headers,
+    })
+
+    let response = await fetch(request)
+    let jsonResponse: any = await response.json()
+    if (jsonResponse.code !== undefined && jsonResponse !== 200) {
+        console.error(jsonResponse)
+    }
+
+    return jsonResponse
+}
+
+export async function addInsurance(i: Insurance): Promise<any> {
+    headers.set('Content-Type', 'application/json')
+    headers.set('Accept', 'application/json')
+
+    const url = `insurance`
+    const dataQuery: string = `insurance_number=${i.number}&registration_date=${i.registrationDate}&insurance_number_expiration=${i.expiration}`
+    const request = new Request(`http://127.0.0.1:8080/${url}?${dataQuery}`, {
+        method: 'PUT',
+        headers: headers,
+    })
+
+    let response = await fetch(request)
+    let jsonResponse: any = await response.json()
+    if (jsonResponse.code !== undefined && jsonResponse !== 200) {
+        console.error(jsonResponse)
+    }
+
+    return jsonResponse
 }
 
 export async function editWing(w: Vehicle): Promise<any> {

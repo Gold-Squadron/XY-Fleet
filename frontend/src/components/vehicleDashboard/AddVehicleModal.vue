@@ -14,31 +14,11 @@
   let resInsurance: Insurance = new Insurance()
   let resPricing: Pricing = new Pricing()
   function createVehicle(): Vehicle {
-
-    // This ID is used for reference in the table (not in the db)
-    // Generate id
-    let id: String = ''
-
-    while (true) {
-      id = Math.random().toString(16)
-      id = id.substring(id.length - 9)
-
-      if (checkId(id)) {
-        break
-      }
-    }
-
-    res.setUiId(id)
     res.gasCard = resGasCard
     res.insurance = resInsurance
     res.pricing = resPricing
 
     return res
-  }
-
-  function checkId(id: String): boolean {
-    // !Todo! Check if id is in use
-    return true
   }
 
   let page: Ref<number> = ref(0)

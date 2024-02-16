@@ -19,7 +19,7 @@
     getAllPricings,
     removeInsurance,
     removeWing,
-    removePricing
+    removePricing, addPricing, addInsurance
   } from "@/components/vehicleDashboard/VehicleDashboardRestCalls";
   import {getAllBookings, removeBooking} from "@/components/userManagement/UsermanagementRestCalls";
 
@@ -93,12 +93,17 @@
   vehiclesConverted.value = convertVehicleData()
 
   function addVehicle(vehicle: Vehicle): void {
-    // !TODO! Add Insurance and Pricing
+    // !FIXME!
 
     // Add vehicle do database
-    addWing(vehicle).then(() => {
-      loadAllWings()
+      addWing(vehicle, 100, 100).then(() => {
+        loadAllWings()
+      })
+      /*
+    addPricing(vehicle.pricing).then(pId => {
+      addInsurance(vehicle.insurance).then(iId => {
     })
+      })*/
 
     // Update UI
     vehiclesConverted.value = []
@@ -125,7 +130,6 @@
 
   function removeSingleWing(wingId: number, insuranceId: number, pricingId: number): void{
     // !TODO! Yes, this is currently a mess. But it works (for now). Will be fixed after the presentation
-    // !FIXME! Insurance and pricing wont be deleted from the db (see TODO in addVehicle())
 
     // Remove insurance, pricing and bookings from the vehicle
     getAllBookings().then(res => {
@@ -148,7 +152,10 @@
             removePricing(pricing.id)
           })
 
-          removeWing(Number(wingId))
+          removeWing(Number(wingId)).then(res => {
+            removeInsurance(res.insurance_id)
+            removePricing(res.pricing_id)
+          })
         })
       })
     })
