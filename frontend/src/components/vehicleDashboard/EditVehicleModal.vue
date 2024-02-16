@@ -67,18 +67,18 @@
       <div :class="page == 1 ? 'd-block' : 'd-none'">
         <BFormRow>
           <BCol class="col-6">
-            <b-form-floating-label label-for="insuranceNumber">Versicherungsnummer</b-form-floating-label>
-            <BFormInput v-model="res.insurance.number" id="insuranceNumber" placeholder="123456789"></BFormInput>
+            <b-form-floating-label label-for="insuranceNumber">Versicherungsnummer*</b-form-floating-label>
+            <BFormInput v-model="res.insurance.number" id="insuranceNumber" placeholder="123456789" required></BFormInput>
           </BCol>
         </BFormRow>
         <BFormRow class="mt-3">
           <BCol>
-            <b-form-floating-label label-for="registrationDate">Registrierungsdatum</b-form-floating-label>
-            <BFormInput v-model="res.insurance.registrationDate" type="date" id="registrationDate" placeholder=""></BFormInput>
+            <b-form-floating-label label-for="registrationDate">Registrierungsdatum*</b-form-floating-label>
+            <BFormInput v-model="res.insurance.registrationDate" id="registrationDate" placeholder="yyyymmdd" required></BFormInput>
           </BCol>
           <BCol>
-            <b-form-floating-label label-for="expirationDate">Ablaufdatum (Registrierung)</b-form-floating-label>
-            <BFormInput v-model="res.insurance.expiration" type="date" id="expirationDate"></BFormInput>
+            <b-form-floating-label label-for="expirationDate">Ablaufdatum* (Registrierung)</b-form-floating-label>
+            <BFormInput v-model="res.insurance.expiration" id="expirationDate" placeholder="yyyymmdd" required></BFormInput>
           </BCol>
         </BFormRow>
       </div>

@@ -93,17 +93,14 @@
   vehiclesConverted.value = convertVehicleData()
 
   function addVehicle(vehicle: Vehicle): void {
-    // !FIXME!
-
     // Add vehicle do database
-      addWing(vehicle, 100, 100).then(() => {
-        loadAllWings()
-      })
-      /*
-    addPricing(vehicle.pricing).then(pId => {
-      addInsurance(vehicle.insurance).then(iId => {
+    addPricing(vehicle.pricing).then(p => {
+      addInsurance(vehicle.insurance).then(i => {
+        addWing(vehicle, p.id, i.id).then(() => {
+          loadAllWings()
+        })
     })
-      })*/
+      })
 
     // Update UI
     vehiclesConverted.value = []
