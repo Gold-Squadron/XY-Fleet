@@ -4,7 +4,8 @@
   import {addFlight, Booking, getPilots, getVehicles, type RPilot, type RXYWing} from "./RoadmapRestCalls";
 
   defineProps<{
-    cars?: RXYWing[]
+    cars?: RXYWing[],
+    type: string
   }>()
 
   let pilots: RPilot[] = await getPilots(); //no time to debug props
@@ -98,10 +99,15 @@
     // [REST-Call] FINAL
     addFlight(res.value.asFlight()).then(x => {
       console.table(x)
+      if(x.code && x.code != 200) {
+        alert(x)
+      } else {
+        emit('refresh') //FINAL
+        reset()
+        hide()
+      }
     })
-    //emit('refresh') FINAL
-    reset()
-    hide()
+
   }
 </script>
 
@@ -115,10 +121,21 @@
     <BForm>
       <BFormRow>
         <BCol>
-          <b-input-group prepend="@">
+          <b-input-group v-if="type === 'booking'" prepend="@">
             <BFormInput id="driver" list="input-list" placeholder="Fahrer" v-model="driverName"></BFormInput>
             <b-tooltip target="driver" triggers="hover">
               Use their normal <b>black</b> name, e.g. mmustermann!
+            </b-tooltip>
+            <datalist id="input-list">
+              <option v-for="el in pilots" :value="el.name">
+                {{el.name}}
+              </option>
+            </datalist>
+          </b-input-group>
+          <b-input-group v-else>
+            <BFormInput id="driver" list="input-list" placeholder="Typ" v-model="type"></BFormInput>
+            <b-tooltip target="driver" triggers="hover">
+              Code monkey needs coffee
             </b-tooltip>
             <datalist id="input-list">
               <option v-for="el in pilots" :value="el.name">

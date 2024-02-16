@@ -33,7 +33,8 @@ export class Booking {
             leasing_end: this.end.toISOString().substring(0, 10),
             leasing_start: this.start.toISOString().substring(0,10),
             reasoning: comp_reason, //this one is beyond reason_ing
-            vehicle_id: this.carId
+            vehicle_id: this.carId,
+            status
         }
     }
 
@@ -89,7 +90,8 @@ export interface RFlight {
     leasing_start: string,
     leasing_end: string,
     reasoning: string,
-    expected_travel_distance: number
+    expected_travel_distance: number,
+    status: string, //'maintenance', 'defective', 'repair', 'other'
 }
 export interface RXYWing {
     id: number,
@@ -159,7 +161,7 @@ export async function addFlight(flight : RFlight): Promise<any[]> {
         return `${pair[0]}=${pair[1]}`
     }).join("&")
 
-    const request: Request = new Request(`http://127.0.0.1:8080/${url}?user=nsimon&secret=123&${dataQuery}`, {
+    const request: Request = new Request(`http://127.0.0.1:8080/${url}?${dataQuery}`, {
         method: 'PUT',
         headers: headers,
     })
