@@ -1,11 +1,13 @@
 <script setup lang="ts">
   import {useModal} from "bootstrap-vue-next";
-  import {computed, type Ref, ref} from "vue";
-  import {Booking, getPilots, type RXYWing} from "./RoadmapRestCalls";
+  import {computed, type ComputedRef, type Ref, ref, type WritableComputedRef} from "vue";
+  import {addFlight, Booking, getPilots, type RPilot, type RXYWing} from "./RoadmapRestCalls";
 
   defineProps<{
     cars?: RXYWing[]
   }>()
+
+  let pilots: RPilot[] = await getPilots(); //no time to debug props
 
 
 
@@ -13,6 +15,21 @@
     createVirtualBooking: [booking : Booking]
     refresh: []
   }>()
+
+  function getUserById(driverId: number) : string {
+    if (isNaN(driverId)) return "If you see this, you f up"
+    return pilots.find(pilot => pilot.id == driverId)?.name as string;
+  }
+
+  function getUserByName(driverName: string) : number {
+    let pilot = pilots.find(pilot => pilot.name == driverName)?.id;
+    return pilot ? pilot : -1;
+  }
+
+  function getCarByLicensePlate(plate: string) : number {
+    let car = cars.find(c => c.license_plate == plate)?.id;
+    return car ? car : -1;
+  }
   
   let res = ref(new Booking())
   let comp =
@@ -37,9 +54,27 @@
         })
       }
 
-  const {show, hide, modal} = useModal('creation-dialog')
+  let driverName : WritableComputedRef<any> = computed({
+    get() : string {
+      if(res.value.driverId === -1) return "";
+      return getUserById(res.value.driverId)
+    },
+    set(newValue : string) {
+      res.value.driverId = getUserByName(newValue);
+    }
+  })
 
-  let drivers = await getPilots();
+  let carPlate : WritableComputedRef<any> = computed({
+    get() : string {
+      if(res.value.driverId === -1) return "";
+      return "nobody cares"
+    },
+    set(newValue : string) {
+      res.value.carId = getCarByLicensePlate(newValue);
+    }
+  })
+
+  const {show, hide, modal} = useModal('creation-dialog')
 
   function reset() {
     res.value = new Booking();
@@ -53,8 +88,11 @@
   }
 
   function addBooking() {
-    emit('createVirtualBooking', res.value.clone()) // DEBUG
+    //emit('createVirtualBooking', res.value.clone()) // DEBUG
     // [REST-Call] FINAL
+    addFlight(res.value.asFlight()).then(x => {
+      console.table(x)
+    })
     //emit('refresh') FINAL
     reset()
     hide()
@@ -72,21 +110,21 @@
       <BFormRow>
         <BCol>
           <b-input-group prepend="@">
-            <BFormInput id="driver" list="input-list" placeholder="Fahrer" v-model="res.driverId"></BFormInput>
+            <BFormInput id="driver" list="input-list" placeholder="Fahrer" v-model="driverName"></BFormInput>
             <b-tooltip target="driver" triggers="hover">
               Use their normal <b>black</b> name, e.g. mmustermann!
             </b-tooltip>
             <datalist id="input-list">
-              <option v-for="el in drivers" :value="el.id">
+              <option v-for="el in pilots" :value="el.name">
                 {{el.name}}
               </option>
             </datalist>
           </b-input-group>
         </BCol>
         <BCol>
-          <BFormInput id="input-with-list" list="car-datalist" placeholder="Fahrzeug" v-model="res.carId"> </BFormInput>
+          <BFormInput id="input-with-list" list="car-datalist" placeholder="Fahrzeug" v-model="carPlate"> </BFormInput>
           <datalist id="car-datalist">
-            <option v-for="el in cars" :value="el.id" :label="el.license_plate"/>
+            <option v-for="el in cars" :value="el.license_plate" :label="el.license_plate"/>
           </datalist>
         </BCol>
       </BFormRow>

@@ -148,7 +148,7 @@ onMounted(() => afterLoad());
     </div>
   </div>
   <Suspense>
-    <CreateBookingModal @refresh="refresh" @createVirtualBooking="createVirtualBooking" :cars="xywings"/>
+    <CreateBookingModal @refresh="refresh" @createVirtualBooking="createVirtualBooking" :cars="xywings" :pilots="pilots"/>
   </Suspense>
 </template>
 

@@ -22,6 +22,18 @@ export class Booking {
         this.end.setHours(23)
     }
 
+    public asFlight(): RFlight {
+        return {
+            driver_id: this.driverId,
+            expected_travel_distance: 0,
+            id: -1,
+            leasing_end: this.end.toDateString(),
+            leasing_start: this.start.toDateString(),
+            reasoning: this.reason, //this one is beyond reason_ing
+            vehicle_id: this.carId
+        }
+    }
+
     public hasHtml() : boolean {
         return this.end.getTime() - this.start.getTime() < 1000 * 60 * 60 * 47;
     }
@@ -136,5 +148,21 @@ export async function getAsJson(url : string): Promise<any[]> {
         console.error(jsonResponse)
     }
     return jsonResponse;
+}
+
+export async function addFlight(flight : RFlight): Promise<any[]> {
+    const url: string = 'booking'
+    const dataQuery: string = Object.entries(flight).map((pair, index) => {
+        return `${pair[0]}=${pair[1]}`
+    }).join("&")
+
+    const request: Request = new Request(`http://127.0.0.1:8080/${url}?user=nsimon&secret=123&${dataQuery}`, {
+        method: 'PUT',
+        headers: headers,
+    })
+
+    console.log(dataQuery)
+
+   return (await fetch(request)).json()
 }
 
