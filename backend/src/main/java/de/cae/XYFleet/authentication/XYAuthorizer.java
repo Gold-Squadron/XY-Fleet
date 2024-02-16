@@ -1,7 +1,7 @@
 package de.cae.XYFleet.authentication;
 
 import de.cae.XYFleet.ressource.UserResource;
-import de.cae.XYFleet.test;
+import de.cae.XYFleet.TestResource;
 import org.restlet.Application;
 import org.restlet.Restlet;
 import org.restlet.data.ChallengeScheme;
@@ -35,14 +35,16 @@ public class XYAuthorizer extends Application {
         router.attach("/user/{identifier}", UserResource.class);
         router.attach("/user", UsersResource.class);
         router.attach("/xywing/{identifier}", VehicleResource.class);
-        router.attach("/test2", test.class);
         router.attach("/xywing", VehiclesResource.class);
         router.attach("/user/{bookingIdentifier}", UserResource.class);
         router.attach("/insurance/{identifier}", InsuranceResource.class);
         router.attach("/insurance", InsurancesResource.class);
         router.attach("/pricing/{identifier}", PricingResource.class);
         router.attach("/pricing", PricingsResource.class);
-
+        router.attach("/maintenance/{identifier}", MaintenanceResource.class);
+        router.attach("/maintenance", MaintenancesResource.class);
+        router.attach("/reschedule", RescheduleResource.class);
+        router.attach("/filter", FilterResource.class);
         return router;
     }
 
