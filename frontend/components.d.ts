@@ -7,8 +7,8 @@ export {}
 
 declare module 'vue' {
   export interface GlobalComponents {
-    BAvatar: typeof import('bootstrap-vue-next')['BAvatar']
     AddUserModal: typeof import('./src/components/userManagement/AddUserModal.vue')['default']
+    AddVehicleModal: typeof import('./src/components/vehicleDashboard/AddVehicleModal.vue')['default']
     BAvatar: typeof import('bootstrap-vue-next')['BAvatar']
     BButton: typeof import('bootstrap-vue-next')['BButton']
     BCard: typeof import('bootstrap-vue-next')['BCard']
@@ -25,14 +25,13 @@ declare module 'vue' {
     BFormSelect: typeof import('bootstrap-vue-next')['BFormSelect']
     BInputGroup: typeof import('bootstrap-vue-next')['BInputGroup']
     BModal: typeof import('bootstrap-vue-next')['BModal']
-    BPopover: typeof import('bootstrap-vue-next')['BPopover']
     BRow: typeof import('bootstrap-vue-next')['BRow']
     BTable: typeof import('bootstrap-vue-next')['BTable']
-    BToast: typeof import('bootstrap-vue-next')['BToast']
     BTooltip: typeof import('bootstrap-vue-next')['BTooltip']
     ConfirmRemovalModal: typeof import('./src/components/userManagement/ConfirmRemovalModal.vue')['default']
     CreateBookingModal: typeof import('./src/components/bookings/CreateBookingModal.vue')['default']
     EditUserModal: typeof import('./src/components/userManagement/EditUserModal.vue')['default']
+    EditVehicleModal: typeof import('./src/components/vehicleDashboard/EditVehicleModal.vue')['default']
     Header: typeof import('./src/components/Header.vue')['default']
     HelloWorld: typeof import('./src/components/HelloWorld.vue')['default']
     LoginWindow: typeof import('./src/components/LoginWindow.vue')['default']
@@ -40,6 +39,7 @@ declare module 'vue' {
     Roadmap: typeof import('./src/components/bookings/Roadmap.vue')['default']
     SideBar: typeof import('./src/components/SideBar.vue')['default']
     UserManagement: typeof import('./src/components/userManagement/UserManagement.vue')['default']
-    VehicleDashboard: typeof import('./src/components/VehicleDashboard.vue')['default']
+    VehicleDashboard: typeof import('./src/components/vehicleDashboard/VehicleDashboard.vue')['default']
+    VehicleDetailsModal: typeof import('./src/components/vehicleDashboard/VehicleDetailsModal.vue')['default']
   }
 }

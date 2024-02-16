@@ -1,7 +1,17 @@
 @import './base.css';
 
+body {
+  background-color: #282828 !important;
+}
+
+.g-gantt-chart {
+  width: 100%;
+  background: #282828 !important;
+  font-family: inherit;
+}
+
 .g-gantt-row-label {
-  z-index: 0 !important;
+  z-index: 3 !important;
 }
 
 a,

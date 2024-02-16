@@ -1,64 +1,64 @@
 <script setup lang="ts">
-  import {useModal} from "bootstrap-vue-next";
-  import {computed, type Ref, ref} from "vue";
-  import {Booking} from "@/main";
+import {useModal} from "bootstrap-vue-next";
+import {computed, type Ref, ref} from "vue";
+import {Booking} from "@/main";
 
-  defineProps<{
-    cars?: string[]
-  }>()
+defineProps<{
+  cars?: string[]
+}>()
 
 
 
-  const emit = defineEmits<{
-    createVirtualBooking: [booking : Booking]
-    refresh: []
-  }>()
-  
-  let res = ref(new Booking())
-  let comp =
-      {
-        startDate: computed({
-          get() : string {
-            return res.value.start.toString();
-          },
-          // setter
-          set(newValue : string) {
-            res.value.start?.setTime(new Date(newValue).getTime())
-          }
-        }),
-        endDate: computed({
-          get() : string {
-            return res.value.end.toString();
-          },
-          // setter
-          set(newValue : string) {
-            res.value.end?.setTime(new Date(newValue).getTime())
-          }
-        })
-      }
+const emit = defineEmits<{
+  createVirtualBooking: [booking : Booking]
+  refresh: []
+}>()
 
-  const {show, hide, modal} = useModal('creation-dialog')
+let res = ref(new Booking())
+let comp =
+    {
+      startDate: computed({
+        get() : string {
+          return res.value.start.toString();
+        },
+        // setter
+        set(newValue : string) {
+          res.value.start?.setTime(new Date(newValue).getTime())
+        }
+      }),
+      endDate: computed({
+        get() : string {
+          return res.value.end.toString();
+        },
+        // setter
+        set(newValue : string) {
+          res.value.end?.setTime(new Date(newValue).getTime())
+        }
+      })
+    }
 
-  let drivers = ref(["nsimon", "lhelbig", "laußem"])
+const {show, hide, modal} = useModal('creation-dialog')
 
-  function reset() {
-    res.value = new Booking();
-  }
-  
-  function preview() {
-    let virtual : Booking = res.value.clone();
-    virtual.status = "preview";
-    emit('createVirtualBooking', virtual)
-    hide(); // minimize the dialog temporarily
-  }
+let drivers = ref(["nsimon", "lhelbig", "laußem"])
 
-  function addBooking() {
-    emit('createVirtualBooking', res.value.clone()) // DEBUG
-    // [REST-Call] FINAL
-    //emit('refresh') FINAL
-    reset()
-    hide()
-  }
+function reset() {
+  res.value = new Booking();
+}
+
+function preview() {
+  let virtual : Booking = res.value.clone();
+  virtual.status = "preview";
+  emit('createVirtualBooking', virtual)
+  hide(); // minimize the dialog temporarily
+}
+
+function addBooking() {
+  emit('createVirtualBooking', res.value.clone()) // DEBUG
+  // [REST-Call] FINAL
+  //emit('refresh') FINAL
+  reset()
+  hide()
+}
 </script>
 
 <template>
@@ -91,7 +91,7 @@
       <BFormRow>
         <BCol>
           <BFormGroup label="Start Date" for="start-date">
-              <b-form-input id="start-date" type="date" v-model="comp.startDate.value"/>
+            <b-form-input id="start-date" type="date" v-model="comp.startDate.value"/>
           </BFormGroup>
         </BCol>
         <BCol>
