@@ -6,8 +6,6 @@ import org.restlet.*;
 import org.restlet.data.Method;
 import org.restlet.data.Protocol;
 import org.restlet.data.Status;
-import org.restlet.service.CorsService;
-import org.restlet.service.Service;
 
 
 public class XYRestServer {
@@ -40,7 +38,6 @@ public class XYRestServer {
 
 
             component.getDefaultHost().attach("/ldapauthenticator", LDAPAuthenticator.class);
-            component.getDefaultHost().attach("/test", test.class);
 
             component.getDefaultHost().attachDefault(new XYAuthorizer());
             component.start();

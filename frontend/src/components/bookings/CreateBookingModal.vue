@@ -1,13 +1,14 @@
 <script setup lang="ts">
   import {useModal} from "bootstrap-vue-next";
   import {computed, type ComputedRef, type Ref, ref, type WritableComputedRef} from "vue";
-  import {addFlight, Booking, getPilots, type RPilot, type RXYWing} from "./RoadmapRestCalls";
+  import {addFlight, Booking, getPilots, getVehicles, type RPilot, type RXYWing} from "./RoadmapRestCalls";
 
   defineProps<{
     cars?: RXYWing[]
   }>()
 
   let pilots: RPilot[] = await getPilots(); //no time to debug props
+  let vehicles: RXYWing[] = await getVehicles(); //no time to debug props
 
 
 
@@ -27,8 +28,13 @@
   }
 
   function getCarByLicensePlate(plate: string) : number {
-    let car = cars.find(c => c.license_plate == plate)?.id;
+    let car = vehicles.find(c => c.license_plate == plate)?.id;
     return car ? car : -1;
+  }
+
+  function getCarById(id: number) : string {
+    let car = vehicles.find(c => c.id == id)?.license_plate;
+    return car ? car : "";
   }
   
   let res = ref(new Booking())
@@ -66,8 +72,8 @@
 
   let carPlate : WritableComputedRef<any> = computed({
     get() : string {
-      if(res.value.driverId === -1) return "";
-      return "nobody cares"
+      if(res.value.carId === -1) return "";
+      return getCarById(res.value.carId);
     },
     set(newValue : string) {
       res.value.carId = getCarByLicensePlate(newValue);
@@ -140,9 +146,18 @@
           </BFormGroup>
         </BCol>
       </BFormRow>
-      <BFormGroup label="Reason (optional):">
-        <BFormInput id="reason" placeholder="I really like driving" v-model="res.reason"></BFormInput>
-      </BFormGroup>
+      <BFormRow>
+        <BCol cols="8">
+          <BFormGroup label="Reason (optional):">
+            <BFormInput id="reason" placeholder="I really like driving" v-model="res.reason"></BFormInput>
+          </BFormGroup>
+        </BCol>
+        <BCol cols="4">
+          <BFormGroup label="Geschätzte Strecke (in km):">
+            <BFormInput id="mileage" placeholder="12" v-model="res.expected_travel_distance"></BFormInput>
+          </BFormGroup>
+        </BCol>
+      </BFormRow>
       <hr/>
       <BButton @click="reset()" variant="outline-warning" class="float-left">Reset</BButton>
       <div class="d-flex justify-content-end">

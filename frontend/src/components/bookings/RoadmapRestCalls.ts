@@ -12,6 +12,8 @@ export class Booking {
     private refStart: Ref<Date> | null = null;
     private refEnd: Ref<Date> | null = null;
 
+    public expected_travel_distance : number = 10;
+
     html: string = "";
     status: string = "";
 
@@ -23,13 +25,14 @@ export class Booking {
     }
 
     public asFlight(): RFlight {
+        const comp_reason = this.reason === "" ? "none" : this.reason;
         return {
             driver_id: this.driverId,
-            expected_travel_distance: 0,
+            expected_travel_distance: this.expected_travel_distance,
             id: -1,
-            leasing_end: this.end.toDateString(),
-            leasing_start: this.start.toDateString(),
-            reasoning: this.reason, //this one is beyond reason_ing
+            leasing_end: this.end.toISOString().substring(0, 10),
+            leasing_start: this.start.toISOString().substring(0,10),
+            reasoning: comp_reason, //this one is beyond reason_ing
             vehicle_id: this.carId
         }
     }
@@ -112,7 +115,7 @@ export interface RPilot {
 }
 
 export async function getFlights(): Promise<RFlight[]> {
-    return await getAsJson('booking') as RFlight[]
+    return await getAsJson('booking?start=2023-11-11&end=2025-11-11') as RFlight[]
 }
 
 export async function getVehicles(): Promise<RXYWing[]> {
@@ -137,7 +140,7 @@ export async function getAsJson(url : string): Promise<any[]> {
 
     headers.set('Authorization', `Basic ${auth}`);
 
-    const request: RequestInfo = new Request(`http://127.0.0.1:8080/${url}?user=nsimon&secret=123`, {
+    const request: RequestInfo = new Request(`http://127.0.0.1:8080/${url}`, {
         method: 'GET',
         headers: headers,
     })

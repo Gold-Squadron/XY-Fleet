@@ -16,6 +16,7 @@ let chartStart : Ref<Date> = ref(new Date().translateDays(25));
 let chartEnd = computed(() => {return chartStart.value.translateDays(31)})
 
 let previewMode = false;
+let previewElement: GanttBarObject | undefined = undefined;
 
 /// shifts the time/day on the component when the mouse scrolls
 /// any due to damn event browser support
@@ -33,8 +34,8 @@ function mouseWheelHandler(inp : any) : boolean {
   return pilots.value.find(pilot => pilot.id == driverId)?.name as string;
 }
 
-//transforms the raw data into the rendering format
-const generatedBars = computed( () => {
+  //transforms the raw data into the rendering format
+  const generatedBars = computed( () => {
   let map = new Map<number, GanttBarObject[]>();
     xywings.value.forEach(obj => map.set(obj.id, []))
     bookings.value.forEach((booking) => {
@@ -44,7 +45,7 @@ const generatedBars = computed( () => {
         color: "white"
       };
       if (booking.status == "maintenance") stylingContent.background = "linear-gradient(117deg, rgba(217,3,3,1) 0%, rgba(124,29,0,1) 100%)";
-      let label : string = booking.reason != 'none' ? booking.reason : getUserById(booking.driverId);
+      let label : string = (booking.reason != 'none' && booking.reason != '') ? booking.reason : getUserById(booking.driverId);
       if (booking.hasHtml()) label = "";
       let x: GanttBarObject = {
         myBeginDate: booking.getStartDateAsReference(),
@@ -73,15 +74,15 @@ const generatedBars = computed( () => {
 }
 
   async function refresh() {
-  console.log("gfb")
-  let flights : RFlight[] = await getFlights();
-  let updatedXywings = await getVehicles();
-  let updatedPilots = await getPilots();
+    console.log("gfb")
+    let flights : RFlight[] = await getFlights();
+    let updatedXywings = await getVehicles();
+    let updatedPilots = await getPilots();
 
-  xywings.value = updatedXywings;
-  pilots.value = updatedPilots;
+    xywings.value = updatedXywings;
+    pilots.value = updatedPilots;
 
-  bookings.value = flights.map(rFlight => Booking.from(rFlight));
+    bookings.value = flights.map(rFlight => Booking.from(rFlight));
   }
 
   const {show, hide, modal} = useModal('creation-dialog')
@@ -89,11 +90,11 @@ const generatedBars = computed( () => {
   function createBookingRestCall(first: UnwrapRefSimple<Booking>) {
     //TODO Rest that call man
   }
-
   function finishPreview(save: boolean) {
     previewMode = false;
 
     let first: UnwrapRefSimple<Booking> | undefined = bookings.value.find((x) => x.status === 'preview');
+
     if (first == undefined || previewElement == undefined) {
       return;
     }
@@ -167,13 +168,13 @@ function afterLoad() {
         <div class="dropdown-divider"></div>
         <a class="dropdown-item" href="#">Add a new type</a>
       </div>
-      <b-button variant="primary" size="lg" @click="show"> Neue Fahrt eintragen </b-button>
+      <b-button variant="primary" size="lg" @click="show" class="add-spacing"> Neue Fahrt eintragen </b-button>
     </div>
-    <CreateBookingModal @refresh="refresh" @createVirtualBooking="createVirtualBooking" :cars="vehicles"/>
   </div>
   <Suspense>
     <CreateBookingModal @refresh="refresh" @createVirtualBooking="createVirtualBooking" :cars="xywings" :pilots="pilots"/>
   </Suspense>
+</div>
 </template>
 
 <style scoped>
