@@ -213,10 +213,6 @@
     cursor: pointer;
     opacity: 0.6;
   }
-
-  * {
-    color: white
-  }
 </style>
 
 <script lang="ts">
