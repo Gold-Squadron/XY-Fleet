@@ -1,7 +1,7 @@
 package de.cae.XYFleet.authentication;
 
-import de.cae.XYFleet.ressource.UserResource;
-import de.cae.XYFleet.TestResource;
+import de.cae.XYFleet.ressource.Entry.*;
+import de.cae.XYFleet.ressource.Table.*;
 import org.restlet.Application;
 import org.restlet.Restlet;
 import org.restlet.data.ChallengeScheme;
