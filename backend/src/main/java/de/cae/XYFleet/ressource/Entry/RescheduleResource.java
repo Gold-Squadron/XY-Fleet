@@ -1,5 +1,8 @@
 package de.cae.XYFleet.ressource.Entry;
 
+
+import de.cae.XYFleet.ressource.Entry.BookingResource;
+
 import de.cae.XYFleet.ressource.EntryResource;
 import de.cae.XYFleet.ressource.FilterResource;
 import org.jooq.Field;

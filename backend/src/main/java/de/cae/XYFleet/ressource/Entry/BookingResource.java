@@ -1,6 +1,8 @@
 package de.cae.XYFleet.ressource.Entry;
 
 import de.cae.XYFleet.ressource.EntryResource;
+
+
 import org.jooq.Field;
 import org.jooq.Result;
 import org.jooq.codegen.XYFleet.tables.records.BookingsRecord;
@@ -22,7 +24,6 @@ import static org.jooq.codegen.XYFleet.Tables.BOOKINGS;
 import static org.jooq.codegen.XYFleet.Tables.INSURANCES;
 import static org.jooq.codegen.XYFleet.tables.Users.USERS;
 import static org.jooq.codegen.XYFleet.tables.Vehicles.VEHICLES;
-
 import org.restlet.data.Status;
 
 public class BookingResource extends EntryResource {
@@ -62,6 +63,7 @@ public class BookingResource extends EntryResource {
         checkInRole(ROLE_USER);
         return editEntry();
     }
+
 /**
     @Override
     public String handlePut(Map<String, String> valuesMap) throws ResourceException {

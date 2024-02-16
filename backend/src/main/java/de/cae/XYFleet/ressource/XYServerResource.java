@@ -1,6 +1,7 @@
 package de.cae.XYFleet.ressource;
 
 import de.cae.XYFleet.Database;
+import de.cae.XYFleet.Main;
 import org.jooq.*;
 import org.jooq.Record;
 import org.jooq.tools.json.JSONArray;
@@ -14,7 +15,7 @@ import org.restlet.resource.ServerResource;
 public abstract class XYServerResource extends ServerResource {
 
     public static final JSONFormat jSONFormat = new JSONFormat().recordFormat(JSONFormat.RecordFormat.OBJECT).header(false);
-    protected DSLContext dslContext = Database.getDSLContext();;
+    protected DSLContext dslContext = Main.getDSLContext();;
     protected static Table<?> table;
     protected void checkInRole(String roleName) {
         if (!isInRole(roleName)) {
