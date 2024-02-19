@@ -1,6 +1,7 @@
 package de.cae.XYFleet.ressource;
 
 import de.cae.XYFleet.Database;
+import de.cae.XYFleet.Main;
 import org.jooq.*;
 import org.jooq.Record;
 import org.jooq.codegen.XYFleet.tables.Vehicles;
@@ -27,7 +28,7 @@ import static org.jooq.impl.DSL.field;
 
 public class FilterResource extends ServerResource {
 
-    protected DSLContext dslContext = Database.getDSLContext();
+    protected DSLContext dslContext = Main.getDSLContext();
 
     @Get()
     public String filterBooking() throws ResourceException {

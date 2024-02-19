@@ -1,4 +1,5 @@
 import de.cae.XYFleet.Database;
+import de.cae.XYFleet.Main;
 import org.jooq.*;
 import org.jooq.Record;
 import org.jooq.codegen.XYFleet.tables.records.UsersRecord;
@@ -28,7 +29,7 @@ public abstract class ResourceTest {
     protected static int USER_ID;
     protected static int SECURITY_ID;
     protected static Scenario scenario;
-
+    protected static DSLContext dslContext = Main.getDSLContext();
     @BeforeAll
     public static void setUp() {
         scenario = new Scenario();
@@ -166,7 +167,7 @@ public abstract class ResourceTest {
                 Field<String> myField = table.field(temp[0], String.class);
                 condition = condition.and(myField.eq(DSL.val(temp[1], myField.getDataType())));
             }
-            Record result = Database.getDSLContext().deleteFrom(table).where(condition).returning().fetchOne();
+            Record result = Main.getDSLContext().deleteFrom(table).where(condition).returning().fetchOne();
             assertNotNull(result);
         } catch (Exception e) {
 
@@ -219,7 +220,7 @@ public abstract class ResourceTest {
                         condition = condition.and(myField.eq(DSL.val(temp[1], myField.getDataType())));
                     }
                 }
-                Database.getDSLContext().deleteFrom(table).where(condition).execute();
+                Main.getDSLContext().deleteFrom(table).where(condition).execute();
             }
             // Release the resources when done
             clientResource.release();

@@ -20,7 +20,7 @@ public class BookingResourceTest extends EntryResourceTest {
             pricing.setId(scenario.add(PRICING, pricing));
             //dslContext.insertInto(PRICING).values(pricing).onDuplicateKeyIgnore().execute();
 
-            InsurancesRecord insurances = new InsurancesRecord(0, 10, 10, 10);
+            InsurancesRecord insurances = new InsurancesRecord(0, 10, LocalDate.parse("2023-01-01"), 10);
             insurances.setId(scenario.add(INSURANCES, insurances));
             //dslContext.insertInto(INSURANCES).values(insurances).onDuplicateKeyIgnore().execute();
 

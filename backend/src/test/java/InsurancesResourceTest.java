@@ -5,6 +5,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
+import java.time.LocalDate;
+
 import static de.cae.XYFleet.authentication.XYAuthorizer.*;
 import static de.cae.XYFleet.authentication.XYAuthorizer.ROLE_ADMIN;
 import static org.jooq.codegen.XYFleet.Tables.BOOKINGS;
@@ -13,13 +15,13 @@ import static org.jooq.codegen.XYFleet.Tables.INSURANCES;
 public class InsurancesResourceTest extends ResourceTest {
     @BeforeAll
     public static void initAll() {
-        InsurancesRecord insurances = new InsurancesRecord(0, 10, 10, 10);
-        InsurancesRecord insurances2 = new InsurancesRecord(0, 5, 10020202, 1028362);
+        InsurancesRecord insurances = new InsurancesRecord(0, 10, LocalDate.parse("1002-02-02"), 10);
+        InsurancesRecord insurances2 = new InsurancesRecord(0, 5, LocalDate.parse("1002-02-02"), 1028362);
         scenario.add(INSURANCES, insurances2);
 
         insurances.setId(scenario.add(INSURANCES, insurances));
         uri = "/insurance";
-        testTable = Database.getDSLContext().select().from(INSURANCES).fetch();
+        testTable = dslContext.select().from(INSURANCES).fetch();
         table = INSURANCES;
     }
     @Override

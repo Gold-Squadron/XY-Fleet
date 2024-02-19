@@ -27,7 +27,7 @@ public class VehiclesResourceTest extends ResourceTest {
         pricing.setId(scenario.add(PRICING, pricing));
         //dslContext.insertInto(PRICING).values(pricing).onDuplicateKeyIgnore().execute();
         PRICING_ID = pricing.getId();
-        InsurancesRecord insurances = new InsurancesRecord(0, 123, 456, 2020);
+        InsurancesRecord insurances = new InsurancesRecord(0, 123, LocalDate.parse("1002-02-02"), 2020);
         insurances.setId(scenario.add(INSURANCES, insurances));
         INSURANCE_ID = insurances.getId();
         //dslContext.insertInto(INSURANCES).values(insurances).onDuplicateKeyIgnore().execute();

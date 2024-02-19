@@ -6,6 +6,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
+import java.time.LocalDate;
+
 import static de.cae.XYFleet.authentication.XYAuthorizer.*;
 import static org.jooq.codegen.XYFleet.Tables.INSURANCES;
 import static org.jooq.codegen.XYFleet.Tables.VEHICLES;
@@ -13,8 +15,8 @@ import static org.jooq.codegen.XYFleet.Tables.VEHICLES;
 public class InsuranceResourceTest extends EntryResourceTest {
     @BeforeAll
     public static void initAll() {
-        InsurancesRecord insurances = new InsurancesRecord(0, 10, 10, 10);
-        InsurancesRecord insurances2 = new InsurancesRecord(0, 5, 10020202, 1028362);
+        InsurancesRecord insurances = new InsurancesRecord(0, 10, LocalDate.parse("2023-01-01"), 10);
+        InsurancesRecord insurances2 = new InsurancesRecord(0, 5, LocalDate.parse("1002-02-02"), 1028362);
         scenario.add(INSURANCES, insurances2);
 
         insurances.setId(scenario.add(INSURANCES, insurances));
@@ -79,7 +81,7 @@ public class InsuranceResourceTest extends EntryResourceTest {
 
     @Override
     @ParameterizedTest
-    @CsvSource(value = {"insurance_number=123&registration_date=01012024&insurance_number_expiration=24122025"}, delimiter = ':')
+    @CsvSource(value = {"insurance_number=123&registration_date=2024-01-01&insurance_number_expiration=24122025"}, delimiter = ':')
     public void put_validCall_shouldReturnEntryInDatabase(String params) {
         super.put_validCall_shouldReturnEntryInDatabase(params);
     }
