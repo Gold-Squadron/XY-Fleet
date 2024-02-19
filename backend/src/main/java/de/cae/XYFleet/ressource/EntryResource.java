@@ -41,8 +41,9 @@ public abstract class EntryResource extends XYServerResource {
         dslContext.delete(table).where(table.field(BOOKINGS.ID).eq(identifier)).execute();
         return result;
     }
+
     @Override
-    public String editEntry() throws ResourceException{
+    public String editEntry() throws ResourceException {
         checkInRole(ROLE_ADMIN);
 
 
@@ -59,7 +60,7 @@ public abstract class EntryResource extends XYServerResource {
             //checking whether amendments have been requested or not. Setting all types to String type safty in tests
             String name = field.getUnqualifiedName().first();
             String value = valuesMap.get(field.getUnqualifiedName().first());
-            if(value != null){
+            if (value != null) {
                 setFieldValueHelper(updatableRecord, field, value);
             }
         }
@@ -74,7 +75,7 @@ public abstract class EntryResource extends XYServerResource {
 
 
         return updatableRecord.formatJSON(jSONFormat);
-    };
+    }
 
     public String handlePut(Map<String, String> valuesMap) throws ResourceException {
         Field<?>[] fields = table.fields();
@@ -85,7 +86,8 @@ public abstract class EntryResource extends XYServerResource {
             String name = field.getUnqualifiedName().first();
             String value = valuesMap.get(name);
             if (isNotRequiredNull(name)) {
-                if (value == null) throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, "Missing value for initialization: " + name);
+                if (value == null)
+                    throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, "Missing value for initialization: " + name);
             }
             setFieldValueHelper(updatableRecord, field, value);
         }
@@ -96,9 +98,11 @@ public abstract class EntryResource extends XYServerResource {
         //CREATE vehicles VALUES ({given values})
         return updatableRecord.formatJSON(jSONFormat);
     }
-    public boolean isNotRequiredNull(String name){
-     return !Objects.equals(name, "id");
+
+    public boolean isNotRequiredNull(String name) {
+        return !Objects.equals(name, "id");
     }
+
     abstract public void validatePutCall(UpdatableRecordImpl record);
     //abstract public void validatePostCall(UpdatableRecordImpl record);
 
@@ -124,10 +128,10 @@ public abstract class EntryResource extends XYServerResource {
                     record.set((Field<String>) field, value);
                 }
             }
-            if(field.getType() == Byte.class) {
-                try{
+            if (field.getType() == Byte.class) {
+                try {
                     record.set((Field<Byte>) field, Byte.parseByte(value));
-                }catch(NumberFormatException e){
+                } catch (NumberFormatException e) {
                     throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, field.getUnqualifiedName().first() + " has an invalid value: " + value + ", not parseable to Byte");
                 }
 

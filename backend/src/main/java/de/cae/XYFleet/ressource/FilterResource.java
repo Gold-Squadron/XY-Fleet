@@ -3,8 +3,6 @@ package de.cae.XYFleet.ressource;
 import de.cae.XYFleet.Database;
 import de.cae.XYFleet.Main;
 import org.jooq.*;
-import org.jooq.Record;
-import org.jooq.codegen.XYFleet.tables.Vehicles;
 import org.jooq.codegen.XYFleet.tables.records.BookingsRecord;
 import org.jooq.codegen.XYFleet.tables.records.VehiclesRecord;
 import org.restlet.data.Form;
@@ -18,7 +16,6 @@ import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 import java.util.Set;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import static de.cae.XYFleet.authentication.XYAuthorizer.ROLE_SECURITY;
 import static de.cae.XYFleet.ressource.XYServerResource.jSONFormat;

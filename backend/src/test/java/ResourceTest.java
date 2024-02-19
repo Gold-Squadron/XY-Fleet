@@ -1,5 +1,3 @@
-import de.cae.XYFleet.Database;
-import de.cae.XYFleet.Main;
 import org.jooq.*;
 import org.jooq.Record;
 import org.jooq.codegen.XYFleet.tables.records.UsersRecord;
