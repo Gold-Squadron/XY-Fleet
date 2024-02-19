@@ -1,6 +1,5 @@
 package de.cae.XYFleet.ressource;
 
-import de.cae.XYFleet.Database;
 import de.cae.XYFleet.Main;
 import org.jooq.*;
 import org.jooq.Record;

@@ -1,6 +1,5 @@
 package de.cae.XYFleet.authentication;
 
-import de.cae.XYFleet.Database;
 import de.cae.XYFleet.Main;
 import org.jooq.DSLContext;
 import org.jooq.codegen.XYFleet.tables.records.UsersRecord;

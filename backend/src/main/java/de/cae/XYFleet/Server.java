@@ -7,8 +7,6 @@ import org.restlet.data.Protocol;
 
 public class Server {
 
-    public static Database database = new Database();
-
     public static void initServer() {
         try {
             Component component = new Component();
