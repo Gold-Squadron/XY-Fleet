@@ -14,7 +14,7 @@ public class UsersResourceTest extends ResourceTest {
 
     @BeforeAll
     public static void initAll() {
-        UsersRecord user = new UsersRecord(0, "mMustermann", "123", "user", Byte.parseByte("1"));
+        UsersRecord user = new UsersRecord(0, "mMustermann", "123","Max Mustermann","Max.Mustermann@cae.com", "user", Byte.parseByte("1"));
         uri = "/user";
         testTable = Database.getDSLContext().select(Users.USERS.ID, Users.USERS.NAME, Users.USERS.ROLE, Users.USERS.IS_DRIVER).from(Users.USERS).fetch();
         table = USERS;
