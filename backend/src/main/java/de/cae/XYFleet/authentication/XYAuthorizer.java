@@ -2,7 +2,6 @@ package de.cae.XYFleet.authentication;
 
 import de.cae.XYFleet.ressource.Entry.*;
 import de.cae.XYFleet.ressource.Table.*;
-import de.cae.XYFleet.TestResource;
 import org.restlet.Application;
 import org.restlet.Restlet;
 import org.restlet.data.ChallengeScheme;
@@ -51,7 +50,7 @@ public class XYAuthorizer extends Application {
 
     private ChallengeAuthenticator createAuthenticator() {
         ChallengeAuthenticator guard = new ChallengeAuthenticator(
-                getContext(),true,  ChallengeScheme.HTTP_BASIC, "realm");
+                getContext(),false,  ChallengeScheme.HTTP_BASIC, "realm");
 
         //Attach enroler and verifier to determine roles
         LDAPVerifier ldapVerifier = new LDAPVerifier();
