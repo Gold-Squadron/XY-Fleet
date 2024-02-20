@@ -1,19 +1,14 @@
-import de.cae.XYFleet.Database;
-import org.jooq.codegen.XYFleet.tables.Users;
 import org.jooq.codegen.XYFleet.tables.records.InsurancesRecord;
 import org.jooq.codegen.XYFleet.tables.records.PricingRecord;
-import org.jooq.codegen.XYFleet.tables.records.UsersRecord;
 import org.jooq.codegen.XYFleet.tables.records.VehiclesRecord;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
-import java.sql.Date;
 import java.time.LocalDate;
 
 import static de.cae.XYFleet.authentication.XYAuthorizer.*;
-import static de.cae.XYFleet.authentication.XYAuthorizer.ROLE_ADMIN;
 import static org.jooq.codegen.XYFleet.Tables.*;
 import static org.jooq.codegen.XYFleet.Tables.VEHICLES;
 
@@ -27,7 +22,7 @@ public class VehiclesResourceTest extends ResourceTest {
         pricing.setId(scenario.add(PRICING, pricing));
         //dslContext.insertInto(PRICING).values(pricing).onDuplicateKeyIgnore().execute();
         PRICING_ID = pricing.getId();
-        InsurancesRecord insurances = new InsurancesRecord(0, 123, 456, 2020);
+        InsurancesRecord insurances = new InsurancesRecord(0, 123, LocalDate.parse("1002-02-02"), 2020);
         insurances.setId(scenario.add(INSURANCES, insurances));
         INSURANCE_ID = insurances.getId();
         //dslContext.insertInto(INSURANCES).values(insurances).onDuplicateKeyIgnore().execute();

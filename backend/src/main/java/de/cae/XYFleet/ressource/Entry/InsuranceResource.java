@@ -34,12 +34,7 @@ public class InsuranceResource extends EntryResource {
     @Delete
     public String deleteEntry() throws ResourceException {
         checkInRole(ROLE_ADMIN);
-
-        String result = this.toString();
-
-        //DELETE insurance where id = {Identifier}
-        dslContext.delete(INSURANCES).where(INSURANCES.ID.eq(identifier)).execute();
-        return result;
+        return super.deleteEntry();
     }
 
     @Override

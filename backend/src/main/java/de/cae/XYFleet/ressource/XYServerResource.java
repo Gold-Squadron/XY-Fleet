@@ -1,11 +1,8 @@
 package de.cae.XYFleet.ressource;
 
-import de.cae.XYFleet.Database;
 import de.cae.XYFleet.Main;
 import org.jooq.*;
 import org.jooq.Record;
-import org.jooq.tools.json.JSONArray;
-import org.jooq.tools.json.JSONObject;
 import org.restlet.data.Status;
 import org.restlet.resource.Delete;
 import org.restlet.resource.Post;

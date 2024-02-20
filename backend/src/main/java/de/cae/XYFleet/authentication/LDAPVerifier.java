@@ -1,10 +1,8 @@
 package de.cae.XYFleet.authentication;
 
-import de.cae.XYFleet.Database;
 import de.cae.XYFleet.Main;
 import org.jooq.DSLContext;
 import org.jooq.codegen.XYFleet.tables.records.UsersRecord;
-import org.restlet.Request;
 import org.restlet.data.ClientInfo;
 import org.restlet.resource.ResourceException;
 import org.restlet.security.Enroler;

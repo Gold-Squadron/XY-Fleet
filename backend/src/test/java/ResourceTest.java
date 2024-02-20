@@ -1,4 +1,3 @@
-import de.cae.XYFleet.Database;
 import org.jooq.*;
 import org.jooq.Record;
 import org.jooq.codegen.XYFleet.tables.records.UsersRecord;
@@ -28,7 +27,7 @@ public abstract class ResourceTest {
     protected static int USER_ID;
     protected static int SECURITY_ID;
     protected static Scenario scenario;
-
+    protected static DSLContext dslContext = Database.getDSLContext();
     @BeforeAll
     public static void setUp() {
         scenario = new Scenario();
