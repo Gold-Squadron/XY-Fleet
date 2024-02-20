@@ -81,7 +81,7 @@ public class InsuranceResourceTest extends EntryResourceTest {
 
     @Override
     @ParameterizedTest
-    @CsvSource(value = {"insurance_number=123&registration_date=01012024&insurance_number_expiration=24122025"}, delimiter = ':')
+    @CsvSource(value = {"insurance_number=123&registration_date=01012024&insurance_number_expiration=2412-12-12"}, delimiter = ':')
     public void put_validCall_shouldReturnEntryInDatabase(String params) {
         super.put_validCall_shouldReturnEntryInDatabase(params);
     }
