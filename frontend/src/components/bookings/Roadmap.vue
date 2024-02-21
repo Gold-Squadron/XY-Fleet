@@ -4,7 +4,16 @@ import {type GanttBarObject, GGanttRow} from "@infectoone/vue-ganttastic";
 import {type UnwrapRefSimple} from "@vue/reactivity"
 import CreateBookingModal from "@/components/bookings/CreateBookingModal.vue";
 import {useModal} from "bootstrap-vue-next";
-import {Booking, type RFlight, getFlights, getVehicles, type RXYWing, type RPilot, getPilots} from "./RoadmapRestCalls";
+import {
+  Booking,
+  type RFlight,
+  getFlights,
+  getVehicles,
+  type RXYWing,
+  type RPilot,
+  getPilots,
+  addFlight
+} from "./RoadmapRestCalls";
 
 //Demodata
 let xywings = ref<RXYWing[]>([]);
@@ -88,7 +97,7 @@ function mouseWheelHandler(inp : any) : boolean {
   const {show, hide, modal} = useModal('creation-dialog')
 
   function createBookingRestCall(first: UnwrapRefSimple<Booking>) {
-    //TODO Rest that call man
+    addFlight(first.asFlight())
   }
   function finishPreview(save: boolean) {
     previewMode = false;
@@ -112,7 +121,7 @@ function mouseWheelHandler(inp : any) : boolean {
 
     first.status = 'booking'
 
-    //createBookingRestCall(first)
+    createBookingRestCall(first)
     previewElement = undefined;
 
   }
