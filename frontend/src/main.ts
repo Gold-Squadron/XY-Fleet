@@ -48,7 +48,7 @@ export class User {
 export class Vehicle {
     public gasCard: GasCard = new GasCard()
     public insurance: Insurance = new Insurance()
-    public prcing: Pricing = new Pricing()
+    public pricing: Pricing = new Pricing()
     constructor(private uiId: String = "", public licensePlate: string = "", public brand: string = "", public model: string = "", public chassisNumber: string = "", public mileage: number = 0, public annualPerformance: number = 0, public type: string = "") {
     }
 

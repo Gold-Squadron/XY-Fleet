@@ -14,31 +14,11 @@
   let resInsurance: Insurance = new Insurance()
   let resPricing: Pricing = new Pricing()
   function createVehicle(): Vehicle {
-
-    // This ID is used for reference in the table (not in the db)
-    // Generate id
-    let id: String = ''
-
-    while (true) {
-      id = Math.random().toString(16)
-      id = id.substring(id.length - 9)
-
-      if (checkId(id)) {
-        break
-      }
-    }
-
-    res.setUiId(id)
     res.gasCard = resGasCard
     res.insurance = resInsurance
-    res.prcing = resPricing
+    res.pricing = resPricing
 
     return res
-  }
-
-  function checkId(id: String): boolean {
-    // !Todo! Check if id is in use
-    return true
   }
 
   let page: Ref<number> = ref(0)
@@ -90,18 +70,18 @@
       <div :class="page == 1 ? 'd-block' : 'd-none'">
         <BFormRow>
           <BCol class="col-6">
-            <b-form-floating-label label-for="insuranceNumber">Versicherungsnummer</b-form-floating-label>
+            <b-form-floating-label label-for="insuranceNumber">Versicherungsnummer*</b-form-floating-label>
             <BFormInput v-model="resInsurance.number" id="insuranceNumber" placeholder="123456789"></BFormInput>
           </BCol>
         </BFormRow>
         <BFormRow class="mt-3">
           <BCol>
-            <b-form-floating-label label-for="registrationDate">Registrierungsdatum</b-form-floating-label>
-            <BFormInput v-model="resInsurance.registrationDate" type="date" id="registrationDate" placeholder=""></BFormInput>
+            <b-form-floating-label label-for="registrationDate">Registrierungsdatum*</b-form-floating-label>
+            <BFormInput v-model="resInsurance.registrationDate" id="registrationDate" placeholder="yyyymmdd" required></BFormInput>
           </BCol>
           <BCol>
-            <b-form-floating-label label-for="expirationDate">Ablaufdatum (Registrierung)</b-form-floating-label>
-            <BFormInput v-model="resInsurance.expiration" type="date" id="expirationDate"></BFormInput>
+            <b-form-floating-label label-for="expirationDate">Ablaufdatum* (Registrierung)</b-form-floating-label>
+            <BFormInput v-model="resInsurance.expiration" id="expirationDate" placeholder="yyyymmdd" required></BFormInput>
           </BCol>
         </BFormRow>
       </div>

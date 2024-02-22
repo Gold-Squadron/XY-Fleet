@@ -2,11 +2,26 @@
 <script setup lang="ts">
   import {type Ref, ref, toRaw} from 'vue';
   import {type TableItem, useModal} from "bootstrap-vue-next";
-  import {Vehicle} from "@/main";
+  import { Insurance, Pricing, Vehicle} from "@/main";
   import AddVehicleModal from "@/components/vehicleDashboard/AddVehicleModal.vue";
   import ConfirmRemovalModal from "@/components/vehicleDashboard/ConfirmRemovalModal.vue";
   import EditVehicleModal from "@/components/vehicleDashboard/EditVehicleModal.vue";
   import VehicleDetailsModal from "@/components/vehicleDashboard/VehicleDetailsModal.vue";
+  import {
+    getAllXYWings,
+    getInsurance,
+    getPricing,
+    addWing,
+    editWing,
+    editInsurance,
+    editPricing,
+    getAllInsurances,
+    getAllPricings,
+    removeInsurance,
+    removeWing,
+    removePricing, addPricing, addInsurance
+  } from "@/components/vehicleDashboard/VehicleDashboardRestCalls";
+  import {getAllBookings, removeBooking} from "@/components/userManagement/UsermanagementRestCalls";
 
   let editeVehicleId: Ref<string> = ref('')
   let editedVehicle: Ref<Vehicle | null> = ref(null)
@@ -21,12 +36,40 @@
     show()
   }
 
-  // Demodata
-  let vehicles = ref([new Vehicle('22323fcvd', 'DN-LA186', 'Opel', 'Corsa E', '123456789', 30000, 35000, 'Kleinwagen')])
-
-  // Convert the raw data into the rendering format
+  let vehicles: Ref<Vehicle[]> = ref([])
   let selectedIds: Ref<String[]> = ref([])
 
+  // Load data from database
+  function loadAllWings(): void {
+    vehicles.value = []
+    getAllXYWings().then(res => {
+          res.forEach(wing => {
+            loadWing(wing)
+          })
+          vehiclesConverted.value = convertVehicleData()
+        }
+    )
+  }
+
+  function loadWing(w: any): void {
+    let wing = new Vehicle(w.id, w.license_plate, w.brand, w.model, w.chassis_number, w.mileage, w.annual_performance, w.type)
+
+    // Load rest of data
+    getInsurance(w.insurance_id).then(i => {
+      // !TODO! Change from number to date
+      wing.insurance = new Insurance(i.insurance_number, i.registration_date, i.insurance_number_expiration)
+    })
+    getPricing(w.pricing_id).then(p => {
+      wing.pricing = new Pricing(p.purchase_date, p.list_price_gross, p.leasing_installment_net)
+    })
+
+    vehicles.value.push(wing)
+  }
+
+  loadAllWings()
+
+
+  // Convert the raw data into the rendering format
   let vehiclesConverted: Ref<TableItem[]> = ref([])
 
   function convertVehicleData(): TableItem[] {
@@ -50,16 +93,29 @@
   vehiclesConverted.value = convertVehicleData()
 
   function addVehicle(vehicle: Vehicle): void {
-    // !TODO! Add vehicle to database
+    // Add vehicle do database
+    addPricing(vehicle.pricing).then(p => {
+      addInsurance(vehicle.insurance).then(i => {
+        addWing(vehicle, p.id, i.id).then(() => {
+          loadAllWings()
+        })
+    })
+      })
 
+    // Update UI
     vehiclesConverted.value = []
     vehicles.value.push(vehicle)
     vehiclesConverted.value = convertVehicleData()
   }
 
   function removeVehicle(): void {
-    // !TODO! Remove vehicle from database
+    // Remove vehicle from database
+    selectedIds.value.forEach(id => {
+      let wing = getVehicleById("" + id)
+      removeSingleWing(Number(id), wing.insurance.id, wing.pricing.id)
+    })
 
+    // Update UI
     vehiclesConverted.value = []
     vehicles.value = vehicles.value.filter(vehicle => !selectedIds.value.includes(vehicle.getUiId()))
     vehiclesConverted.value = convertVehicleData()
@@ -67,6 +123,39 @@
     selectedIds.value = []
 
     changeAll(true)
+  }
+
+  function removeSingleWing(wingId: number, insuranceId: number, pricingId: number): void{
+    // !TODO! Yes, this is currently a mess. But it works (for now). Will be fixed after the presentation
+
+    // Remove insurance, pricing and bookings from the vehicle
+    getAllBookings().then(res => {
+      let bookingsDelete = res.filter(r => r.vehicle_id == Number(wingId))
+
+      bookingsDelete.forEach(booking => {
+        removeBooking(booking.id)
+      })
+
+      getAllInsurances().then(res => {
+        let insurancesDelete = res.filter(r => r.id == Number(insuranceId))
+
+        insurancesDelete.forEach(insurance => {
+          removeInsurance(insurance.id)
+        })
+        getAllPricings().then(res => {
+          let pricingsDelete = res.filter(r2 => r2.id == Number(pricingId))
+
+          pricingsDelete.forEach(pricing => {
+            removePricing(pricing.id)
+          })
+
+          removeWing(Number(wingId)).then(res => {
+            removeInsurance(res.insurance_id)
+            removePricing(res.pricing_id)
+          })
+        })
+      })
+    })
   }
 
   function selectRow(index: number, forceDeselect: boolean = false): void {
@@ -105,14 +194,13 @@
   }
 
   function editVehicle(data: Vehicle): void {
-    let vehicle = getVehicleById(editeVehicleId.value)
+    editWing(data).then(res => {
+      const pricingId = res.pricing_id
+      const insuranceId = res.insurance_id
 
-    if (vehicle == undefined) {
-      return
-    }
-
-    // !FIXME!
-    vehicle = data
+      editPricing(data, pricingId)
+      editInsurance(data, insuranceId)
+    })
 
     vehiclesConverted.value = convertVehicleData()
   }

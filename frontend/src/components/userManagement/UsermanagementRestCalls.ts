@@ -15,7 +15,8 @@ export interface RPilot {
 
 export interface RBooking {
     id: number,
-    driver_id: number
+    driver_id: number,
+    vehicle_id: number
 //    role  varchar(8) check( role in ('admin', 'user', 'security')),
 //    is_driver tinyint(1) not null
 }

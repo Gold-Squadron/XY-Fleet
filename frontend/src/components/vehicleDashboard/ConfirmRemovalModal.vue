@@ -26,6 +26,3 @@
     </b-row>
   </BModal>
 </template>
-
-<script lang="ts">
-</script>
