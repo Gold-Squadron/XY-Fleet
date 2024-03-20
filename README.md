@@ -44,7 +44,8 @@ docker compose -f compose.yml up mariadb -d
 ````
 If you have mariadb properly installed, you can call it in the console like this.
 ```shell
-mariadb --defaults-file ./connection_parameters.cnf init.sql
+mariadb --defaults-file=connection_parameters.cnf --execute='source init.sql;'
+mariadb --defaults-file=connection_parameters.cnf --execute='source ExampleDataInit.sql;' 
 ```
 Otherwise, you can execute the init.sql script manually form your Database IDE on the docker image.
 ### Backend (Java)
