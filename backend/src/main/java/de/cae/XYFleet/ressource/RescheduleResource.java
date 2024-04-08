@@ -1,6 +1,7 @@
 package de.cae.XYFleet.ressource;
 
 import org.jooq.Result;
+import org.jooq.codegen.XYFleet.tables.records.VehiclesRecord;
 import org.restlet.data.Status;
 import org.restlet.resource.*;
 
@@ -24,6 +25,11 @@ public class RescheduleResource extends EntryResource{
         throw new ResourceException(Status.CLIENT_ERROR_METHOD_NOT_ALLOWED);
     }
 
+    /**
+     *  calculates reschedule suggestions for each bookings.
+     * @return returns JSON package containing reschedule suggestions for each booking in a list.
+     * @throws ResourceException
+     */
     @Override
     @Get
     public String toString() throws ResourceException {
@@ -33,9 +39,8 @@ public class RescheduleResource extends EntryResource{
 
         Integer[] ids = Arrays.stream(valuesMap.get("id").split(",")).map(Integer::valueOf).toArray(Integer[]::new);
         Result<BookingsRecord> records = dslContext.fetch(BOOKINGS, BOOKINGS.ID.in(ids));
-        FilterResource filterResource = new FilterResource();
 
-        Result<BookingsRecord> result = filterResource.filterBooking(records);
+        Result<BookingsRecord> result = calculateRescheduling(records);
 
         return result.formatJSON(jSONFormat);
     }
@@ -49,5 +54,24 @@ public class RescheduleResource extends EntryResource{
     @Override
     public String handlePut(Map<String, String> values) throws ResourceException {
         return null;
+    }
+    /**
+     * calculate possible rescheduling for given bookingsrecords. This Method is designed to handle for one specific vehicle only.
+     * @param records bookingRecordList of all records that need to be rescheduled
+     * @return calculated rescheduling for given bookingsrecords
+     */
+    public Result<BookingsRecord> calculateRescheduling(Result<BookingsRecord> records) {
+        Result<BookingsRecord> tempBookingsTable = dslContext.fetch(BOOKINGS);
+        FilterResource filterResource = new FilterResource();
+        for (BookingsRecord record : records) {
+            Result<VehiclesRecord> result = filterResource.filterVehicle(tempBookingsTable, record.getLeasingStart(), record.getLeasingEnd());
+
+            int i = result.get(0).getId();
+            tempBookingsTable.remove(record);
+            record.setVehicleId(i);
+            //add expected rescheduled Booking to temporary table, so it gets considered for next calculation
+            tempBookingsTable.add(record);
+        }
+        return records;
     }
 }
