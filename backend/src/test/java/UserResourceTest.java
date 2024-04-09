@@ -18,7 +18,7 @@ public class UserResourceTest extends EntryResourceTest {
     @BeforeAll
     public static void initAll() {
         //Arrange
-        UsersRecord user = new UsersRecord(0, "mMustermann", "123","Max Mustermann","Max.Mustermann@cae.com", "user", Byte.parseByte("1"));
+        UsersRecord user = new UsersRecord(0, "mMustermann", "123", "user", Byte.parseByte("1"));
         user.setId(scenario.add(USERS, user));
         uri = "/user/" + user.getId();
         testRecord = user;
@@ -32,7 +32,7 @@ public class UserResourceTest extends EntryResourceTest {
     }
 
     @ParameterizedTest
-    @CsvSource(value = {"name=mMusterKerl&password=123&role=security&is_driver=1&full_name=Max Mustermann&email=Max.Mustermann@cae.com"}, delimiter = ':')
+    @CsvSource(value = {"name=mMusterKerl1&password=123&role=security&is_driver=1"}, delimiter = ':')
     public void put_validCall_shouldReturnEntryInDatabase(String params) {
         super.put_validCall_shouldReturnEntryInDatabase(params);
     }

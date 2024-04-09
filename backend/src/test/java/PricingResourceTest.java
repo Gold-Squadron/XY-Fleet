@@ -81,17 +81,17 @@ public class PricingResourceTest extends EntryResourceTest{
 
     @Override
     @ParameterizedTest
-    @CsvSource(value = {"purchase_date=2013-08-29&list_price_gross=10000&leasing_installment_net=2345"}, delimiter = ':')
+    @CsvSource(value = {"purchase_date=2013-08-29&list_price_gross=10000&leasing_installment_net=2345&leasing_start=2024-01-01&leasing_end=2025-01-01"}, delimiter = ':')
     public void put_validCall_shouldReturnEntryInDatabase(String params) {
         super.put_validCall_shouldReturnEntryInDatabase(params);
     }
 
     @Override
     @ParameterizedTest
-    @CsvSource(value = {FORBIDDEN+":" + ROLE_USER + ":purchase_date=2013-08-29&list_price_gross=10000&leasing_installment_net=2345",
-            FORBIDDEN+":" + ROLE_SECURITY + ":purchase_date=2013-08-29&list_price_gross=10000&leasing_installment_net=2345",
-            UNAUTHORIZED+":abc:purchase_date=2013-08-29&list_price_gross=10000&leasing_installment_net=2345",
-            BAD_REQUEST+":" + ROLE_ADMIN + ":list_price_gross=10000&leasing_installment_net=2345",
+    @CsvSource(value = {FORBIDDEN+":" + ROLE_USER + ":purchase_date=2013-08-29&list_price_gross=10000&leasing_installment_net=2345&leasing_start=2024-01-01&leasing_end=2025-01-01",
+            FORBIDDEN+":" + ROLE_SECURITY + ":purchase_date=2013-08-29&list_price_gross=10000&leasing_installment_net=2345&leasing_start=2024-01-01&leasing_end=2025-01-01",
+            UNAUTHORIZED+":abc:purchase_date=2013-08-29&list_price_gross=10000&leasing_installment_net=2345&leasing_start=2024-01-01&leasing_end=2025-01-01",
+            BAD_REQUEST+":" + ROLE_ADMIN + ":list_price_gross=10000&leasing_installment_net=2345&leasing_start=2024-01-01&leasing_end=2025-01-01",
             BAD_REQUEST+":"+ ROLE_ADMIN +":"}, delimiter = ':')
     public void put_invalidCall_shouldThrowResourceException(String responseMessage, String role, String params) {
         super.put_invalidCall_shouldThrowResourceException(responseMessage, role, params);

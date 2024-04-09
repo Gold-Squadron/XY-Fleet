@@ -24,10 +24,13 @@ public class BookingsResourceTest extends ResourceTest{
         pricing.setId(scenario.add(PRICING, pricing));
         //dslContext.insertInto(PRICING).values(pricing).onDuplicateKeyIgnore().execute();
 
-        InsurancesRecord insurances = new InsurancesRecord(0, 10, 10, LocalDate.parse("2024-01-01"));
+        InsurancesRecord insurances = new InsurancesRecord(0, 10, LocalDate.parse("2024-01-01"), LocalDate.parse("2024-01-01"));
         insurances.setId(scenario.add(INSURANCES, insurances));
         //dslContext.insertInto(INSURANCES).values(insurances).onDuplicateKeyIgnore().execute();
+
         FuelCardRecord fuelCard = new FuelCardRecord(0, 10000000000000000L, 10000000000000001L,null);
+        fuelCard.setId(scenario.add(FUEL_CARD, fuelCard));
+        //dslContext.insertInto(FUEL_CARD).values(fuelCard).onDuplicateKeyIgnore().execute();
 
         VehiclesRecord vehicle = new VehiclesRecord(0, "STO-XY-123", "VW", "Käfer", "123", 2000, 2000,4000, insurances.getId(),"car" ,pricing.getId(), fuelCard.getId(), ACCESS_GROUP_ID);
         vehicle.setId(scenario.add(VEHICLES, vehicle));

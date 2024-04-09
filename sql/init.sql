@@ -2,24 +2,12 @@ DROP SCHEMA if exists SWT;
 
 create schema if not exists SWT;
 
-create table if not exists SWT.users
-(
-    id        int auto_increment
-        primary key,
-    name      varchar(255) not null unique,
-    password varchar(255) not null,
-    full_name varchar(255) not null,
-    email varchar(255) not null,
-    role  varchar(255) not null,
-    is_driver tinyint(1) not null
-);
-
 create table if not exists SWT.insurances
 (
     id                          int auto_increment
         primary key,
     insurance_number            int not null unique,
-    registration_date           int not null,
+    registration_date           date not null,
     insurance_number_expiration_date date not null
 );
 
@@ -40,7 +28,7 @@ create table if not exists SWT.users
         primary key,
     name      varchar(255) not null unique,
     password varchar(255) not null,
-    role  varchar(8) check( role in ('admin', 'user', 'security')),
+    role  varchar(8) check( role in ('admin', 'user', 'security', null)),
     is_driver tinyint(1) not null
 );
 
@@ -49,7 +37,7 @@ create table if not exists SWT.access_groups
     id      int auto_increment
         primary key,
     user_id int,
-    `group` varchar(255) not null,
+    `group` varchar(255) not null unique,
     is_bookable boolean not null,
     constraint access_groups_user_fk
         foreign key (user_id) references users (id)

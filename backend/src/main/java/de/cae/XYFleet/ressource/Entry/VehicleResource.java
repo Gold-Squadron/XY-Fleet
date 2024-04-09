@@ -62,6 +62,12 @@ public class VehicleResource extends EntryResource {
         //check InsuranceId
         if(!dslContext.fetchExists(INSURANCES, INSURANCES.ID.eq(vehiclesRecord.getInsuranceId())))
             throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, "non existing Insurance Id given");
+        //check FuelCardId
+        if(!dslContext.fetchExists(FUEL_CARD, FUEL_CARD.ID.eq(vehiclesRecord.getFuelCardId())))
+            throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, "non existing Fuel Card Id given");
+        //check FuelCardId
+        if(!dslContext.fetchExists(ACCESS_GROUPS, ACCESS_GROUPS.ID.eq(vehiclesRecord.getAccessGroupId())))
+            throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, "non existing Access Group Id given");
 
         VehiclesRecord temp = dslContext.fetchOne(VEHICLES, VEHICLES.LICENSE_PLATE.eq(vehiclesRecord.getLicensePlate()));
 

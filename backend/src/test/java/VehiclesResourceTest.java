@@ -17,6 +17,7 @@ import static org.jooq.codegen.XYFleet.Tables.VEHICLES;
 public class VehiclesResourceTest extends ResourceTest {
     public static int INSURANCE_ID;
     public static int PRICING_ID;
+    public static int FUEL_CARD_ID;
     @BeforeAll
     public static void initAll() {
         //Arrange
@@ -24,10 +25,13 @@ public class VehiclesResourceTest extends ResourceTest {
         pricing.setId(scenario.add(PRICING, pricing));
         //dslContext.insertInto(PRICING).values(pricing).onDuplicateKeyIgnore().execute();
 
-        InsurancesRecord insurances = new InsurancesRecord(0, 10, 10, LocalDate.parse("2024-01-01"));
+        InsurancesRecord insurances = new InsurancesRecord(0, 10, LocalDate.parse("2024-01-01"), LocalDate.parse("2024-01-01"));
         insurances.setId(scenario.add(INSURANCES, insurances));
         //dslContext.insertInto(INSURANCES).values(insurances).onDuplicateKeyIgnore().execute();
+
         FuelCardRecord fuelCard = new FuelCardRecord(0, 10000000000000000L, 10000000000000001L,null);
+        fuelCard.setId(scenario.add(FUEL_CARD, fuelCard));
+        //dslContext.insertInto(FUEL_CARD).values(fuelCard).onDuplicateKeyIgnore().execute();
 
         VehiclesRecord vehicle = new VehiclesRecord(0, "STO-XY-123", "VW", "Käfer", "123", 2000, 2000,4000, insurances.getId(),"car" ,pricing.getId(), fuelCard.getId(), ACCESS_GROUP_ID);
         vehicle.setId(scenario.add(VEHICLES, vehicle));
@@ -36,6 +40,9 @@ public class VehiclesResourceTest extends ResourceTest {
         uri = "/xywing";
         testTable = Database.getDSLContext().select().from(VEHICLES).fetch();
         table = VEHICLES;
+        FUEL_CARD_ID=fuelCard.getId();
+        PRICING_ID= pricing.getId();
+        INSURANCE_ID= insurances.getId();
     }
     @Override
     @ParameterizedTest
@@ -64,7 +71,7 @@ public class VehiclesResourceTest extends ResourceTest {
 
     @Test
     public void put_validCall_shouldReturnEntryInDatabase() {
-        String params = "license_plate=STO-XY-1&brand=Tesla&model=C2&chassis_number=100&mileage=400&annual_performance=2000&expected_mileage=3000&type=car&pricing_id=" + PRICING_ID + "&insurance_id=" + INSURANCE_ID;
+        String params = "license_plate=STO-XY-1&brand=Tesla&model=C2&chassis_number=100&mileage=400&annual_performance=2000&expected_mileage=3000&type=car&pricing_id=" + PRICING_ID + "&insurance_id=" + INSURANCE_ID+ "&fuel_card_id=" + FUEL_CARD_ID + "&access_group_id="+ACCESS_GROUP_ID;
         super.put_validCall_shouldReturnEntryInDatabase(params);
     }
 

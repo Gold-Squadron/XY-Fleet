@@ -38,9 +38,9 @@ public abstract class ResourceTest {
         scenario = new Scenario();
         UsersRecord test = new UsersRecord();
 
-        UsersRecord admin = new UsersRecord(0, ROLE_ADMIN, ROLE_ADMIN, "Adam Adminton the 3rd","admin@cae.com",ROLE_ADMIN , (byte) 1 );
-        UsersRecord user = new UsersRecord(0, ROLE_USER,ROLE_USER, "Usan Adminsson", "user@cae.com", ROLE_USER, (byte) 1);
-        UsersRecord security = new UsersRecord(0, ROLE_SECURITY, ROLE_SECURITY,"Secura Userdaughter","security@cae.com", ROLE_SECURITY, (byte) 0);
+        UsersRecord admin = new UsersRecord(0, ROLE_ADMIN, ROLE_ADMIN,ROLE_ADMIN , (byte) 1);
+        UsersRecord user = new UsersRecord(0, ROLE_USER,ROLE_USER, ROLE_USER, (byte) 1 );
+        UsersRecord security = new UsersRecord(0, ROLE_SECURITY, ROLE_SECURITY, ROLE_SECURITY, (byte) 0);
 
         AccessGroupsRecord accessGroup = new AccessGroupsRecord(0,null, "Pool",(byte) 1);
         ACCESS_GROUP_ID = scenario.add(ACCESS_GROUPS, accessGroup);
