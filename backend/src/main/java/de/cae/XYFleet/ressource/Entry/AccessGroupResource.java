@@ -29,7 +29,7 @@ public class AccessGroupResource extends EntryResource {
         AccessGroupsRecord accessGroupsRecord = (AccessGroupsRecord) record;
         //check USER_ID
         Integer userId = accessGroupsRecord.getUserId();
-        if(userId!=null && !dslContext.fetchExists(ACCESS_GROUPS, USERS.ID.eq(userId)))
+        if(userId!=null && !dslContext.fetchExists(USERS, USERS.ID.eq(userId)))
             throw new ResourceException(org.restlet.data.Status.CLIENT_ERROR_BAD_REQUEST, "non existing User id given");
 
         //check Group name duplicity
@@ -56,6 +56,9 @@ public class AccessGroupResource extends EntryResource {
     public String createEntity() throws ResourceException {
         checkInRole(ROLE_ADMIN);
         return super.createEntity();
+    }
+    public boolean isNotRequiredNull(String name) {
+        return super.isNotRequiredNull(name) && !Objects.equals(name, "user_id");
     }
     @Override
     @Get()

@@ -32,6 +32,12 @@ public class UserResource extends EntryResource {
         return super.createEntity();
     }
 
+    @Override
+    @Post()
+    public String editEntry() {
+        checkInRole(ROLE_ADMIN);
+        return super.editEntry();
+    }
 
     @Override
     public void validatePutCall(UpdatableRecordImpl record) {

@@ -48,6 +48,10 @@ public class Scenario<R extends org.jooq.UpdatableRecord<R>> extends HashMap<Tab
             for (R record : this.get(INSURANCES)) record.delete();
         if (this.get(PRICING) != null)
             for (R record : this.get(PRICING)) record.delete();
+        if (this.get(ACCESS_GROUPS) !=null)
+            for (R record : this.get(ACCESS_GROUPS)) record.delete();
+        if (this.get(FUEL_CARD) !=null)
+            for (R record : this.get(FUEL_CARD)) record.delete();
         if (this.get(USERS) != null)
             for (R record : this.get(USERS)) record.delete();
     }

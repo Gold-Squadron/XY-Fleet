@@ -46,8 +46,8 @@ create table if not exists SWT.fuel_card
 (
     id                int auto_increment
         primary key ,
-    aral numeric(17),
-    shell numeric(17),
+    aral numeric(17) unique,
+    shell numeric(17) unique,
     pin int
 );
 create table if not exists SWT.vehicles
@@ -90,19 +90,5 @@ create table if not exists SWT.bookings
     constraint bookings_driver_fk
         foreign key (driver_id) references users (id),
     constraint bookings_vehicle_fk
-        foreign key (vehicle_id) references vehicles (id)
-);
-
-create table if not exists SWT.gas_cards
-(
-    id            int auto_increment
-        primary key,
-    number_aral   int          null,
-    number_shell  int          null,
-    pin           int          null,
-    license_plate int          not null,
-    holder        varchar(255) not null,
-    vehicle_id    int          not null,
-    constraint gas_cards_vehicle_fk
         foreign key (vehicle_id) references vehicles (id)
 );

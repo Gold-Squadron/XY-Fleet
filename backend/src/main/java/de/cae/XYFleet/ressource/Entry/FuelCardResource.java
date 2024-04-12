@@ -1,8 +1,7 @@
 package de.cae.XYFleet.ressource.Entry;
 
 import de.cae.XYFleet.ressource.EntryResource;
-import org.jooq.codegen.XYFleet.tables.records.AccessGroupsRecord;
-import org.jooq.codegen.XYFleet.tables.records.GasCardsRecord;
+import org.jooq.codegen.XYFleet.tables.records.FuelCardRecord;
 import org.jooq.impl.UpdatableRecordImpl;
 import org.restlet.data.Status;
 import org.restlet.resource.*;
@@ -13,23 +12,33 @@ import static de.cae.XYFleet.authentication.XYAuthorizer.ROLE_ADMIN;
 import static de.cae.XYFleet.authentication.XYAuthorizer.ROLE_SECURITY;
 import static org.jooq.codegen.XYFleet.Tables.*;
 
-public class GasCardResource extends EntryResource {
-    public GasCardResource(){
-        table = GAS_CARDS;
+public class FuelCardResource extends EntryResource {
+    public FuelCardResource() {
+        table = FUEL_CARD;
     }
+
     @Override
     protected void doInit() throws ResourceException {
         super.doInit();
-        table = GAS_CARDS;
+        table = FUEL_CARD;
     }
 
     @Override
     public void validatePutCall(UpdatableRecordImpl record) {
-        GasCardsRecord gasCardsRecord = (GasCardsRecord) record;
-        //check USER_ID
-        if( !dslContext.fetchExists(GAS_CARDS, GAS_CARDS.ID.eq(gasCardsRecord.getVehicleId())))
-            throw new ResourceException(org.restlet.data.Status.CLIENT_ERROR_BAD_REQUEST, "non existing Vehicle id given");
-        }
+        FuelCardRecord fuelCardRecord = (FuelCardRecord) record;
+        //check Group name duplicity
+        FuelCardRecord aral = dslContext.fetchOne(FUEL_CARD, FUEL_CARD.ARAL.eq(fuelCardRecord.getAral()));
+
+        if (aral != null && !Objects.equals(aral.getId(), fuelCardRecord.getId()))
+            throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, "no duplicate ARAL identifier allowed");
+
+        FuelCardRecord shell = dslContext.fetchOne(FUEL_CARD, FUEL_CARD.SHELL.eq(fuelCardRecord.getShell()));
+
+        if (shell != null && !Objects.equals(shell.getId(), fuelCardRecord.getId()))
+            throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, "no duplicate SHELL identifier allowed");
+    }
+
+
     @Override
     @Delete
     public String deleteEntry() throws ResourceException {
@@ -43,12 +52,14 @@ public class GasCardResource extends EntryResource {
         checkInRole(ROLE_ADMIN);
         return super.editEntry();
     }
+
     @Override
     @Put
     public String createEntity() throws ResourceException {
         checkInRole(ROLE_ADMIN);
         return super.createEntity();
     }
+
     @Override
     @Get()
     public String toString() {

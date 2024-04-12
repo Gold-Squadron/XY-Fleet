@@ -15,19 +15,12 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 public abstract class EntryResourceTest extends ResourceTest {
     protected static UpdatableRecord testRecord = null;
     public void post_validCall_shouldReturnEntryInDatabase(String params) {
-        ClientResource clientResource = new ClientResource(url + uri);
-        ChallengeResponse challengeResponse = new ChallengeResponse(ChallengeScheme.HTTP_BASIC, ROLE_ADMIN, ROLE_ADMIN);
+        //create new Request
 
-        clientResource.setChallengeResponse(challengeResponse);
-        clientResource.setRetryAttempts(10);
+        ClientResource clientResource = setupRequest(ROLE_ADMIN);
+
         //Query
-        if (params != null) {
-            String[] paramList = params.split("&");
-            for (String param : paramList) {
-                String[] temp = param.split("=");
-                clientResource.setQueryValue(temp[0], temp[1]);
-            }
-        }
+        processQuery(params, clientResource);
         try {
             //Act
             //Assert
@@ -46,21 +39,12 @@ public abstract class EntryResourceTest extends ResourceTest {
         }
     }
     public void post_invalidCall_shouldReturnEntryInDatabase(String responseMessage, String role, String params) {
-        ClientResource clientResource = new ClientResource(url + uri);
-        ChallengeResponse challengeResponse = new ChallengeResponse(ChallengeScheme.HTTP_BASIC, role, role);
-        //Query
+        //create new Request
 
-        clientResource.setChallengeResponse(challengeResponse);
-        clientResource.setRetryAttempts(10);
+        ClientResource clientResource = setupRequest(role);
 
         //Query
-        if (params !=null) {
-            String[] paramList = params.split("&");
-            for (String param : paramList) {
-                String[] temp = param.split("=");
-                clientResource.setQueryValue(temp[0], temp[1]);
-            }
-        }
+        processQuery(params, clientResource);
         try {
             //Act
             //Assert
@@ -80,4 +64,5 @@ public abstract class EntryResourceTest extends ResourceTest {
             clientResource.release();
         }
     }
+
 }
