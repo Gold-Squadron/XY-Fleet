@@ -68,6 +68,9 @@ public class VehicleResource extends EntryResource {
         //check FuelCardId
         if(!dslContext.fetchExists(ACCESS_GROUPS, ACCESS_GROUPS.ID.eq(vehiclesRecord.getAccessGroupId())))
             throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, "non existing Access Group Id given");
+        //check validity of amount of seats
+        if(vehiclesRecord.getSeats()<1)
+            throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, "amount of seats must be greater or equal than 1");
 
         VehiclesRecord temp = dslContext.fetchOne(VEHICLES, VEHICLES.LICENSE_PLATE.eq(vehiclesRecord.getLicensePlate()));
 

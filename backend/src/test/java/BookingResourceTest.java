@@ -29,7 +29,7 @@ public class BookingResourceTest extends EntryResourceTest {
             fuelCard.setId(scenario.add(FUEL_CARD, fuelCard));
             //dslContext.insertInto(FUEL_CARD).values(fuelCard).onDuplicateKeyIgnore().execute();
 
-            VehiclesRecord vehicle = new VehiclesRecord(0, "STO-XY-123", "VW", "Käfer", "123", 2000, 2000,4000, insurances.getId(),"car" ,pricing.getId(), fuelCard.getId(), ACCESS_GROUP_ID);
+            VehiclesRecord vehicle = new VehiclesRecord(0, "STO-XY-123", "VW", "Käfer", "123", 2000, 2000,4000, insurances.getId(),"car" ,pricing.getId(), fuelCard.getId(), ACCESS_GROUP_ID, 1);
             vehicle.setId(scenario.add(VEHICLES, vehicle));
             //dslContext.insertInto(VEHICLES).values(vehicle).onDuplicateKeyIgnore().execute();
 

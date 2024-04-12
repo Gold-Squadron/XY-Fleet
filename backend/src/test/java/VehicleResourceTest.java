@@ -34,7 +34,7 @@ public class VehicleResourceTest extends EntryResourceTest {
         fuelCard.setId(scenario.add(FUEL_CARD, fuelCard));
         ////dslContext.insertInto(FUEL_CARD).values(fuelCard).onDuplicateKeyIgnore().execute();
 
-        VehiclesRecord vehicle = new VehiclesRecord(0, "STO-XY-123", "VW", "Käfer", "123", 2000, 2000,4000, insurances.getId(),"car" ,pricing.getId(), fuelCard.getId(), ACCESS_GROUP_ID);
+        VehiclesRecord vehicle = new VehiclesRecord(0, "STO-XY-123", "VW", "Käfer", "123", 2000, 2000,4000, insurances.getId(),"car" ,pricing.getId(), fuelCard.getId(), ACCESS_GROUP_ID, 2);
         vehicle.setId(scenario.add(VEHICLES, vehicle));
         //dslContext.insertInto(VEHICLES).values(vehicle).onDuplicateKeyIgnore().execute();
 
@@ -102,15 +102,17 @@ public class VehicleResourceTest extends EntryResourceTest {
 
     @Test
     public void put_validCall_shouldReturnEntryInDatabase() {
-        String params = "license_plate=STO-XY-1&brand=Tesla&model=C2&chassis_number=100&mileage=400&annual_performance=2000&expected_mileage=3000&type=car&pricing_id=" + PRICING_ID + "&insurance_id=" + INSURANCE_ID + "&fuel_card_id=" + FUEL_CARD_ID + "&access_group_id="+ACCESS_GROUP_ID;
+        String params = "license_plate=STO-XY-1&brand=Tesla&model=C2&chassis_number=100&mileage=400&annual_performance=2000&expected_mileage=3000&type=car&pricing_id=" + PRICING_ID + "&insurance_id=" + INSURANCE_ID + "&fuel_card_id=" + FUEL_CARD_ID + "&access_group_id="+ACCESS_GROUP_ID +"&seats=2";
         super.put_validCall_shouldReturnEntryInDatabase(params);
     }
 
     @Override
     @ParameterizedTest
-    @CsvSource(value = {FORBIDDEN+":" + ROLE_USER + ":license_plate=STO-XY-1&brand=Tesla&model=C2&chassis_number=1000&mileage=100&annual_performance=2000&",
-            FORBIDDEN+":" + ROLE_SECURITY + ":license_plate=STO-XY-1&brand=Tesla&model=C2&chassis_number=1000&mileage=100&annual_performance=2000&",
-            UNAUTHORIZED+":abc:license_plate=STO-XY-1&brand=Tesla&model=C2&chassis_number=1000&mileage=100&annual_performance=2000&"}, delimiter= ':')
+    @CsvSource(value = {FORBIDDEN+":" + ROLE_USER + ":license_plate=STO-XY-1&brand=Tesla&model=C2&chassis_number=1000&mileage=100&annual_performance=2000&seats=2",
+            FORBIDDEN+":" + ROLE_SECURITY + ":license_plate=STO-XY-1&brand=Tesla&model=C2&chassis_number=1000&mileage=100&annual_performance=2000&seats=2",
+            UNAUTHORIZED+":abc:license_plate=STO-XY-1&brand=Tesla&model=C2&chassis_number=1000&mileage=100&annual_performance=2000&seats=2",
+            FORBIDDEN+":"+ROLE_USER+":license_plate=STO-XY-1&brand=Tesla&model=C2&chassis_number=1000&mileage=100&annual_performance=2000&seats=-1",
+    }, delimiter= ':')
     public void put_invalidCall_shouldThrowResourceException(String responseMessage, String role, String params) {
         params = params + "pricing_id=" + PRICING_ID + "&insurance_id=" + INSURANCE_ID+ "&fuel_card_id=" + FUEL_CARD_ID + "&access_group_id="+ACCESS_GROUP_ID;
         super.put_invalidCall_shouldThrowResourceException(responseMessage, role, params);

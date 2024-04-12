@@ -66,6 +66,7 @@ create table if not exists SWT.vehicles
     pricing_id         int          not null,
     fuel_card_id       int          not null,
     access_group_id    int          not null,
+    seats              int          default(2)  check(seats>0),
     constraint vehicles_access_group_fk
         foreign key (access_group_id) references access_groups (id),
     constraint vehicles_fuel_card_fk
