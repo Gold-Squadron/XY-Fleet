@@ -61,7 +61,7 @@ public class BookingResource extends EntryResource {
     @Post()
     public String editEntry() {
         checkInRole(ROLE_USER);
-        return editEntry();
+        return super.editEntry();
     }
 
 /**

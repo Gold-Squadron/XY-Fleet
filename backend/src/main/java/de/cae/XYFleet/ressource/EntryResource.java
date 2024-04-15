@@ -33,8 +33,6 @@ public abstract class EntryResource extends XYServerResource {
 
     @Override
     public String deleteEntry() throws ResourceException {
-        checkInRole(ROLE_ADMIN);
-
         String result = this.toString();
 
         //DELETE insurance where id = {Identifier}
@@ -44,9 +42,6 @@ public abstract class EntryResource extends XYServerResource {
 
     @Override
     public String editEntry() throws ResourceException {
-        checkInRole(ROLE_ADMIN);
-
-
         Map<String, String> valuesMap = getQuery().getValuesMap();
         valuesMap.remove("id");
 
@@ -85,10 +80,8 @@ public abstract class EntryResource extends XYServerResource {
         for (Field<?> field : fields) {
             String name = field.getUnqualifiedName().first();
             String value = valuesMap.get(name);
-            if (isNotRequiredNull(name)) {
-                if (value == null)
+            if (isNotRequiredNull(name) && value == null)
                     throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, "Missing value for initialization: " + name);
-            }
             setFieldValueHelper(updatableRecord, field, value);
         }
         updatableRecord.set(BOOKINGS.ID, null);
@@ -104,7 +97,6 @@ public abstract class EntryResource extends XYServerResource {
     }
 
     abstract public void validatePutCall(UpdatableRecordImpl record);
-    //abstract public void validatePostCall(UpdatableRecordImpl record);
 
     //cast queue input according to the fields Datatype
     protected void setFieldValueHelper(UpdatableRecordImpl record, Field<?> field, String value) {
@@ -116,25 +108,29 @@ public abstract class EntryResource extends XYServerResource {
             } catch (NumberFormatException e) {
                 throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, field.getUnqualifiedName().first() + " has an invalid value: " + value + ", not parseable to Integer");
             }
-        } else {
-            if (field.getType() == LocalDate.class) {
-                try {
-                    record.set((Field<LocalDate>) field, LocalDate.parse(value));
-                } catch (DateTimeParseException e) {
-                    throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, field.getUnqualifiedName().first() + " has an invalid value: " + value + ", not parseable to LocalDate");
-                }
-            } else {
-                if (field.getType() == String.class) {
-                    record.set((Field<String>) field, value);
-                }
+        } else if (field.getType() == LocalDate.class) {
+            try {
+                record.set((Field<LocalDate>) field, LocalDate.parse(value));
+            } catch (DateTimeParseException e) {
+                throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, field.getUnqualifiedName().first() + " has an invalid value: " + value + ", not parseable to LocalDate");
             }
-            if (field.getType() == Byte.class) {
-                try {
-                    record.set((Field<Byte>) field, Byte.parseByte(value));
-                } catch (NumberFormatException e) {
-                    throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, field.getUnqualifiedName().first() + " has an invalid value: " + value + ", not parseable to Byte");
-                }
-
+        } else if (field.getType() == String.class) {
+            try {
+                record.set((Field<String>) field, value);
+            } catch (DateTimeParseException e) {
+                throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, field.getUnqualifiedName().first() + " has an invalid value: " + value + ", not parseable to String");
+            }
+        } else if (field.getType() == Byte.class) {
+            try {
+                record.set((Field<Byte>) field, Byte.parseByte(value));
+            } catch (NumberFormatException e) {
+                throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, field.getUnqualifiedName().first() + " has an invalid value: " + value + ", not parseable to Byte");
+            }
+        } else if (field.getType() == Long.class) {
+            try {
+                record.set((Field<Long>) field, Long.parseLong(value));
+            } catch (NumberFormatException e) {
+                throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, field.getUnqualifiedName().first() + " has an invalid value: " + value + ", not parseable to Long");
             }
         }
     }

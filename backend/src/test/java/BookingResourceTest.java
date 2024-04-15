@@ -16,15 +16,19 @@ public class BookingResourceTest extends EntryResourceTest {
     @BeforeAll
     public static void initAll(){
             //Arrange
-            PricingRecord pricing = new PricingRecord(0, LocalDate.parse("2023-01-01"), 3000, 5000);
+            PricingRecord pricing = new PricingRecord(0, LocalDate.parse("2023-01-01"),3000, 5000, LocalDate.parse("2023-01-01"), LocalDate.parse("2023-01-01"));
             pricing.setId(scenario.add(PRICING, pricing));
             //dslContext.insertInto(PRICING).values(pricing).onDuplicateKeyIgnore().execute();
 
-            InsurancesRecord insurances = new InsurancesRecord(0, 10, LocalDate.parse("2023-01-01"), 10);
+            InsurancesRecord insurances = new InsurancesRecord(0, 10, LocalDate.parse("2024-01-01"), LocalDate.parse("2024-01-01"));
             insurances.setId(scenario.add(INSURANCES, insurances));
             //dslContext.insertInto(INSURANCES).values(insurances).onDuplicateKeyIgnore().execute();
 
-            VehiclesRecord vehicle = new VehiclesRecord(0, "STO-XY-123", "VW", "Käfer", "123", 2000, 2000,4000, insurances.getId(),"car" ,pricing.getId() );
+            FuelCardRecord fuelCard = new FuelCardRecord(0, 10000000000000000L, 10000000000000001L,null);
+            fuelCard.setId(scenario.add(FUEL_CARD, fuelCard));
+            //dslContext.insertInto(FUEL_CARD).values(fuelCard).onDuplicateKeyIgnore().execute();
+
+            VehiclesRecord vehicle = new VehiclesRecord(0, "STO-XY-123", "VW", "Käfer", "123", 2000, 2000,4000, insurances.getId(),"car" ,pricing.getId(), fuelCard.getId(), ACCESS_GROUP_ID, 1);
             vehicle.setId(scenario.add(VEHICLES, vehicle));
             //dslContext.insertInto(VEHICLES).values(vehicle).onDuplicateKeyIgnore().execute();
 

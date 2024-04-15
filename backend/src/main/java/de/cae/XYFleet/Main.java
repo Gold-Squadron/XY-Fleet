@@ -19,7 +19,7 @@ public class Main {
             Connection conn = DriverManager.getConnection(url, userName, password);
             dslContext =  DSL.using(conn, SQLDialect.MARIADB);
             Server.initServer();
-        } catch (SQLException e) {
+       } catch (SQLException e) {
             e.printStackTrace();
         }
     }

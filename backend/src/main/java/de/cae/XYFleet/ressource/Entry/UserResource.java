@@ -32,7 +32,6 @@ public class UserResource extends EntryResource {
         return super.createEntity();
     }
 
-
     @Override
     public void validatePutCall(UpdatableRecordImpl record) {
         UsersRecord usersRecord = (UsersRecord) record;

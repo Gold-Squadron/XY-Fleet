@@ -1,16 +1,20 @@
 import org.jooq.*;
 import org.jooq.Record;
+import org.jooq.codegen.XYFleet.tables.records.AccessGroupsRecord;
 import org.jooq.codegen.XYFleet.tables.records.UsersRecord;
 import org.jooq.impl.DSL;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
+import org.restlet.Client;
 import org.restlet.data.ChallengeResponse;
 import org.restlet.data.ChallengeScheme;
 import org.restlet.resource.ClientResource;
 import org.restlet.resource.ResourceException;
 
+import static com.sun.jna.platform.win32.LMAccess.ACCESS_GROUP;
 import static de.cae.XYFleet.authentication.XYAuthorizer.*;
 import static de.cae.XYFleet.ressource.XYServerResource.jSONFormat;
+import static org.jooq.codegen.XYFleet.Tables.ACCESS_GROUPS;
 import static org.jooq.codegen.XYFleet.tables.Users.USERS;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -26,6 +30,7 @@ public abstract class ResourceTest {
     protected static int ADMIN_ID;
     protected static int USER_ID;
     protected static int SECURITY_ID;
+    protected static int ACCESS_GROUP_ID;
     protected static Scenario scenario;
     protected static DSLContext dslContext = Database.getDSLContext();
     @BeforeAll
@@ -33,9 +38,13 @@ public abstract class ResourceTest {
         scenario = new Scenario();
         UsersRecord test = new UsersRecord();
 
-        UsersRecord admin = new UsersRecord(0, ROLE_ADMIN, ROLE_ADMIN, ROLE_ADMIN, (byte) 1 );
-        UsersRecord user = new UsersRecord(0, ROLE_USER, ROLE_USER, ROLE_USER, (byte) 1);
+        UsersRecord admin = new UsersRecord(0, ROLE_ADMIN, ROLE_ADMIN,ROLE_ADMIN , (byte) 1);
+        UsersRecord user = new UsersRecord(0, ROLE_USER,ROLE_USER, ROLE_USER, (byte) 1 );
         UsersRecord security = new UsersRecord(0, ROLE_SECURITY, ROLE_SECURITY, ROLE_SECURITY, (byte) 0);
+
+        AccessGroupsRecord accessGroup = new AccessGroupsRecord(0,null, "Pool",(byte) 1);
+
+        ACCESS_GROUP_ID = scenario.add(ACCESS_GROUPS, accessGroup);
         ADMIN_ID = scenario.add(USERS, admin);
         USER_ID = scenario.add(USERS, user);
         SECURITY_ID = scenario.add(USERS, security);
@@ -91,10 +100,8 @@ public abstract class ResourceTest {
 
     public void get_validCall_shouldReturnEntryInDatabase() {
         //Arrange
-        ClientResource clientResource = new ClientResource(url + uri);
-        ChallengeResponse challengeResponse = new ChallengeResponse(ChallengeScheme.HTTP_BASIC, ROLE_ADMIN, ROLE_ADMIN);
-        clientResource.setChallengeResponse(challengeResponse);
-        clientResource.setRetryAttempts(10);
+        ClientResource clientResource = setupRequest(ROLE_ADMIN);
+
         try {
             //Act
             // Send a GET request
@@ -114,10 +121,8 @@ public abstract class ResourceTest {
     public void delete_invalidCall_shouldThrowResourceException(String responseMessage, String role) {
         //Arrange
         if (role == null) role = "";
-        ClientResource clientResource = new ClientResource(url + uri);
-        ChallengeResponse challengeResponse = new ChallengeResponse(ChallengeScheme.HTTP_BASIC, role, role);
-        clientResource.setChallengeResponse(challengeResponse);
-        clientResource.setRetryAttempts(10);
+        ClientResource clientResource = setupRequest(role);
+
         //Act
         try {
             // Send a invalid DELETE request
@@ -137,18 +142,10 @@ public abstract class ResourceTest {
     public void put_validCall_shouldReturnEntryInDatabase(String params) {
         //Arrange
 
-        ClientResource clientResource = new ClientResource(url + uri);
-        ChallengeResponse challengeResponse = new ChallengeResponse(ChallengeScheme.HTTP_BASIC, ROLE_ADMIN, ROLE_ADMIN);
-        clientResource.setChallengeResponse(challengeResponse);
-        clientResource.setRetryAttempts(10);
+        ClientResource clientResource = setupRequest(ROLE_ADMIN);
 
         //Query
-        if (params == null) params = "";
-        String[] paramList = params.split("&");
-        for (String param : paramList) {
-            String[] temp = param.split("=");
-            clientResource.setQueryValue(temp[0], temp[1]);
-        }
+        String paramList[] = processQuery(params, clientResource);
 
         try {
             //Assert
@@ -178,22 +175,11 @@ public abstract class ResourceTest {
 
     public void put_invalidCall_shouldThrowResourceException(String responseMessage, String role, String params) {
         //Arrange
-        ClientResource clientResource = new ClientResource(url + uri);
-        ChallengeResponse challengeResponse = new ChallengeResponse(ChallengeScheme.HTTP_BASIC, role, role);
-        clientResource.setChallengeResponse(challengeResponse);
-        clientResource.setRetryAttempts(10);
+
+        ClientResource clientResource = setupRequest(role);
 
         //Query
-        String[] paramList = null;
-        if (params != null) {
-            paramList = params.split("&");
-            for (String param : paramList) {
-                String[] temp = param.split("=");
-                if (temp.length == 2) {
-                    clientResource.setQueryValue(temp[0], temp[1]);
-                }
-            }
-        }
+        String[] paramList = processQuery(params, clientResource);
 
         try {
             //Act
@@ -215,7 +201,9 @@ public abstract class ResourceTest {
                     String[] temp = param.split("=");
                     if (temp.length == 2) {
                         Field<String> myField = table.field(temp[0], String.class);
-                        condition = condition.and(myField.eq(DSL.val(temp[1], myField.getDataType())));
+                        if(myField!=null){
+                            condition = condition.and(myField.eq(DSL.val(temp[1], myField.getDataType())));
+                        }
                     }
                 }
                 Database.getDSLContext().deleteFrom(table).where(condition).execute();
@@ -229,5 +217,29 @@ public abstract class ResourceTest {
     public static void cleanUp() {
         scenario.cleanUp();
     }
-
+    protected String[] processQuery(String params, ClientResource clientResource){
+        //Query
+        if (params !=null) {
+            String[] paramList = params.split("&");
+            for (String param : paramList) {
+                String[] temp = param.split("=");
+                if(temp.length>1){
+                    clientResource.setQueryValue(temp[0], temp[1]);
+                }else if(temp.length==1){
+                    clientResource.setQueryValue(temp[0], null);
+                }else{
+                    throw new IllegalArgumentException("Query was not setup correctly. Always needs a form of 'column_name'='value/'");
+                }
+            }
+            return paramList;
+        }
+        return null;
+    }
+    protected ClientResource setupRequest(String role){
+        ClientResource clientResource = new ClientResource(url + uri);
+        ChallengeResponse challengeResponse = new ChallengeResponse(ChallengeScheme.HTTP_BASIC, role, role);
+        clientResource.setChallengeResponse(challengeResponse);
+        clientResource.setRetryAttempts(10);
+        return clientResource;
+    }
 }

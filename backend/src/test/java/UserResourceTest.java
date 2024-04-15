@@ -32,7 +32,7 @@ public class UserResourceTest extends EntryResourceTest {
     }
 
     @ParameterizedTest
-    @CsvSource(value = {"name=mMusterKerl&password=123&role=security&is_driver=1"}, delimiter = ':')
+    @CsvSource(value = {"name=mMusterKerl1&password=123&role=security&is_driver=1"}, delimiter = ':')
     public void put_validCall_shouldReturnEntryInDatabase(String params) {
         super.put_validCall_shouldReturnEntryInDatabase(params);
     }
