@@ -2,16 +2,6 @@ DROP SCHEMA if exists SWT;
 
 create schema if not exists SWT;
 
-create table if not exists SWT.users
-(
-    id        int auto_increment
-        primary key,
-    name      varchar(255) not null unique,
-    password varchar(255) not null,
-    role  varchar(255) not null,
-    is_driver tinyint(1) not null
-);
-
 create table if not exists SWT.insurances
 (
     id                          int auto_increment
@@ -38,7 +28,7 @@ create table if not exists SWT.users
         primary key,
     name      varchar(255) not null unique,
     password varchar(255) not null,
-    role  varchar(8) check( role in ('admin', 'user', 'security', null)),
+    role  varchar(8)  default(null) check( role in ('admin', 'user', 'security', null)),
     is_driver tinyint(1) not null
 );
 
