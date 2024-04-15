@@ -33,13 +33,6 @@ public class UserResource extends EntryResource {
     }
 
     @Override
-    @Post()
-    public String editEntry() {
-        checkInRole(ROLE_ADMIN);
-        return super.editEntry();
-    }
-
-    @Override
     public void validatePutCall(UpdatableRecordImpl record) {
         UsersRecord usersRecord = (UsersRecord) record;
 

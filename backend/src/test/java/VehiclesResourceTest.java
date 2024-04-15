@@ -1,16 +1,12 @@
-import de.cae.XYFleet.Database;
-import org.jooq.codegen.XYFleet.tables.Users;
 import org.jooq.codegen.XYFleet.tables.records.*;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 
-import java.sql.Date;
 import java.time.LocalDate;
 
 import static de.cae.XYFleet.authentication.XYAuthorizer.*;
-import static de.cae.XYFleet.authentication.XYAuthorizer.ROLE_ADMIN;
 import static org.jooq.codegen.XYFleet.Tables.*;
 import static org.jooq.codegen.XYFleet.Tables.VEHICLES;
 

@@ -1,4 +1,3 @@
-import de.cae.XYFleet.Database;
 import org.jooq.codegen.XYFleet.tables.records.InsurancesRecord;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -9,9 +8,7 @@ import java.time.LocalDate;
 
 import static de.cae.XYFleet.authentication.XYAuthorizer.*;
 import static de.cae.XYFleet.authentication.XYAuthorizer.ROLE_ADMIN;
-import static org.jooq.codegen.XYFleet.Tables.BOOKINGS;
 import static org.jooq.codegen.XYFleet.Tables.INSURANCES;
-
 public class InsurancesResourceTest extends ResourceTest {
     @BeforeAll
     public static void initAll() {

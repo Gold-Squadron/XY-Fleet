@@ -1,4 +1,3 @@
-import de.cae.XYFleet.Database;
 import org.jooq.codegen.XYFleet.tables.Users;
 import org.jooq.codegen.XYFleet.tables.records.*;
 import org.junit.jupiter.api.BeforeAll;
