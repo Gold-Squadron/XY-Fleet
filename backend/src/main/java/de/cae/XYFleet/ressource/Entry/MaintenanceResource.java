@@ -1,5 +1,6 @@
-package de.cae.XYFleet.ressource;
+package de.cae.XYFleet.ressource.Entry;
 
+import de.cae.XYFleet.ressource.EntryResource;
 import org.jooq.Field;
 import org.jooq.Result;
 import org.jooq.codegen.XYFleet.tables.records.BookingsRecord;
@@ -15,22 +16,26 @@ import static org.jooq.codegen.XYFleet.Tables.BOOKINGS;
 
 public class MaintenanceResource extends EntryResource {
     @Override
+    protected void doInit() throws ResourceException {
+        super.doInit();
+        table = BOOKINGS;
+    }
+    public MaintenanceResource(){
+        table = BOOKINGS;
+    }
+    @Override
     @Delete
     public String deleteEntry() throws ResourceException {
         checkInRole(ROLE_ADMIN);
 
-        String result = this.toString();
-
-        //DELETE insurance where id = {Identifier}
-        dslContext.delete(BOOKINGS).where(BOOKINGS.ID.eq(identifier)).execute();
-        return result;
+        return super.deleteEntry();
     }
 
     @Override
     @Put
     public String createEntity() throws ResourceException {
         checkInRole(ROLE_USER);
-        return handlePut(getQuery().getValuesMap());
+        return super.createEntity();
     }
 
     @Override
@@ -51,61 +56,15 @@ public class MaintenanceResource extends EntryResource {
     @Post
     public String editEntry() throws ResourceException {
         checkInRole(ROLE_ADMIN);
-
-
-        Map<String, String> valuesMap = getQuery().getValuesMap();
-        valuesMap.remove("id");
-
-        Field<?>[] fields = BOOKINGS.fields();
-        //build up query for database
-        BookingsRecord booking = dslContext.fetchOne(BOOKINGS, BOOKINGS.ID.eq(identifier));
-
-        if (booking == null) throw new ResourceException(404, "given Maintenance Id is missing");
-
-        for (Field<?> field : fields) {
-            //checking whether amendments have been requested or not. Setting all types to String type safty in tests
-            String name = field.getUnqualifiedName().first();
-            String value = valuesMap.get(field.getUnqualifiedName().first());
-            if(value != null){
-                setFieldValueHelper(booking, field, value);
-            }
-        }
-        //check if valid call
-        if (!booking.changed())
-            throw new ResourceException(400, "nothing to do. no params in query given");
-        //check correctness of values
-        validateCall(booking);
-
-        //UPDATE insurances SET ({given values}) WHERE id = {Identifier}
-        booking.update();
-
-
-        return booking.formatJSON(jSONFormat);
+        return super.editEntry();
     }
 
     @Override
-    public String handlePut(Map<String, String> valuesMap) throws ResourceException {
-        Field<?>[] fields = BOOKINGS.fields();
-        //check if all expected values are given
-        BookingsRecord booking = dslContext.newRecord(BOOKINGS);
-        //INSERT INTO booking  VALUES ({query values})
-        for (Field<?> field : fields) {
-            String name = field.getUnqualifiedName().first();
-            String value = valuesMap.get(name);
-            if (!Objects.equals(name, "id") && !Objects.equals(name, "driver_id")) {
-                if (value == null) throw new ResourceException(400, "Missing value for initialization.");
-            }
-            setFieldValueHelper(booking, field, value);
-        }
-        booking.setId(null);
-        //check correctness of values
-        validateCall(booking);
-        booking.merge();
-        //CREATE vehicles VALUES ({given values})
-        return booking.formatJSON(jSONFormat);
+    public boolean isNotRequiredNull(String name) {
+        return super.isNotRequiredNull(name) && !Objects.equals(name, "driver_id");
     }
 
-    public void validateCall(UpdatableRecordImpl record) {
+    public void validatePutCall(UpdatableRecordImpl record) {
         BookingsRecord booking = (BookingsRecord) record;
         if (booking.getDriverId() != null)
             throw new ResourceException(400, "maintenance entries do not have a driver");

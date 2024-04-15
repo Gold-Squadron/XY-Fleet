@@ -28,15 +28,50 @@ function generateAvatarBasedOnInitials(driver: string) {
 export enum Roles{
     ADMIN,
     SECURITY,
-    TRAVEL_OFFICE
+    TRAVEL_OFFICE,
+    USER,
+    NONE
 }
 
 export class User {
-    constructor(private id: String = "", public name: String = "", public email: String = "" ,public password: String = "1234", public role: Roles = Roles.ADMIN, public isDriver: boolean = false) {
+    constructor(private uiId: String = "", public name: string = "", public password: string = "", public role: Roles = Roles.ADMIN, public isDriver: boolean = false) {
     }
 
-    public getId(): String{
-        return this.id
+    public getUiId(): String{
+        return this.uiId
+    }
+    public setUiId(id: string): void {
+        this.uiId = id
+    }
+}
+
+export class Vehicle {
+    public gasCard: GasCard = new GasCard()
+    public insurance: Insurance = new Insurance()
+    public prcing: Pricing = new Pricing()
+    constructor(private uiId: String = "", public licensePlate: string = "", public brand: string = "", public model: string = "", public chassisNumber: string = "", public mileage: number = 0, public annualPerformance: number = 0, public type: string = "") {
+    }
+
+    public getUiId(): String{
+        return this.uiId
+    }
+    public setUiId(id: String) : void {
+        this.uiId = id
+    }
+}
+
+export class GasCard {
+    constructor(public holder: string = "", public numberAral: any = null, public numberShell: any = null, public pin: any = null) {
+    }
+}
+
+export class Insurance {
+    constructor(public number: any = null, public registrationDate: any = null, public expiration: any = null) {
+    }
+}
+
+export class Pricing {
+    constructor(public purchaseDate: any = null, public listPriceGross: any = null, public leasingCostNet : any = null) {
     }
 }
 

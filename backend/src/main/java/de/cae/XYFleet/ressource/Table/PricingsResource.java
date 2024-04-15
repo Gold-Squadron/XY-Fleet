@@ -1,16 +1,20 @@
-package de.cae.XYFleet.ressource;
+package de.cae.XYFleet.ressource.Table;
 
 import de.cae.XYFleet.authentication.XYAuthorizer;
-import org.jooq.Record;
-import org.jooq.Result;
+import de.cae.XYFleet.ressource.Entry.PricingResource;
+import de.cae.XYFleet.ressource.XYServerResource;
 import org.restlet.resource.Get;
 import org.restlet.resource.Put;
 import org.restlet.resource.ResourceException;
 
-import static org.jooq.codegen.XYFleet.Tables.INSURANCES;
 import static org.jooq.codegen.XYFleet.Tables.PRICING;
 
 public class PricingsResource extends XYServerResource {
+    @Override
+    protected void doInit() throws ResourceException {
+        super.doInit();
+        table = PRICING;
+    }
 
     @Override
     @Put
@@ -23,7 +27,6 @@ public class PricingsResource extends XYServerResource {
     @Get
     public String toString() throws ResourceException {
         checkInRole(XYAuthorizer.ROLE_SECURITY);
-        Result<Record> result = dslContext.select().from(PRICING).fetch();
-        return result.formatJSON(jSONFormat);
+        return super.toString();
     }
 }

@@ -1,9 +1,5 @@
-import de.cae.XYFleet.Database;
 import org.jooq.DSLContext;
 import org.jooq.Table;
-import org.jooq.TableRecord;
-import org.jooq.impl.UpdatableRecordImpl;
-import org.restlet.security.User;
 
 import java.util.HashMap;
 import java.util.HashSet;

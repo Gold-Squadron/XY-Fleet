@@ -6,14 +6,14 @@ VALUES ('lhelbig', '123', 'admin', '1'),
        ('laußem', '123', 'admin', '1'),
        ('user', '123', 'user', '0'),
        ('security', '123', 'security', '0');
-INSERT INTO users
+INSERT INTO users (id, name, password, is_driver)
 VALUES
-       (101,'askywalker', 'abc', 'none', '1'),
-       (102,'dvader', 'abc', 'none', '1'),
-       (103,'hsolo', 'abc', 'none', '1'),
-       (104, 'okenobi', 'abc', 'none', '1'),
-       (105, 'myoda', 'abc', 'none', '1'),
-       (106, 'mwindu', 'abc', 'none', '1');
+       (101,'askywalker', 'abc', '1'),
+       (102,'dvader', 'abc', '1'),
+       (103,'hsolo', 'abc', '1'),
+       (104, 'okenobi', 'abc', '1'),
+       (105, 'myoda', 'abc', '1'),
+       (106, 'mwindu', 'abc', '1');
 INSERT INTO insurances
 VALUES (100,100234992, 20050101, 20300202),
        (101,496652100, 20100304, 20280309),
@@ -36,9 +36,9 @@ VALUES (100, 'STO-XY-1', 'CITROEN', 'C2', '1G1YY25R69570001', 30000, 34000, 5000
        (102, 'STO-XY-3', 'VW', 'Tiguan', '3H4ZZ11E991833262', 1000, 2000, 10000, 102, 'car', 102),
        (103, 'STO-XY-4', 'Mercedes', 'AMG-GT', '9H3BD76L3044292', 0, 500, 2000, 103, 'car', 103),
        (104, 'STO-XY-5', 'Toyota', 'Mustang', '3G2EE25I692877166', 4000, 5000, 3000, 104, 'car', 104),
-       (105, 'STO-XY-6', 'Ford', 'Ranger', '5A5FF9918N9918854', 150000, 155000, 10000, 105, 'car', 105),
-       (106, 'STO-XY-7', 'Tesla', 'Cybertruck', '2G2UU8271N7273892', 2000, 8000, 12000, 106, 'car', 106),
-       (107, 'STO-XY-8', 'Audi', 'A4', '2G2UU8271N7273812', 2000, 3000, 12000, 100, 'car', 100);
+       (105, 'STO-XY-6', 'Ford', 'Ranger', '5A5FF9918N99105', 150000, 155000, 10000, 105, 'car', 105),
+       (106, 'STO-XY-7', 'Tesla', 'Cybertruck', '2G2UU8271N7273', 2000, 8000, 12000, 106, 'car', 106),
+       (107, 'STO-XY-8', 'Tesla', 'Cybertruck', '2G2UU8271N7273', 2000, 8000, 12000, 106, 'car', 106);
 INSERT INTO bookings (driver_id, vehicle_id, leasing_start, leasing_end, reasoning, expected_travel_distance)
 VALUES (101, 100, '2024-03-01', '2024-03-07', 'Betriebsausflug', 1000),
        (102, 100, '2024-03-14', '2024-03-15', 'none', 200),

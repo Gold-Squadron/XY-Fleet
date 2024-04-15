@@ -1,37 +1,40 @@
 <script setup lang="ts">
   import {useModal} from "bootstrap-vue-next";
   import {User} from "@/main";
+  import {ref, watch} from "vue";
 
-  const {hide} = useModal('creation-dialog')
+  const {hide} = useModal('edit-dialog')
 
-  defineEmits<{
-    (event: "createUser", newUser: User): void
+  const emit = defineEmits<{
+    (event: 'updateUser', data: any) : void
   }>()
 
-  let res = new User()
+  const props = defineProps({
+    user: null
+  })
+
+  watch(() => props.user, () => {
+    res.value = props.user
+  })
+
+  let res = ref(new User())
 </script>
 
 <template>
-  <BModal v-if="true" id="creation-dialog" @on-cancel="hide()" size="lg" hide-header hide-footer>
+  <BModal v-if="true" id="edit-dialog" @on-cancel="hide()" size="lg" hide-header hide-footer>
     <div class="modal-header">
-      <h3>Benutzer hinzufügen</h3>
+      <h3>Benutzer bearbeiten</h3>
     </div>
     <br>
-    <BForm @submit="$emit.call(null, 'createUser', res); hide()">
+    <BForm @submit="emit('updateUser', res); hide()">
       <BFormRow>
         <BCol>
           <b-form-floating-label label-for="name">Name</b-form-floating-label>
-          <BFormInput v-model="res.name" id="name" placeholder="mmustermann" required></BFormInput>
-        </BCol>
-      </BFormRow>
-      <BFormRow class="mt-3">
-        <BCol>
-          <b-form-floating-label label-for="password">Password</b-form-floating-label>
-          <BFormInput v-model="res.password" type="password" id="password" required></BFormInput>
+          <BFormInput id="name" v-model="res.name" placeholder="mmustermann" required></BFormInput>
         </BCol>
         <BCol>
           <b-form-floating-label label-for="role">Rolle</b-form-floating-label>
-          <b-form-select v-model="res.role" id="role" :options="selectRoles" class="w-100 form-control"></b-form-select>
+          <b-form-select id="role" v-model="res.role" :options="selectRoles" class="w-100 form-control"></b-form-select>
         </BCol>
       </BFormRow>
       <BFormRow class="mt-3">
@@ -41,7 +44,7 @@
       </BFormRow>
       <b-row class="mt-4 text-right">
         <b-col>
-          <b-button type="submit" variant="primary" class="mr-2">Benutzer hinzufügen</b-button>
+          <b-button type="submit" variant="primary" class="mr-2">Änderungen speichern</b-button>
           <b-button type="button" @click="hide()" variant="secondary">Abbrechen</b-button>
         </b-col>
       </b-row>
@@ -51,7 +54,6 @@
 
 <script lang="ts">
   import {Roles} from "@/main";
-
   export default {
     data() {
       return {
