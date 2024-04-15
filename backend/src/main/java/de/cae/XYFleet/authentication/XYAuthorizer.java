@@ -1,6 +1,7 @@
 package de.cae.XYFleet.authentication;
 
 import de.cae.XYFleet.ressource.Entry.*;
+import de.cae.XYFleet.ressource.Entry.RescheduleResource;
 import de.cae.XYFleet.ressource.Table.*;
 import org.restlet.Application;
 import org.restlet.Restlet;
