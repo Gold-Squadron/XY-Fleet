@@ -6,14 +6,14 @@ VALUES ('lhelbig', '123', 'admin', '1'),
        ('laußem', '123', 'admin', '1'),
        ('user', '123', 'user', '0'),
        ('security', '123', 'security', '0');
-INSERT INTO users
+INSERT INTO users (id, name, password, is_driver)
 VALUES
-       (101,'askywalker', 'abc', 'none', '1'),
-       (102,'dvader', 'abc', 'none', '1'),
-       (103,'hsolo', 'abc', 'none', '1'),
-       (104, 'okenobi', 'abc', 'none', '1'),
-       (105, 'myoda', 'abc', 'none', '1'),
-       (106, 'mwindu', 'abc', 'none', '1');
+       (101,'askywalker', 'abc', '1'),
+       (102,'dvader', 'abc', '1'),
+       (103,'hsolo', 'abc', '1'),
+       (104, 'okenobi', 'abc', '1'),
+       (105, 'myoda', 'abc', '1'),
+       (106, 'mwindu', 'abc', '1');
 INSERT INTO insurances
 VALUES (100,100234992, 20050101, 20300202),
        (101,496652100, 20100304, 20280309),

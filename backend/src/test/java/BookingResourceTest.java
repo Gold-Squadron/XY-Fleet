@@ -1,5 +1,4 @@
 import org.jooq.UpdatableRecord;
-import org.jooq.codegen.XYFleet.tables.AccessGroups;
 import org.jooq.codegen.XYFleet.tables.records.*;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;

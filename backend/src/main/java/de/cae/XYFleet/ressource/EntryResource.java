@@ -55,7 +55,6 @@ public abstract class EntryResource extends XYServerResource {
             //checking whether amendments have been requested or not. Setting all types to String type safty in tests
             String name = field.getUnqualifiedName().first();
             String value = valuesMap.get(field.getUnqualifiedName().first());
-            System.out.println("name = " + name);
             if (value != null) {
                 setFieldValueHelper(updatableRecord, field, value);
             }
@@ -72,8 +71,6 @@ public abstract class EntryResource extends XYServerResource {
 
         return updatableRecord.formatJSON(jSONFormat);
     }
-
-    ;
 
     public String handlePut(Map<String, String> valuesMap) throws ResourceException {
         Field<?>[] fields = table.fields();

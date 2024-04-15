@@ -39,8 +39,8 @@ public class BookingsResourceTest extends ResourceTest{
         BookingsRecord booking = new BookingsRecord(0, ADMIN_ID, vehicle.getId(),  LocalDate.parse("2023-01-01"),  LocalDate.parse("2023-01-01"), "none", 200, null);
         booking.setId(scenario.add(BOOKINGS, booking));
         uri = "/booking";
-        testTable =Database.getDSLContext().select().from(BOOKINGS).fetch();
-        table = BOOKINGS;
+        testTable = dslContext.select().from(BOOKINGS).fetch();
+        table=BOOKINGS;
     }
 
     @Override

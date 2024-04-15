@@ -50,6 +50,12 @@ public class UserResource extends EntryResource {
     }
 
     @Override
+    @Post
+    public String editEntry() throws ResourceException {
+        checkInRole(ROLE_ADMIN);
+        return super.editEntry();
+    }
+
     @Get()
     public String toString() throws ResourceException {
         checkInRole(ROLE_ADMIN);
