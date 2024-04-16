@@ -93,17 +93,19 @@ create table if not exists SWT.bookings
     constraint bookings_vehicle_fk
         foreign key (vehicle_id) references vehicles (id)
 );
-
-create table if not exists SWT.gas_cards
+create table if not exists SWT.tokens
 (
-    id            int auto_increment
-        primary key,
-    number_aral   int          null,
-    number_shell  int          null,
-    pin           int          null,
-    license_plate int          not null,
-    holder        varchar(255) not null,
-    vehicle_id    int          not null,
-    constraint gas_cards_vehicle_fk
-        foreign key (vehicle_id) references vehicles (id)
+    id int auto_increment primary key,
+    token varchar(50) not null,
+    user_name varchar(255) not null unique,
+    constraint tokens_users_fk
+        foreign key(user_name) references users(name)
+);
+create table if not exists SWT.settings
+(
+    id int auto_increment primary key,
+    darkmode boolean not null default(false),
+    user_id int not null,
+    constraint settings_users_fk
+        foreign key(user_id) references users(id)
 );

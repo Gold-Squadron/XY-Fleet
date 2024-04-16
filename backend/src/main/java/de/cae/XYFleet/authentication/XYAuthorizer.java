@@ -5,9 +5,8 @@ import de.cae.XYFleet.ressource.Table.*;
 import de.cae.XYFleet.ressource.Table.FuelCardsResource;
 import org.restlet.Application;
 import org.restlet.Restlet;
-import org.restlet.data.ChallengeScheme;
 import org.restlet.routing.Router;
-import org.restlet.security.*;
+import org.restlet.ext.crypto.DigestAuthenticator;
 import de.cae.XYFleet.ressource.*;
 public class XYAuthorizer extends Application {
 
@@ -19,9 +18,9 @@ public class XYAuthorizer extends Application {
     @Override
     public Restlet createInboundRoot() {
         //Create the authenticator, the authorizer and the router that will be protected
-        ChallengeAuthenticator authenticator = createAuthenticator();
-
+        DigestAuthenticator authenticator = createAuthenticator();
         Router baseRouter = createBaseRouter();
+
         //Protect the resource by enforcing authentication then authorization
         authenticator.setNext(baseRouter);
 
@@ -53,16 +52,14 @@ public class XYAuthorizer extends Application {
         return router;
     }
 
-    private ChallengeAuthenticator createAuthenticator() {
-        ChallengeAuthenticator guard = new ChallengeAuthenticator(
-                getContext(),false,  ChallengeScheme.HTTP_BASIC, "realm");
-
+    private DigestAuthenticator createAuthenticator() {
         //Attach enroler and verifier to determine roles
-        LDAPVerifier ldapVerifier = new LDAPVerifier();
-        guard.setVerifier(ldapVerifier);
-        guard.setEnroler(ldapVerifier);
-
-        return guard;
+        DigestAuthenticator xyAuthenticator = new DigestAuthenticator(
+                getContext(),"xyFleetSecurityRealm", "MyServerKey");
+        xyAuthenticator.setVerifier(new XYHttpDigestVerifier(xyAuthenticator, new LDAPLocalVerifier(), null));
+        //xyAuthenticator.setWrappedVerifier(new LDAPLocalVerifier());
+        xyAuthenticator.setEnroler(new XYEnroler());
+        return xyAuthenticator;
     }
 
 }
