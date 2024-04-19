@@ -15,6 +15,7 @@
 
   watch(() => props.user, () => {
     res.value = props.user
+    res.value.isDriver = !!res.value.isDriver
   })
 
   let res = ref(new User())
