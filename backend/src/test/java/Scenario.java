@@ -36,6 +36,8 @@ public class Scenario<R extends org.jooq.UpdatableRecord<R>> extends HashMap<Tab
     }
 
     public void cleanUp() {
+        dslContext.delete(TOKENS).execute();
+        dslContext.deleteFrom(SETTINGS).execute();
         if (this.get(BOOKINGS) != null)
             for (R record : this.get(BOOKINGS)) record.delete();
         if (this.get(VEHICLES) != null)
