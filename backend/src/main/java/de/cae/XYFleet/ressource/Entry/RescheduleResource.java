@@ -72,7 +72,7 @@ public class RescheduleResource extends EntryResource {
     }
 
     /**
-     * calculate possible rescheduling for given bookingsrecords. This Method is designed to handle for one specific vehicle only.
+     * calculates possible rescheduling operation for given booking entries in the database. This Method is designed to handle a rescheduling request that contains bookings for only one vehicle. All booking entries in this request need to belong to the same vehicle.
      *
      * @param records bookingRecordList of all records that need to be rescheduled
      * @return calculated rescheduling for given bookingsrecords

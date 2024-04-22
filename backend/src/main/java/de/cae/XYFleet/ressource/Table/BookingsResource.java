@@ -25,7 +25,7 @@ public class BookingsResource extends XYServerResource {
 
     @Get()
     public String toString() {
-        checkInRole(XYAuthorizer.ROLE_SECURITY);
+      checkInRole(XYAuthorizer.ROLE_SECURITY);
 
        return super.toString();
     }
