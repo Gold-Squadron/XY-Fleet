@@ -35,7 +35,7 @@ public class RescheduleResource extends EntryResource {
     }
 
     /**
-     * calculates reschedule suggestions for each bookings.
+     * calculates reschedule suggestions for each booking.
      *
      * @return returns JSON package containing reschedule suggestions for each booking in a list.
      * @throws ResourceException
