@@ -105,7 +105,7 @@ create table if not exists SWT.settings
 (
     id int auto_increment primary key,
     `key` varchar(255) not null,
-    `value` varchar(255),
+    value varchar(255),
     user_id int not null,
     constraint settings_users_fk
         foreign key(user_id) references users(id)

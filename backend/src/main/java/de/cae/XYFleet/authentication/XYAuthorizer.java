@@ -49,6 +49,8 @@ public class XYAuthorizer extends Application {
         router.attach("/accessGroup", AccessGroupsResource.class);
         router.attach("/fuelCard/{identifier}", FuelCardResource.class);
         router.attach("/fuelCard", FuelCardsResource.class);
+        router.attach("/setting/{identifier}", SettingResource.class);
+        router.attach("/setting", SettingsResource.class);
         return router;
     }
 

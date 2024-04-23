@@ -96,7 +96,7 @@ public abstract class EntryResource extends XYServerResource {
         return !Objects.equals(name, "id");
     }
 
-    abstract public void validatePutCall(UpdatableRecordImpl record);
+    abstract public void validatePutCall(UpdatableRecordImpl record); //always throws exceptions if anything is not valid
 
     //cast queue input according to the fields Datatype
     protected void setFieldValueHelper(UpdatableRecordImpl record, Field<?> field, String value) {
