@@ -19,16 +19,18 @@ public class Server {
             //component.getDefaultHost().attach("/ldapauthenticator", LDAPAuthenticator.class);
             component.getDefaultHost().attach("/test", TestResource.class);
 
-            //handle CORS to allow frontend to access this server!
-            CorsService corsService = new CorsService();
-            corsService.setAllowedOrigins( new HashSet(Arrays.asList("http://localhost:5173/", "http://localhost:5174/"))); //TODO: add the URL of the frontend
-            corsService.setAllowedCredentials(true);
 
             //Add to the first Application. The Authorizer the CORS Service handler
             XYAuthorizer xyAuthorizer = new XYAuthorizer();
-            xyAuthorizer.getServices().add(corsService);
-            component.getDefaultHost().attachDefault(new XYAuthorizer());
+            CorsService corsService = new CorsService();
+            corsService.setAllowingAllRequestedHeaders(true);
+            corsService.setAllowedOrigins(new HashSet(Arrays.asList("http://localhost:5173")));
+            corsService.setAllowedCredentials(true);
+            corsService.setSkippingResourceForCorsOptions(true);
 
+
+            xyAuthorizer.getServices().add(corsService);
+            component.getDefaultHost().attachDefault(xyAuthorizer);
 
             component.start();
 
