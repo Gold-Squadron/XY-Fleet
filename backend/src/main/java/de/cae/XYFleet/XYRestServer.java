@@ -1,13 +1,11 @@
 package de.cae.XYFleet;
 import org.restlet.Server;
-import de.cae.XYFleet.authentication.LDAPAuthenticator;
+import de.cae.XYFleet.authentication.LDAP.LDAPAuthenticator;
 import de.cae.XYFleet.authentication.XYAuthorizer;
 import org.restlet.*;
 import org.restlet.data.Method;
 import org.restlet.data.Protocol;
 import org.restlet.data.Status;
-import org.restlet.service.CorsService;
-import org.restlet.service.Service;
 
 
 public class XYRestServer {

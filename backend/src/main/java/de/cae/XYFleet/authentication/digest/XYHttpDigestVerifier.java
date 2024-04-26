@@ -1,6 +1,7 @@
-package de.cae.XYFleet.authentication;
+package de.cae.XYFleet.authentication.digest;
 
 import de.cae.XYFleet.Main;
+import de.cae.XYFleet.authentication.Token.XYToken;
 import org.jooq.DSLContext;
 import org.jooq.codegen.XYFleet.tables.records.TokensRecord;
 import org.restlet.Request;

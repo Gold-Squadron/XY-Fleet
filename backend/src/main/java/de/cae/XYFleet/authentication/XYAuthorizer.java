@@ -1,5 +1,7 @@
 package de.cae.XYFleet.authentication;
 
+import de.cae.XYFleet.authentication.digest.LocalVerifier;
+import de.cae.XYFleet.authentication.digest.XYHttpDigestVerifier;
 import de.cae.XYFleet.ressource.Entry.*;
 import de.cae.XYFleet.ressource.Table.*;
 import de.cae.XYFleet.ressource.Table.FuelCardsResource;
@@ -58,8 +60,8 @@ public class XYAuthorizer extends Application {
         //Attach enroler and verifier to determine roles
         DigestAuthenticator xyAuthenticator = new DigestAuthenticator(
                 getContext(),"xyFleetSecurityRealm", "MyServerKey");
-        xyAuthenticator.setVerifier(new XYHttpDigestVerifier(xyAuthenticator, new LDAPLocalVerifier(), null));
-        //xyAuthenticator.setWrappedVerifier(new LDAPLocalVerifier());
+        xyAuthenticator.setVerifier(new XYHttpDigestVerifier(xyAuthenticator, new LocalVerifier(), null));
+        //xyAuthenticator.setWrappedVerifier(new LocalVerifier());
         xyAuthenticator.setEnroler(new XYEnroler());
         return xyAuthenticator;
     }

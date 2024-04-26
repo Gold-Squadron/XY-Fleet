@@ -98,6 +98,7 @@ create table if not exists SWT.tokens
     id int auto_increment primary key,
     token varchar(50) not null,
     user_name varchar(255) not null unique,
+    `date` TIMESTAMP default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
     constraint tokens_users_fk
         foreign key(user_name) references users(name)
 );
@@ -110,3 +111,13 @@ create table if not exists SWT.settings
     constraint settings_users_fk
         foreign key(user_id) references users(id)
 );
+
+SET GLOBAL event_scheduler=ON;
+
+CREATE EVENT SWT.DeleteOldRecords
+ON SCHEDULE EVERY 1 HOUR
+COMMENT 'Delete tokens older than 8 hours'
+DO
+BEGIN
+    DELETE FROM SWT.tokens WHERE SWT.tokens.date < NOW() - INTERVAL 8 HOUR;
+END;

@@ -1,4 +1,4 @@
-package de.cae.XYFleet.authentication;
+package de.cae.XYFleet.authentication.Token;
 
 import java.security.SecureRandom;
 import java.util.Base64;
