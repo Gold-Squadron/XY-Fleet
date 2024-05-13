@@ -7,7 +7,10 @@ import org.restlet.data.Method;
 import org.restlet.data.Protocol;
 import org.restlet.data.Status;
 
-
+import org.restlet.Component;
+import org.restlet.data.Parameter;
+import org.restlet.data.Protocol;
+import org.restlet.util.Series;
 public class XYRestServer {
 
     //public static final String ROOT_URI = "file:///c:/restlet/docs/api/";
@@ -36,8 +39,16 @@ public class XYRestServer {
                     response.setStatus(Status.SUCCESS_OK);
                 }
             };
-            Server server = component.getServers().add(Protocol.HTTP, 8080);
+            Server server = component.getServers().add(Protocol.HTTPS, 8080);
 
+            Series<Parameter> parameters = server.getContext().getParameters();
+            parameters.add("keyStorePath", "C:/Users/Lennard Helbig/JavaVorkurs/XY-Fleet/backend/SSL/XYFleetServerKeystore.jks");
+            parameters.add("keyStorePassword", "tyJ;~>\"p:x3h(aVS");
+            parameters.add("keyPassword", "changeit");
+            parameters.add("keyStoreType", "JKS");
+            parameters.add("sslContextFactory", "org.restlet.engine.ssl.DefaultSslContextFactory");
+            //parameters.add("truststorePath", "C:/Users/Lennard Helbig/JavaVorkurs/XY-Fleet/backend/SSL/XYFleetServerTruststore.jks");
+            //parameters.add("truststorePassword", "Uzv2/8EY.X+9dRe<");
 
             component.getDefaultHost().attach("/ldapauthenticator", LDAPAuthenticator.class);
             component.getDefaultHost().attach("/test", TestResource.class);

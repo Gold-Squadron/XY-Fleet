@@ -16,7 +16,7 @@ public class LocalVerifier extends org.restlet.security.LocalVerifier {
         DSLContext dslContext = Main.getDSLContext();
         UsersRecord usersRecord = dslContext.fetchOne(USERS, USERS.NAME.eq(s));
        if(usersRecord == null)
-           throw new ResourceException(401, "insufficient permission");
+           throw new ResourceException(401);
         return usersRecord.getPassword().toCharArray();
     }
 }

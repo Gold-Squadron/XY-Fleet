@@ -14,12 +14,12 @@ public class Server {
     public static void initServer() {
         try {
             Component component = new Component();
-            org.restlet.Server server = component.getServers().add(Protocol.HTTP, 8080);
+            org.restlet.Server server = component.getServers().add(Protocol.HTTPS, 8080);
 
             //component.getDefaultHost().attach("/ldapauthenticator", LDAPAuthenticator.class);
             component.getDefaultHost().attach("/test", TestResource.class);
 
-
+            component.getLogger();
             //Add to the first Application. The Authorizer the CORS Service handler
             XYAuthorizer xyAuthorizer = new XYAuthorizer();
             CorsService corsService = new CorsService();

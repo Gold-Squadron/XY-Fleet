@@ -61,7 +61,7 @@ public abstract class EntryResource extends XYServerResource {
         }
         //check if valid call
         if (!updatableRecord.changed())
-            throw new ResourceException(400, "nothing to do. no params in query given");
+            throw new ResourceException(400);
         //check correctness of values
         validatePutCall(updatableRecord);
 
