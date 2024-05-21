@@ -1,7 +1,5 @@
 package de.cae.XYFleet.excel;
 
-import de.cae.XYFleet.Main;
-import de.cae.XYFleet.Server;
 import org.apache.poi.xssf.usermodel.*;
 import org.jooq.DSLContext;
 import org.jooq.SQLDialect;
@@ -16,6 +14,7 @@ import org.jooq.impl.DSL;
 import static org.jooq.codegen.XYFleet.Tables.*;
 import java.io.FileInputStream;
 import java.io.InputStream;
+import java.math.BigInteger;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -35,7 +34,7 @@ public class ExcelReader{
                 e.printStackTrace();
             }
 
-            InputStream inp = new FileInputStream("C:\\Users\\Lennard Helbig\\Downloads\\test.xlsx");
+            InputStream inp = new FileInputStream("C:\\Users\\Lennard Helbig\\JavaVorkurs\\XY-Fleet\\backend\\Test.xlsx");
             XSSFWorkbook wb = (XSSFWorkbook) XSSFWorkbookFactory.create(inp);;
             XSSFSheet sheet = wb.getSheetAt(0);
             XSSFRow row;
@@ -46,13 +45,15 @@ public class ExcelReader{
 
             int cols = 0; // No of columns
             int tmp = 0;
-
-            row = sheet.getRow(1);
-            if(row != null) {
-                tmp = sheet.getRow(1).getPhysicalNumberOfCells();
-                if(tmp > cols) cols = tmp;
+            for(int i=0;i<10;i++){
+                row = sheet.getRow(i);
+                if(row != null) {
+                    tmp = sheet.getRow(i).getPhysicalNumberOfCells();
+                    if(tmp > cols) cols = tmp;
+                    break;
+                }
             }
-            for(int r = 2; r < rows; r++) {
+            for(int r = 2; r <= rows; r++) {
                 row = sheet.getRow(r);
                 if(row==null){
                     continue;
@@ -62,7 +63,7 @@ public class ExcelReader{
                 InsurancesRecord insurancesRecord = dslContext.newRecord(INSURANCES);
                 PricingRecord pricingRecord = dslContext.newRecord(PRICING);
                 VehiclesRecord vehiclesRecord = dslContext.newRecord(VEHICLES);
-                for (int c = 0; c < cols; c++) {
+                for (int c = 0; c <= cols; c++) {
                     cell = row.getCell((short) c);
                     if(cell == null){
                         continue;
@@ -70,7 +71,7 @@ public class ExcelReader{
                     String columnName = sheet.getRow(1).getCell((short) c).toString();
 
                     StringBuilder value = new StringBuilder(cell.toString());
-                    Long temp;
+                    BigInteger temp;
                     LocalDate date;
                     String[] split;
                     switch (columnName) {
@@ -100,17 +101,17 @@ public class ExcelReader{
                         case "Tankkarte Aral":
 
                             try {
-                                 temp = (value.length() == 0) ? null : Long.parseLong(value.toString());
+                                temp = BigInteger.valueOf((long) cell.getNumericCellValue());
                             } catch(NumberFormatException e) {
-                                temp = 0L;
+                                temp = new BigInteger("0");
                             }
                             fuelCardRecord.setAral(temp);
                             break;
                         case "Tankkarte Shell":
                             try {
-                                temp = (value.length() == 0) ? null : Long.parseLong(value.toString());
+                                temp = BigInteger.valueOf((long) cell.getNumericCellValue());
                             } catch(NumberFormatException e) {
-                                temp = 0L;
+                                temp = new BigInteger("0");
                             }
                             fuelCardRecord.setShell(temp);
                             break;
@@ -161,16 +162,45 @@ public class ExcelReader{
                         case "Kauf-datum":
                             pricingRecord.setPurchaseDate((value.length() == 0) ? null: cell.getDateCellValue().toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
                         break;
-                        case "KM jährlich":
+                        case "KM jährlich", "jährliche Leistung":
                             vehiclesRecord.setAnnualPerformance((int) cell.getNumericCellValue());
                             break;
-                        case "Leasingrate (netto)":
+                        case "Leasingrate (netto)", "Leasingrate \n(netto)":
                             pricingRecord.setLeasingInstallmentNet((int) cell.getNumericCellValue());
                             break;
-                        case "Listenpreis (Brutto)":
+                        case "Listenpreis (Brutto)", "Listenpreis \n(Brutto)":
                             pricingRecord.setListPriceGross((int) cell.getNumericCellValue());
                             break;
-                        default:
+                        case "Marke":
+                            vehiclesRecord.setBrand(cell.getStringCellValue());
+                            break;
+                        case "Model":
+                            vehiclesRecord.setModel(cell.getStringCellValue());
+                            break;
+                        case "Kilometerstand":
+                            vehiclesRecord.setMileage((int) cell.getNumericCellValue());
+                            break;
+                        case "erwarteter \nKilometerstand":
+                            vehiclesRecord.setExpectedMileage((int) cell.getNumericCellValue());
+                            break;
+                        case "Sitzanzahl":
+                            vehiclesRecord.setSeats((int) cell.getNumericCellValue());
+                            break;
+                        case "Gruppe\\Fahrzeugführer":
+                            accessGroupsRecord.setGroup(cell.getStringCellValue());
+                            break;
+                        case "buchbar":
+                            accessGroupsRecord.setIsBookable((byte) cell.getNumericCellValue());
+                            break;
+                        case "Registrierungsdatum":
+                            insurancesRecord.setRegistrationDate(cell.getDateCellValue().toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
+                            break;
+                        case "Versicherungsnummer Verfallsdatum":
+                            insurancesRecord.setInsuranceNumberExpirationDate(cell.getDateCellValue().toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
+                            break;
+                        case "Versicherungsscheinnummer":
+                            insurancesRecord.setInsuranceNumber((long) cell.getNumericCellValue());
+                            default:
                             break;
                     }
                 }
