@@ -6,10 +6,18 @@ import org.jooq.impl.DSL;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.restlet.Client;
+import org.restlet.Context;
+import org.restlet.Request;
+import org.restlet.data.Parameter;
+import org.restlet.util.Series;
+import org.restlet.data.ChallengeRequest;
+import org.restlet.Client;
 import org.restlet.data.ChallengeResponse;
 import org.restlet.data.ChallengeScheme;
+import org.restlet.data.Protocol;
 import org.restlet.resource.ClientResource;
 import org.restlet.resource.ResourceException;
+import org.restlet.security.Role;
 
 import static com.sun.jna.platform.win32.LMAccess.ACCESS_GROUP;
 import static de.cae.XYFleet.authentication.XYAuthorizer.*;
@@ -19,7 +27,7 @@ import static org.jooq.codegen.XYFleet.tables.Users.USERS;
 import static org.junit.jupiter.api.Assertions.*;
 
 public abstract class ResourceTest {
-    protected static String url = "http://" + "@localhost:8080";
+    protected static String url = "https://" + "localhost:8080";
     protected static String uri;
     protected static Table<?> table;
     protected static Formattable testTable;
@@ -52,10 +60,33 @@ public abstract class ResourceTest {
 
     public void delete_validCall_shouldReturnEntryInDatabase() {
         //Arrange
-        ClientResource clientResource = new ClientResource(url + uri);
-        ChallengeResponse challengeResponse = new ChallengeResponse(ChallengeScheme.HTTP_BASIC, ROLE_ADMIN, ROLE_ADMIN);
-        clientResource.setChallengeResponse(challengeResponse);
+        ClientResource clientResource = new ClientResource(new Context(),url + uri);
         clientResource.setRetryAttempts(10);
+        clientResource.setProtocol(Protocol.HTTPS);
+        clientResource.setChallengeResponse(new ChallengeResponse(ChallengeScheme.HTTP_DIGEST, ROLE_ADMIN, ROLE_ADMIN));
+        //Client client = new Client(new Context(), Protocol.HTTPS);
+        Series<Parameter> clientParameters = clientResource.getContext().getParameters();
+        clientParameters.add("truststorePath", "C:\\Users\\Lennard Helbig\\JavaVorkurs\\XY-Fleet\\backend\\SSL\\XYFleetServerTruststore.jks");
+        clientParameters.add("truststorePassword", "Uzv2/8EY.X+9dRe<");
+
+        // Send the first request with unsufficient authentication.
+        try {
+            clientResource.get();
+        } catch (ResourceException re) {
+        }
+        ChallengeRequest c1 = null;
+        for (ChallengeRequest challengeRequest : clientResource.getChallengeRequests()) {
+            if (ChallengeScheme.HTTP_DIGEST.equals(challengeRequest.getScheme())) {
+                c1 = challengeRequest;
+                break;
+            }
+        }
+        ChallengeResponse challengeResponse = new ChallengeResponse(c1,
+                clientResource.getResponse(),
+                ROLE_ADMIN,
+                ROLE_ADMIN);
+        clientResource.setChallengeResponse(challengeResponse);
+
         //Act
         try {
             // Send a DELETE request
@@ -77,10 +108,36 @@ public abstract class ResourceTest {
     public void get_invalidCall_shouldThrowResourceException(String responseMessage, String role) {
         //Arrange
         if (role == null) role = "";
-        ClientResource clientResource = new ClientResource(url + uri);
-        ChallengeResponse challengeResponse = new ChallengeResponse(ChallengeScheme.HTTP_BASIC, role, role);
-        clientResource.setChallengeResponse(challengeResponse);
+        System.setProperty("javax.net.ssl.trustStore", "C:/Users/Lennard Helbig/JavaVorkurs/XY-Fleet/backend/SSL/XYFleetServerTruststore.jks");
+        System.setProperty("javax.net.ssl.trustStorePassword","Uzv2/8EY.X+9dRe<");
+
+        ClientResource clientResource = new ClientResource(new Context(),url + uri);
         clientResource.setRetryAttempts(10);
+        clientResource.setProtocol(Protocol.HTTPS);
+        clientResource.setChallengeResponse(new ChallengeResponse(ChallengeScheme.HTTP_DIGEST, role, role));
+        //Client client = new Client(new Context(), Protocol.HTTPS);
+        Series<Parameter> clientParameters = clientResource.getContext().getParameters();
+        clientParameters.add("truststorePath", "C:\\Users\\Lennard Helbig\\JavaVorkurs\\XY-Fleet\\backend\\SSL\\XYFleetServerTruststore.jks");
+        clientParameters.add("truststorePassword", "Uzv2/8EY.X+9dRe<");
+
+        // Send the first request with unsufficient authentication.
+        try {
+            clientResource.get();
+        } catch (ResourceException re) {
+        }
+        ChallengeRequest c1 = null;
+        for (ChallengeRequest challengeRequest : clientResource.getChallengeRequests()) {
+            if (ChallengeScheme.HTTP_DIGEST.equals(challengeRequest.getScheme())) {
+                c1 = challengeRequest;
+                break;
+            }
+        }
+        ChallengeResponse challengeResponse = new ChallengeResponse(c1,
+                clientResource.getResponse(),
+                role,
+                role);
+        clientResource.setChallengeResponse(challengeResponse);
+
         try {
             //Act
             // Send a GET request
@@ -226,7 +283,7 @@ public abstract class ResourceTest {
                 if(temp.length>1){
                     clientResource.setQueryValue(temp[0], temp[1]);
                 }else if(temp.length==1){
-                    clientResource.setQueryValue(temp[0], null);
+                     clientResource.setQueryValue(temp[0], null);
                 }else{
                     throw new IllegalArgumentException("Query was not setup correctly. Always needs a form of 'column_name'='value/'");
                 }
@@ -236,10 +293,35 @@ public abstract class ResourceTest {
         return null;
     }
     protected ClientResource setupRequest(String role){
-        ClientResource clientResource = new ClientResource(url + uri);
-        ChallengeResponse challengeResponse = new ChallengeResponse(ChallengeScheme.HTTP_BASIC, role, role);
-        clientResource.setChallengeResponse(challengeResponse);
+        System.setProperty("javax.net.ssl.trustStore", "C:/Users/Lennard Helbig/JavaVorkurs/XY-Fleet/backend/SSL/XYFleetServerTruststore.jks");
+        System.setProperty("javax.net.ssl.trustStorePassword","Uzv2/8EY.X+9dRe<");
+
+        ClientResource clientResource = new ClientResource(new Context(),url + uri);
         clientResource.setRetryAttempts(10);
+        clientResource.setProtocol(Protocol.HTTPS);
+        clientResource.setChallengeResponse(new ChallengeResponse(ChallengeScheme.HTTP_DIGEST, role, role));
+        //Client client = new Client(new Context(), Protocol.HTTPS);
+        Series<Parameter> clientParameters = clientResource.getContext().getParameters();
+        clientParameters.add("truststorePath", "C:\\Users\\Lennard Helbig\\JavaVorkurs\\XY-Fleet\\backend\\SSL\\XYFleetServerTruststore.jks");
+        clientParameters.add("truststorePassword", "Uzv2/8EY.X+9dRe<");
+
+        try {
+            clientResource.get();
+        } catch (ResourceException re) {
+        }
+        ChallengeRequest c1 = null;
+        for (ChallengeRequest challengeRequest : clientResource.getChallengeRequests()) {
+            if (ChallengeScheme.HTTP_DIGEST.equals(challengeRequest.getScheme())) {
+                c1 = challengeRequest;
+                break;
+            }
+        }
+        ChallengeResponse challengeResponse = new ChallengeResponse(c1,
+                clientResource.getResponse(),
+                role,
+                role);
+        clientResource.setChallengeResponse(challengeResponse);
+
         return clientResource;
     }
 }

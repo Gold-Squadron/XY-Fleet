@@ -1,4 +1,4 @@
-package de.cae.XYFleet.authentication;
+package de.cae.XYFleet.authentication.LDAP;
 
 import org.restlet.resource.Get;
 import org.restlet.resource.ServerResource;

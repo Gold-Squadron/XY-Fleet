@@ -1,14 +1,15 @@
 package de.cae.XYFleet.authentication;
 
+import de.cae.XYFleet.authentication.digest.LocalVerifier;
+import de.cae.XYFleet.authentication.digest.XYHttpDigestVerifier;
 import de.cae.XYFleet.ressource.Entry.*;
 import de.cae.XYFleet.ressource.Entry.RescheduleResource;
 import de.cae.XYFleet.ressource.Table.*;
 import de.cae.XYFleet.ressource.Table.FuelCardsResource;
 import org.restlet.Application;
 import org.restlet.Restlet;
-import org.restlet.data.ChallengeScheme;
 import org.restlet.routing.Router;
-import org.restlet.security.*;
+import org.restlet.ext.crypto.DigestAuthenticator;
 import de.cae.XYFleet.ressource.*;
 public class XYAuthorizer extends Application {
 
@@ -20,9 +21,9 @@ public class XYAuthorizer extends Application {
     @Override
     public Restlet createInboundRoot() {
         //Create the authenticator, the authorizer and the router that will be protected
-        ChallengeAuthenticator authenticator = createAuthenticator();
-
+        DigestAuthenticator authenticator = createAuthenticator();
         Router baseRouter = createBaseRouter();
+
         //Protect the resource by enforcing authentication then authorization
         authenticator.setNext(baseRouter);
 
@@ -51,19 +52,19 @@ public class XYAuthorizer extends Application {
         router.attach("/accessGroup", AccessGroupsResource.class);
         router.attach("/fuelCard/{identifier}", FuelCardResource.class);
         router.attach("/fuelCard", FuelCardsResource.class);
+        router.attach("/setting/{identifier}", SettingResource.class);
+        router.attach("/setting", SettingsResource.class);
         return router;
     }
 
-    private ChallengeAuthenticator createAuthenticator() {
-        ChallengeAuthenticator guard = new ChallengeAuthenticator(
-                getContext(),false,  ChallengeScheme.HTTP_BASIC, "realm");
-
+    private DigestAuthenticator createAuthenticator() {
         //Attach enroler and verifier to determine roles
-        LDAPVerifier ldapVerifier = new LDAPVerifier();
-        guard.setVerifier(ldapVerifier);
-        guard.setEnroler(ldapVerifier);
-
-        return guard;
+        DigestAuthenticator xyAuthenticator = new DigestAuthenticator(
+                getContext(),"xyFleetSecurityRealm", "MyServerKey");
+        xyAuthenticator.setVerifier(new XYHttpDigestVerifier(xyAuthenticator, new LocalVerifier(), null));
+        //xyAuthenticator.setWrappedVerifier(new LocalVerifier());
+        xyAuthenticator.setEnroler(new XYEnroler());
+        return xyAuthenticator;
     }
 
 }
