@@ -25,6 +25,11 @@ public class FilterResource extends ServerResource {
 
     protected DSLContext dslContext = Main.getDSLContext();
 
+    /***
+     * filters all bookingsrecords that are not within given start and end date
+     * @return JSON package with all bookings within given start and end date
+     * @throws ResourceException
+     */
     @Get()
     public String filterBooking() throws ResourceException {
         if (!isInRole(ROLE_SECURITY))
@@ -43,12 +48,19 @@ public class FilterResource extends ServerResource {
             throw new ResourceException(Status.CLIENT_ERROR_BAD_REQUEST, e.getMessage());
         }
 
-        Result<VehiclesRecord> result = filterBooking(start, end);
+        Result<VehiclesRecord> result = filterVehicle(start, end);
 
         return result.formatJSON(jSONFormat);
     }
 
-    public Result<VehiclesRecord> filterBooking(Result<BookingsRecord> tempTable, LocalDate start, LocalDate end) {
+    /**
+     * filters all vehicles that cannot be booked for start to end date.
+     * @param tempTable the List of all bookings
+     * @param start start date
+     * @param end end date
+     * @return list of all vehicles that can be booked for start to end date.
+     */
+    public Result<VehiclesRecord> filterVehicle(Result<BookingsRecord> tempTable, LocalDate start, LocalDate end) {
         Set<Integer> possibleVehicleIds = tempTable.stream().
                 filter(e -> (e.getLeasingStart().isBefore(end.plusDays(1)) && e.getLeasingEnd().isAfter(start.minusDays(1))))
                 .map(BookingsRecord::getVehicleId).collect(Collectors.toSet());
@@ -61,21 +73,15 @@ public class FilterResource extends ServerResource {
         return result;
     }
 
-    public Result<VehiclesRecord> filterBooking(LocalDate start, LocalDate end) {
-        return filterBooking(dslContext.fetch(BOOKINGS), start, end);
+    /**
+     * filters all vehicles that ca
+     * @param start
+     * @param end
+     * @return
+     */
+    public Result<VehiclesRecord> filterVehicle(LocalDate start, LocalDate end) {
+        return filterVehicle(dslContext.fetch(BOOKINGS), start, end);
     }
 
-    public Result<BookingsRecord> filterBooking(Result<BookingsRecord> records) {
-        Result<BookingsRecord> tempBookingsTable = dslContext.fetch(BOOKINGS);
-        for (BookingsRecord record : records) {
-            Result<VehiclesRecord> result = filterBooking(tempBookingsTable, record.getLeasingStart(), record.getLeasingEnd());
 
-            int i = result.get(0).getId();
-            tempBookingsTable.remove(record);
-            //add expected rescheduled Booking to temporary table, so it gets considered for next calculation
-            record.setVehicleId(i);
-            tempBookingsTable.add(record);
-        }
-        return records;
-    }
 }
