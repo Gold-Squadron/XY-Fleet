@@ -5,7 +5,7 @@
 <template>
   <nav class="navbar navbar-expand-sm navbar-light bg-light shadow-custom">
     <a class="navbar-brand text-white p-0">
-      <img src="/src/assets/logo.png" alt="XY-Fleet" style="height: 7vh"> <!-- don't ask me why-->
+      <img src="/src/assets/XY_Logo_XY_Fleet_Blau_Negativ.png" alt="XY-Fleet" style="height: 7vh"> <!-- don't ask me why-->
     </a>
 
     <div class="collapse navbar-collapse" id="navbarSupportedContent">

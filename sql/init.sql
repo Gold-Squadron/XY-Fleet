@@ -6,7 +6,7 @@ create table if not exists SWT.insurances
 (
     id                          int auto_increment
         primary key,
-    insurance_number            int not null unique,
+    insurance_number            numeric(17) not null unique,
     registration_date           date not null,
     insurance_number_expiration_date date not null
 );
@@ -46,8 +46,8 @@ create table if not exists SWT.fuel_card
 (
     id                int auto_increment
         primary key ,
-    aral numeric(17) unique,
-    shell numeric(17) unique,
+    aral numeric(20) unique,
+    shell numeric(20) unique,
     pin int
 );
 create table if not exists SWT.vehicles
@@ -121,3 +121,5 @@ DO
 BEGIN
     DELETE FROM SWT.tokens WHERE SWT.tokens.date < NOW() - INTERVAL 8 HOUR;
 END;
+
+CREATE VIEW SWT.completeVehicle AS SELECT vehicles.id, license_plate, brand, model, chassis_number, mileage, expected_mileage, annual_performance, seats, purchase_date, list_price_gross, leasing_installment_net, leasing_start, leasing_end, `group`, is_bookable, insurance_number, registration_date, insurance_number_expiration_date, aral, shell, pin  FROM SWT.vehicles INNER JOIN SWT.pricing ON pricing_id = pricing.id INNER JOIN SWT.fuel_card fc on fc.id = vehicles.fuel_card_id JOIN SWT.access_groups ag on ag.id = vehicles.access_group_id JOIN SWT.insurances i on i.id = vehicles.insurance_id;

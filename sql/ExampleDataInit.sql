@@ -42,7 +42,7 @@ VALUES(100, 2000000000, 3000000000, 1234),
 INSERT INTO access_groups
 VALUES (100, null, 'POOL', 1),
        (101, null, 'OTHER', 0),
-       (102, 101, 'self', 1);
+       (102, 101, 'askywalker', 1);
 
 INSERT INTO vehicles
 VALUES (100, 'STO-XY-1', 'CITROEN', 'C2', '1G1YY25R69570001', 30000, 34000, 5000, 100, 'car', 100,100, 100, 2),
